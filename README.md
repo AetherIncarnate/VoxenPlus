@@ -16,6 +16,12 @@ No download or installation is required.
 
 ---
 
+<p align="center">
+  <img src="https://i.ibb.co/rgycjB9/IMG-2133.jpg" alt="VoxenPlus screenshot" width="800">
+</p>
+
+---
+
 ## ⭐ VoxenPlus vs. Original Voxen
 
 VoxenPlus builds on the original Voxen synced lyrics editor with additional editing, synchronization, vocal-layer, and project features.

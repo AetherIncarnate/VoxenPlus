@@ -20,8 +20,6 @@ No download or installation is required.
 
 VoxenPlus builds on the original Voxen synced lyrics editor with additional editing, synchronization, vocal-layer, and project features.
 
-The table below compares VoxenPlus with the feature set documented in the original Voxen README.
-
 | Feature                        | VoxenPlus | Original Voxen |
 | ------------------------------ | :-------: | :------------: |
 | Line-by-line lyric timing      |     ✅     |        ✅       |
@@ -29,29 +27,26 @@ The table below compares VoxenPlus with the feature set documented in the origin
 | Syllable-by-syllable timing    |     ✅     |        ❌       |
 | Automatic syllable splitting   |     ✅     |        ❌       |
 | Manual syllable editing        |     ✅     |        ❌       |
-| Background vocals              |     ✅     |        ✅       |
-| Duet / multiple singers        |     ✅     |        ✅       |
-| Third singer layer             |     ✅     |        ❌       |
-| Independent vocal layers       |     ✅     |        ❌       |
-| Tap sync mode                  |     ✅     |        ❌       |
-| Hold sync mode                 |     ✅     |        ❌       |
-| Hybrid sync mode               |     ✅     |        ❌       |
+| Background vocals              |     ✅     |        ❌       |
+| Multiple singer layers         |     ✅     |        ❌       |
+| Tap sync mode                  |     ✅     |        ✅       |
+| Hold sync mode                 |     ✅     |        ✅       |
+| Hybrid sync mode               |     ✅     |        ✅       |
 | Customizable keyboard controls |     ✅     |        ❌       |
 | Reaction offset                |     ✅     |        ✅       |
 | Timestamp shifting             |     ✅     |        ❌       |
 | Merge and split syllables      |     ✅     |        ❌       |
 | Sort lyrics by timestamp       |     ✅     |        ❌       |
-| `.vxn` project files           |     ✅     |        ❌       |
-| JSON project format            |     ❌     |        ✅       |
-| Configurable preview effects   |     ✅     |     Limited    |
+| `.vxn` project files           |     ✅     |        ✅       |
+| Configurable themes            |     ✅     |      Limited    |
 | Browser-based                  |     ✅     |        ✅       |
 | PC support                     |     ✅     |        ✅       |
 | Mobile support                 |     ✅     |        ✅       |
-| LRC import                     |     ✅     |        ❌       |
+| LRC import                     |     ✅     |        ✅       |
 | LRC export                     |     ✅     |        ✅       |
 | No installation required       |     ✅     |        ✅       |
 
-Feature availability can change as both projects are developed. The comparison is based on the documented feature sets of the projects.
+Feature availability can change as both projects are developed.
 
 ---
 
@@ -91,7 +86,6 @@ VoxenPlus supports multiple vocal layers, including:
 
 * Lead vocals
 * Singer 2
-* Singer 3
 * Background vocals
 
 Different vocal parts can overlap and be synchronized independently.
@@ -121,7 +115,7 @@ You can also use **Reaction Offset** to compensate for the delay between hearing
 
 Keyboard shortcuts can be customized directly inside the editor.
 
-Default controls include:
+Every key can be rebound from the **Keys** section.
 
 | Action                   | Key      |
 | ------------------------ | -------- |
@@ -129,8 +123,8 @@ Default controls include:
 | Next line                | `S`      |
 | Previous word            | `A`      |
 | Next word                | `D`      |
-| Seek backward 5 seconds  | `←`      |
-| Seek forward 5 seconds   | `→`      |
+| Seek backward            | `←`      |
+| Seek forward             | `→`      |
 | Play / pause             | `Space`  |
 | Set timestamp            | `Enter`  |
 | Switch layer             | `B`      |
@@ -138,14 +132,11 @@ Default controls include:
 | Edit line                | `E`      |
 | Singer 1                 | `1`      |
 | Singer 2                 | `2`      |
-| Singer 3                 | `3`      |
 | Move line between layers | `4`      |
 | Delete line              | `Delete` |
 | Preview                  | `V`      |
 | Split syllables          | `X`      |
 | Sort by timestamp        | `R`      |
-
-Every key can be rebound from the **Keys** section.
 
 ---
 
@@ -199,11 +190,9 @@ You can also copy generated LRC directly to your clipboard.
 
 ## 💾 `.vxn` Project Files
 
-VoxenPlus has its own `.vxn` project format.
+VoxenPlus uses the `.vxn` project format for saving and loading projects.
 
 Project files allow you to save your current lyrics, timing information, vocal layers, and other editing data so you can continue working later.
-
-This is useful when creating a large or highly detailed synchronized lyrics project that you don't want to finish in one session.
 
 ---
 
@@ -357,7 +346,7 @@ Yes. Background vocals can be placed on their own layer and synchronized indepen
 
 ### Does VoxenPlus support multiple singers?
 
-Yes. VoxenPlus supports multiple singer layers, including Singer 1, Singer 2, and Singer 3.
+Yes. VoxenPlus supports multiple singer layers, including Singer 1 and Singer 2.
 
 ### Can I use VoxenPlus on mobile?
 

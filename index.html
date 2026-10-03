@@ -3,10 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#0e1012">
     <title>Voxen</title>
-    <style>
+    <style id="css-modern">
     /* =====================================================================
        Voxen styles - purple theme
        1  Tokens            7  Dock (player + tap button)
@@ -3453,7 +3453,3985 @@
             align-self: flex-end;
         }
     }
+
+    /* =====================================================================
+       Modern skin: additions
+       ===================================================================== */
+    /* pieces that only exist for the legacy layout stay out of sight */
+    .sidebar-tabs {
+        display: none;
+    }
+
+    /* undo and redo are the only top bar buttons that are icons (the rest of the bar is plain text) */
+    .topbar .tb-btn.tb-icon .ic {
+        display: block;
+        width: 20px;
+        height: 20px;
+    }
+
+    .topbar .tb-group {
+        margin-right: 6px;
+    }
+
+    .dock-undo.ctl-round {
+        flex: none;
+    }
+
+    /* =====================================================================
+       Additions (shared by the modern and the legacy skin)
+       - the label variants, touch behaviour
+       - history buttons, converter, toast button, the Keys panel
+       Only tokens that both skins define are used.
+       ===================================================================== */
+    html[data-ui="legacy"] .ui-m {
+        display: none !important;
+    }
+
+    html:not([data-ui="legacy"]) .ui-l {
+        display: none !important;
+    }
+
+    /* Touch ------------------------------------------------------------- */
+    html,
+    body {
+        overscroll-behavior: none;
+    }
+
+    .lane-body {
+        overscroll-behavior: contain;
+    }
+
+    button,
+    .seg-btn,
+    .toggle-opt,
+    .tab-btn,
+    .word-span,
+    .lyric-line,
+    .hotkey-pill,
+    .file-upload-label,
+    .speed-option,
+    .tool-item-btn {
+        touch-action: manipulation;
+    }
+
+    .dock-sync-btn,
+    .sync-btn {
+        touch-action: none;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    html[data-touch="1"] .lyric-line,
+    html[data-touch="1"] .word-span,
+    html[data-touch="1"] .lane-head,
+    html[data-touch="1"] .welcome-container {
+        -webkit-touch-callout: none;
+    }
+
+    html[data-touch="1"] .word-span,
+    html[data-touch="1"] .line-text {
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    input,
+    textarea {
+        -webkit-user-select: text;
+        user-select: text;
+    }
+
+    /* a keyboard hint means nothing on a touch screen without a keyboard */
+    html[data-kbd="off"] kbd[data-keyhint] {
+        display: none !important;
+    }
+
+    /* Top bar: history, clear, convert ------------------------------------ */
+    .tb-btn.tb-icon {
+        width: 34px;
+        padding: 0;
+    }
+
+    .tb-group {
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+    }
+
+    .tb-group + .tb-btn {
+        margin-left: 2px;
+    }
+
+    .ctl-btn:disabled,
+    .md-hist:disabled {
+        opacity: 0.35;
+        pointer-events: none;
+    }
+
+    /* Undo beside TAP: only where a finger is the pointer (a desktop has the top bar and the keyboard) */
+    .dock-undo {
+        display: none;
+    }
+
+    html[data-touch="1"] .dock-undo {
+        display: inline-flex;
+    }
+
+    /* a narrower window: Clear times and Convert become icons (the modern top bar is plain text otherwise) */
+    @media (min-width: 901px) and (max-width: 1220px) {
+        .tb-btn.tb-new {
+            width: 34px;
+            padding: 0;
+        }
+
+        .tb-btn.tb-new .btn-text {
+            display: none;
+        }
+
+        .topbar .tb-btn.tb-new .ic {
+            display: block;
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    /* a touch screen has no hover: rows show their buttons in Edit mode, so the Edit button has to be there */
+    html[data-touch="1"] #edit-mode-toggle {
+        display: inline-flex;
+    }
+
+    @media (max-width: 900px) {
+        .mobile-dock-controls {
+            grid-template-columns: 52px 46px minmax(0, 1fr) 46px 52px;
+            gap: 8px;
+        }
+
+        .mobile-dock-controls .md-hist {
+            width: 46px;
+            height: 46px;
+            align-self: center;
+        }
+    }
+
+    /* Toast with a button -------------------------------------------------- */
+    .toast.has-action {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .toast .toast-act {
+        flex: none;
+        margin-left: 4px;
+        padding: 5px 12px;
+        border: 0;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent-text);
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .toast .toast-act:hover {
+        background: var(--accent);
+        color: var(--accent-ink);
+    }
+
+    /* Converter ------------------------------------------------------------ */
+    .convert-modal {
+        width: min(700px, calc(100vw - 24px));
+        max-height: calc(100vh - 24px);
+        max-height: calc(100dvh - 24px);
+        overflow-y: auto;
+    }
+
+    .cv-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 6px;
+    }
+
+    .cv-head .field-label {
+        margin: 0;
+    }
+
+    .cv-chip {
+        padding: 2px 11px;
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        background: var(--field);
+        color: var(--text-2);
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .cv-chip[data-kind="pro"],
+    .cv-chip[data-kind="advanced"],
+    .cv-chip[data-kind="lines"] {
+        border-color: var(--accent-line);
+        background: var(--accent-soft);
+        color: var(--accent-text);
+    }
+
+    .cv-text {
+        width: 100%;
+        height: 132px;
+        min-height: 96px;
+        resize: vertical;
+        font: 12px/1.6 var(--mono);
+        white-space: pre;
+        overflow: auto;
+        tab-size: 4;
+    }
+
+    .cv-tools {
+        margin-top: 8px;
+    }
+
+    .cv-summary.is-error {
+        color: var(--danger);
+    }
+
+    .cv-actions {
+        flex-wrap: wrap;
+    }
+
+    .cv-actions .btn {
+        flex: 1 1 130px;
+    }
+
+    /* Keys panel: notes and the touch help ------------------------------------ */
+    .touch-help {
+        display: none;
+        margin-top: 18px;
+        padding-top: 14px;
+        border-top: 1px solid var(--line);
+    }
+
+    html[data-touch="1"] .touch-help {
+        display: block;
+    }
+
+    .touch-help h3 {
+        margin: 0 0 8px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--text-2);
+    }
+
+    .touch-help ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 8px;
+        font-size: 13px;
+        line-height: 1.45;
+        color: var(--text-2);
+    }
+
+    .touch-help li b {
+        color: var(--text);
+        font-weight: 600;
+    }
+
+    /* no keyboard, no key table (it shows up the moment a key is pressed) */
+    html[data-device="phone"][data-kbd="off"] #tab-controls .hotkey-container,
+    html[data-device="phone"][data-kbd="off"] #tab-controls [onclick="resetKeybinds()"] {
+        display: none;
+    }
+
+    /* Fingers: larger targets where the pointer is coarse ----------------------- */
+    @media (pointer: coarse) {
+        .tb-btn {
+            height: 42px;
+            padding: 0 12px;
+        }
+
+        .tb-btn.tb-icon,
+        .tb-btn.tb-new {
+            min-width: 42px;
+        }
+
+        .icon-btn {
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        .action-btn {
+            width: 40px;
+            height: 40px;
+        }
+
+        .seg-btn,
+        .toggle-opt {
+            min-height: 40px;
+        }
+
+        .mode-toggle label {
+            height: 40px;
+        }
+
+        .hotkey-pill {
+            min-height: 40px;
+        }
+
+        .btn,
+        .welcome-btn {
+            min-height: 44px;
+        }
+
+        .speed-option {
+            min-height: 44px;
+        }
+
+        .ctx-split,
+        #singer-filter,
+        .file-upload-label {
+            min-height: 44px;
+        }
+
+        .btn-link {
+            padding: 9px 0;
+        }
+    }
+
+    /* A word pill is the same size on a touch screen, but a finger may land a little beside it: the tap area is larger */
+    html[data-touch="1"] .app-container:not(.is-preview) .word-span {
+        position: relative;
+    }
+
+    html[data-touch="1"] .app-container:not(.is-preview) .word-span::before {
+        content: "";
+        position: absolute;
+        top: -6px;
+        right: -3px;
+        bottom: -6px;
+        left: -3px;
+    }
+
+    /* =====================================================================
+       Preview animations, "Smooth" (shared by both skins). "Simple" keeps the earlier preview.
+       Hooks set by the script: .lyric-line[data-a="0..4"] = distance to the line being sung,
+       .word-span { --p: 0..1 } = how much of the word has been sung, .pv-now = being sung, .pv-gap = room for the dots
+       ===================================================================== */
+    html[data-pvfx="rich"] .app-container.is-preview {
+        --pv-lit: #fff;
+        --pv-base: #868a94;
+        --pv-halo: rgba(167, 139, 250, 0.95);
+    }
+
+    html[data-ui="legacy"][data-pvfx="rich"] .app-container.is-preview {
+        --pv-lit: #f6f6f8;
+        --pv-base: var(--text-3);
+        --pv-halo: rgba(150, 112, 255, 0.9);
+    }
+
+    /* lines: the ones around the line being sung step back */
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line {
+        opacity: 0.26;
+        transform: scale(0.94);
+        transform-origin: 0 50%;
+        transition: opacity 0.55s cubic-bezier(0.22, 0.8, 0.26, 1), transform 0.7s cubic-bezier(0.22, 0.9, 0.28, 1);
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line.is-v2 {
+        transform-origin: 100% 50%;
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line.is-v3 {
+        transform-origin: 50% 50%;
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line[data-a="0"] {
+        opacity: 1;
+        transform: none;
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line[data-a="1"] {
+        opacity: 0.72;
+        transform: scale(0.972);
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line[data-a="2"] {
+        opacity: 0.5;
+        transform: scale(0.955);
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line[data-a="3"] {
+        opacity: 0.34;
+        transform: scale(0.945);
+    }
+
+    /* a line that is being sung (a background or a singer 2 line can overlap the lead line) is always in full light */
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line.is-playing {
+        opacity: 1;
+        transform: none;
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line.pv-gap {
+        margin-top: clamp(34px, 4.2vw, 52px);
+    }
+
+    /* words: the colour comes from the fill below, never from the skin */
+    html[data-pvfx="rich"] .app-container.is-preview .word-span {
+        position: relative;
+        color: var(--pv-base) !important;
+        text-shadow: none !important;
+        transform-origin: 50% 80%;
+        transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.25) !important;
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .word-span.pv-now {
+        transform: translateY(-0.055em) scale(1.035);
+    }
+
+    /* the fill: a copy of the word in full light, uncovered from left to right as --p grows */
+    html[data-pvfx="rich"] .app-container.is-preview .word-span::after {
+        content: attr(data-t);
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        padding: inherit;
+        color: var(--pv-lit);
+        white-space: pre;
+        opacity: 0;
+        pointer-events: none;
+        -webkit-mask-image: linear-gradient(90deg, #000 calc(var(--p, 0) * (100% + 0.7em) - 0.7em), transparent calc(var(--p, 0) * (100% + 0.7em)));
+        mask-image: linear-gradient(90deg, #000 calc(var(--p, 0) * (100% + 0.7em) - 0.7em), transparent calc(var(--p, 0) * (100% + 0.7em)));
+        transition: opacity 0.5s ease;
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line.is-playing .word-span::after {
+        opacity: 1;
+    }
+
+    /* the glow around the word being sung: a transparent copy of the word that only has a shadow (no filters: they are
+       slow on a phone) */
+    html[data-pvfx="rich"] .app-container.is-preview .word-span::before {
+        content: attr(data-t);
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        padding: inherit;
+        color: transparent;
+        text-shadow: 0 0 0.42em var(--pv-halo), 0 0 0.9em var(--pv-halo);
+        white-space: pre;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.6s ease;
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .word-span.pv-now::before {
+        opacity: 0.8;
+        transition-duration: 0.12s;
+    }
+
+    /* the stage fades in when the preview opens */
+    @keyframes pv-in {
+        from {
+            opacity: 0;
+            transform: translateY(18px) scale(0.985);
+        }
+
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+
+    html[data-pvfx="rich"] .app-container.pv-enter .lanes {
+        animation: pv-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+
+    /* the dots after a long break */
+    .pv-dots {
+        position: absolute;
+        left: 6px;
+        z-index: 3;
+        display: none;
+        gap: 0.6em;
+        padding: 0.2em 0;
+        font-size: clamp(14px, 1.6vw, 22px);
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(8px) scale(0.85);
+        transform-origin: 0 50%;
+        transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .pv-dots {
+        display: flex;
+    }
+
+    .pv-dots.is-on {
+        opacity: 1;
+        transform: none;
+        animation: pv-breathe 2.6s ease-in-out infinite;
+    }
+
+    .pv-dots i {
+        width: 0.7em;
+        height: 0.7em;
+        border-radius: 50%;
+        background: var(--pv-base, #868a94);
+        opacity: 0.5;
+        transition: background 0.35s, opacity 0.35s, transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.4), box-shadow 0.35s;
+    }
+
+    .pv-dots i.lit {
+        background: var(--pv-lit, #fff);
+        opacity: 1;
+        transform: scale(1.22);
+        box-shadow: 0 0 0.9em var(--pv-halo, rgba(167, 139, 250, 0.9));
+    }
+
+    @keyframes pv-breathe {
+        0%, 100% { scale: 1; }
+        50% { scale: 1.07; }
+    }
     </style>
+    <style id="css-legacy" media="not all">
+    /* =====================================================================
+       Voxen styles
+       1  Tokens            6  Layers and lyric rows
+       2  Base              7  Dock (player + tap button)
+       3  App layout        8  Modals, sheets, toasts
+       4  Buttons, fields   9  Audio loading panel
+       5  Menu sidebar      10 Responsive
+       ===================================================================== */
+
+    /* 1. Tokens ---------------------------------------------------------- */
+    :root {
+        color-scheme: dark;
+
+        --bg: #101113;
+        --panel: #16171a;
+        --raised: #1d1e22;
+        --field: #212227;
+        --hover: #282931;
+        --press: #32333b;
+        --line: #26272c;
+        --line-strong: #3a3b43;
+
+        --text: #e8e9ec;
+        --text-2: #a1a4ac;
+        --text-3: #7b7e87;
+
+        --accent: #8650fa;
+        --accent-ink: #ffffff;
+        --accent-soft: rgba(134, 80, 250, 0.16);
+        --accent-line: rgba(134, 80, 250, 0.6);
+        --accent-text: #b79bff;
+        --danger: #e5675f;
+
+        --r-sm: 4px;
+        --r: 6px;
+        --r-lg: 10px;
+
+        --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, "Liberation Mono", Menlo, monospace;
+
+        --topbar-h: 48px;
+        --glow-speed: 0.1s;
+    }
+
+    /* 2. Base ------------------------------------------------------------ */
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+        height: 100%;
+    }
+
+    html {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+
+    body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 14px/1.45 var(--font);
+        -webkit-font-smoothing: antialiased;
+        overflow: hidden;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+        font: inherit;
+        color: inherit;
+    }
+
+    button {
+        cursor: pointer;
+    }
+
+    [hidden] {
+        display: none !important;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+    }
+
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--line-strong) transparent;
+    }
+
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--line-strong);
+        border-radius: 4px;
+        border: 2px solid transparent;
+        background-clip: content-box;
+    }
+
+    kbd {
+        display: inline-block;
+        min-width: 18px;
+        padding: 1px 5px;
+        border: 1px solid var(--line-strong);
+        border-radius: var(--r-sm);
+        background: var(--field);
+        color: var(--text-2);
+        font: 11px/1.4 var(--mono);
+        text-align: center;
+    }
+
+    .grow {
+        flex: 1;
+    }
+
+    .ic {
+        flex: none;
+        width: 18px;
+        height: 18px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .ic-fill {
+        fill: currentColor;
+        stroke: currentColor;
+        stroke-width: 1.5;
+    }
+
+    .sprite {
+        position: absolute;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+    }
+
+    .disabled-area {
+        opacity: 0.4;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    /* 3. App layout ------------------------------------------------------ */
+    .app-container {
+        position: relative;
+        display: flex;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+    }
+
+    .editor-area {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .topbar {
+        position: relative;
+        z-index: 20;
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: var(--topbar-h);
+        padding: 0 12px;
+        background: var(--panel);
+        border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-left,
+    .topbar-right {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .topbar-right {
+        justify-content: flex-end;
+    }
+
+    .top-left-controls,
+    .top-right-controls {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .time-display {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        font: 500 17px/1 var(--mono);
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.02em;
+        color: var(--text);
+        pointer-events: none;
+    }
+
+    .mode-indicator,
+    .mobile-header-right {
+        display: none;
+    }
+
+    /* Top bar buttons */
+    .tb-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        height: 32px;
+        padding: 0 10px;
+        border: 0;
+        border-radius: var(--r);
+        background: transparent;
+        color: var(--text-2);
+        font-size: 13px;
+        font-weight: 500;
+        white-space: nowrap;
+        transition: background 0.12s, color 0.12s;
+    }
+
+    .tb-btn:hover {
+        background: var(--hover);
+        color: var(--text);
+    }
+
+    .tb-btn.active,
+    .tb-btn[aria-pressed="true"] {
+        background: var(--accent-soft);
+        color: var(--accent-text);
+    }
+
+    .tb-btn:disabled {
+        opacity: 0.35;
+        pointer-events: none;
+    }
+
+    .tb-btn-solid {
+        background: var(--text);
+        color: #121316;
+    }
+
+    .tb-btn-solid:hover {
+        background: #fff;
+        color: #000;
+    }
+
+    /* Desktop: rows get their actions on hover, so no separate Edit button */
+    #edit-mode-toggle,
+    #btn-add-top {
+        display: none;
+    }
+
+    .app-container.is-editing #btn-add-top {
+        display: inline-flex;
+    }
+
+    /* Layer bar */
+    .layerbar {
+        flex: none;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 12px;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .layerbar-hint {
+        color: var(--text-3);
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .app-container.is-empty .layerbar {
+        display: none;
+    }
+
+    .seg,
+    .mode-toggle {
+        display: inline-flex;
+        gap: 2px;
+        padding: 2px;
+        background: var(--field);
+        border: 1px solid var(--line);
+        border-radius: var(--r);
+    }
+
+    .seg-btn,
+    .mode-toggle label {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        height: 28px;
+        padding: 0 12px;
+        border: 0;
+        border-radius: var(--r-sm);
+        background: transparent;
+        color: var(--text-2);
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.12s, color 0.12s;
+    }
+
+    .seg-btn:hover,
+    .mode-toggle label:hover {
+        color: var(--text);
+    }
+
+    .seg-btn.is-on,
+    .mode-toggle input[type="radio"]:checked + label {
+        background: var(--press);
+        color: var(--text);
+        box-shadow: inset 0 0 0 1px var(--line-strong);
+    }
+
+    .seg-full {
+        display: flex;
+        width: 100%;
+    }
+
+    .seg-full .seg-btn {
+        flex: 1;
+    }
+
+    .seg-count {
+        font: 11px var(--mono);
+        color: var(--text-3);
+    }
+
+    .seg-btn.is-on .seg-count {
+        color: var(--accent-text);
+    }
+
+    .mode-toggle {
+        display: flex;
+    }
+
+    .mode-toggle label {
+        flex: 1;
+        margin: 0;
+    }
+
+    input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .mode-toggle input[type="radio"]:focus-visible + label {
+        outline: 2px solid var(--accent);
+        outline-offset: 1px;
+    }
+
+    /* 4. Buttons and fields ---------------------------------------------- */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        min-height: 36px;
+        padding: 0 14px;
+        border: 1px solid transparent;
+        border-radius: var(--r);
+        background: var(--text);
+        color: #121316;
+        font-size: 13.5px;
+        font-weight: 600;
+        transition: background 0.12s, border-color 0.12s, color 0.12s;
+    }
+
+    .btn:hover {
+        background: #fff;
+    }
+
+    .btn:disabled {
+        opacity: 0.4;
+        pointer-events: none;
+    }
+
+    .btn-secondary {
+        background: var(--raised);
+        border-color: var(--line-strong);
+        color: var(--text);
+        font-weight: 500;
+    }
+
+    .btn-secondary:hover {
+        background: var(--hover);
+    }
+
+    .btn-outline {
+        background: transparent;
+        border-color: var(--line-strong);
+        color: var(--text-2);
+        font-weight: 500;
+    }
+
+    .btn-outline:hover {
+        background: var(--hover);
+        color: var(--text);
+    }
+
+    .btn-danger {
+        color: var(--danger);
+    }
+
+    .btn-auto {
+        width: auto;
+    }
+
+    .btn-note {
+        width: 40px;
+        padding: 0;
+        flex: none;
+        font-size: 16px;
+    }
+
+    .icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        border: 0;
+        border-radius: var(--r);
+        background: transparent;
+        color: var(--text-2);
+        transition: background 0.12s, color 0.12s;
+    }
+
+    .icon-btn:hover {
+        background: var(--hover);
+        color: var(--text);
+    }
+
+    .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .field-label,
+    label {
+        display: block;
+        margin: 0;
+        color: var(--text-2);
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .field-label .optional {
+        margin-left: 6px;
+        color: var(--text-3);
+        font-weight: 400;
+    }
+
+    .hint {
+        margin: 0;
+        color: var(--text-3);
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    textarea,
+    input[type="text"],
+    input[type="number"],
+    select {
+        width: 100%;
+        padding: 8px 10px;
+        background: var(--field);
+        border: 1px solid var(--line);
+        border-radius: var(--r);
+        color: var(--text);
+        transition: border-color 0.12s;
+    }
+
+    textarea:focus,
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus {
+        outline: none;
+        border-color: var(--accent-line);
+    }
+
+    textarea {
+        min-height: 140px;
+        resize: vertical;
+        line-height: 1.55;
+    }
+
+    textarea.mono,
+    .export-preview {
+        font: 12px/1.6 var(--mono);
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
+
+    select {
+        -webkit-appearance: none;
+        appearance: none;
+        padding-right: 28px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a1a4ac' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 9px center;
+    }
+
+    /* File pickers */
+    .file-upload-wrapper,
+    .load-project-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .file-upload-wrapper {
+        min-height: 64px;
+    }
+
+    .load-project-wrapper {
+        height: 36px;
+        flex: 1;
+    }
+
+    .file-upload-input {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        z-index: 2;
+    }
+
+    .file-upload-label {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 0 14px;
+        background: var(--field);
+        border: 1px dashed var(--line-strong);
+        border-radius: var(--r-lg);
+        color: var(--text-2);
+        font-size: 13px;
+        transition: border-color 0.12s, background 0.12s, color 0.12s;
+        z-index: 1;
+    }
+
+    .load-project-wrapper .file-upload-label {
+        border-style: solid;
+        border-radius: var(--r);
+        background: var(--raised);
+        color: var(--text);
+        font-weight: 500;
+    }
+
+    .file-upload-input:hover + .file-upload-label,
+    .file-upload-input:focus-visible + .file-upload-label {
+        border-color: var(--accent-line);
+        color: var(--text);
+    }
+
+    .audio-label-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        min-width: 0;
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .audio-label-main,
+    .audio-label-sub {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .audio-label-main {
+        color: var(--text);
+        font-weight: 500;
+    }
+
+    .audio-label-sub {
+        color: var(--text-3);
+        font-size: 11.5px;
+    }
+
+    /* 5. Menu sidebar ---------------------------------------------------- */
+    .sidebar {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 300;
+        display: flex;
+        flex-direction: column;
+        width: min(420px, 100%);
+        background: var(--panel);
+        border-right: 1px solid var(--line-strong);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+        transform: translateX(-100%);
+        visibility: hidden;
+        transition: transform 0.22s ease, visibility 0s linear 0.22s;
+    }
+
+    .sidebar.active {
+        transform: none;
+        visibility: visible;
+        transition: transform 0.22s ease;
+    }
+
+    .sidebar-overlay-pc {
+        position: absolute;
+        inset: 0;
+        z-index: 250;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+    }
+
+    .sidebar.active ~ .sidebar-overlay-pc {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .sidebar-head {
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 10px 10px 18px;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+    }
+
+    .sidebar-tabs {
+        flex: none;
+        display: flex;
+        padding: 0 10px;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .tab-btn {
+        flex: 1;
+        margin-bottom: -1px;
+        padding: 11px 6px;
+        border: 0;
+        border-bottom: 2px solid transparent;
+        background: transparent;
+        color: var(--text-2);
+        font-size: 13px;
+        font-weight: 500;
+        transition: color 0.12s;
+    }
+
+    .tab-btn:hover {
+        color: var(--text);
+    }
+
+    .tab-btn.active {
+        color: var(--text);
+        border-bottom-color: var(--accent);
+    }
+
+    .sidebar-container {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sidebar-inner {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding: 18px;
+    }
+
+    .tab-content {
+        display: none;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .tab-content.active {
+        display: flex;
+    }
+
+    .row-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .row-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .row-flex {
+        display: flex;
+        gap: 8px;
+    }
+
+    .divider {
+        height: 1px;
+        margin: 0;
+        border: 0;
+        background: var(--line);
+    }
+
+    /* Keybinds */
+    .hotkey-container {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        overflow: hidden;
+    }
+
+    .hotkey-text,
+    .hotkey-pill {
+        display: flex;
+        align-items: center;
+        min-height: 38px;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .hotkey-text {
+        padding-left: 12px;
+        color: var(--text-2);
+        font-size: 13px;
+    }
+
+    .hotkey-pill {
+        justify-content: center;
+        min-width: 84px;
+        margin: 0;
+        padding: 0 12px;
+        border-left: 1px solid var(--line);
+        background: var(--field);
+        color: var(--text);
+        font: 12px var(--mono);
+        cursor: pointer;
+        transition: background 0.12s, color 0.12s;
+    }
+
+    .hotkey-pill:hover {
+        background: var(--accent-soft);
+        color: var(--accent-text);
+    }
+
+    .hotkey-container > :nth-last-child(-n + 2) {
+        border-bottom: 0;
+    }
+
+    .keybind-modal {
+        width: 320px;
+        text-align: center;
+    }
+
+    .keybind-anim {
+        margin: 8px 0;
+        color: var(--accent-text);
+        font: 600 28px var(--mono);
+        animation: pulse 1.2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        50% {
+            opacity: 0.45;
+        }
+    }
+
+    /* 6. Layers and lyric rows ------------------------------------------- */
+    .lanes-wrap {
+        position: relative;
+        flex: 1;
+        min-height: 0;
+        display: flex;
+    }
+
+    .lanes {
+        flex: 1;
+        min-width: 0;
+        min-height: 0;
+        display: flex;
+    }
+
+    .app-container.is-empty .lanes {
+        display: none;
+    }
+
+    .lane {
+        display: none;
+        flex: 1 1 0;
+        min-width: 0;
+        min-height: 0;
+        flex-direction: column;
+    }
+
+    .app-container:not(.layers-split) .lane.is-active,
+    .app-container.layers-split .lane {
+        display: flex;
+    }
+
+    .lane + .lane {
+        border-left: 1px solid var(--line);
+    }
+
+    .app-container:not(.layers-split) .lane.is-active {
+        width: 100%;
+        max-width: 960px;
+        margin: 0 auto;
+        border-right: 1px solid var(--line);
+        border-left: 1px solid var(--line);
+    }
+
+    .lane-head {
+        flex: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: 40px;
+        padding: 0 8px 0 14px;
+        border-bottom: 1px solid var(--line);
+        color: var(--text-2);
+        user-select: none;
+        cursor: pointer;
+    }
+
+    .lane.is-active .lane-head {
+        color: var(--text);
+        box-shadow: inset 0 -2px 0 var(--accent);
+    }
+
+    .lane-dot {
+        flex: none;
+        width: 8px;
+        height: 8px;
+        border: 1.5px solid var(--text-3);
+        border-radius: 50%;
+    }
+
+    .lane.is-active .lane-dot {
+        background: var(--accent);
+        border-color: var(--accent);
+    }
+
+    .lane-title {
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .lane-meta {
+        color: var(--text-3);
+        font-size: 12px;
+    }
+
+    .lane-filter select {
+        width: auto;
+        height: 28px;
+        padding: 0 26px 0 9px;
+        background-color: transparent;
+        border-color: var(--line);
+        color: var(--text-2);
+        font-size: 12px;
+    }
+
+    .lane-body {
+        position: relative;
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding: 4px 0 45vh;
+        overscroll-behavior: contain;
+        scroll-behavior: smooth;
+    }
+
+    .lane-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        padding: 48px 24px;
+        color: var(--text-2);
+        text-align: center;
+    }
+
+    .lane-empty p {
+        margin: 0;
+    }
+
+    .lane-empty .hint {
+        max-width: 34ch;
+    }
+
+    .lane-empty-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    /* Row */
+    .lyric-line {
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 6px 14px;
+        border-bottom: 1px solid var(--line);
+        box-shadow: inset 3px 0 0 transparent;
+        transition: background 0.12s;
+    }
+
+    .lyric-line:hover {
+        background: rgba(255, 255, 255, 0.025);
+    }
+
+    .lyric-line::before {
+        content: "";
+        position: absolute;
+        top: 17px;
+        left: 5px;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--text);
+        opacity: 0;
+    }
+
+    .lane-bg .lyric-line::before {
+        top: 16px;
+    }
+
+    .lyric-line.is-playing {
+        background: rgba(255, 255, 255, 0.04);
+    }
+
+    .lyric-line.is-playing::before {
+        opacity: 1;
+    }
+
+    .lyric-line.is-cursor {
+        background: var(--hover);
+        box-shadow: inset 3px 0 0 var(--text-3);
+    }
+
+    .lane.is-active .lyric-line.is-cursor {
+        box-shadow: inset 3px 0 0 var(--accent);
+    }
+
+    .line-meta {
+        flex: none;
+        display: flex;
+        align-items: center;
+        height: 29px;
+    }
+
+    .timestamp-group {
+        display: inline-flex;
+        align-items: center;
+        gap: 1px;
+        padding: 4px 6px;
+        border-radius: var(--r-sm);
+        color: var(--text-3);
+        font: 12.5px/1 var(--mono);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .timestamp-group:hover,
+    .timestamp-group:focus-within {
+        background: var(--field);
+    }
+
+    .lyric-line.is-playing .timestamp-group {
+        color: var(--text-2);
+    }
+
+    .ts-digit {
+        width: 2.3ch;
+        padding: 0;
+        border: 0;
+        border-radius: 2px;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+        text-align: center;
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
+
+    .ts-digit:focus {
+        outline: none;
+        color: var(--text);
+        background: var(--press);
+    }
+
+    .ts-digit::-webkit-outer-spin-button,
+    .ts-digit::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .ts-sep {
+        opacity: 0.6;
+    }
+
+    .line-content-wrapper {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .line-text {
+        font-size: 17px;
+        line-height: 1.7;
+        color: var(--text);
+        overflow-wrap: anywhere;
+    }
+
+    .lane-bg .line-text {
+        font-size: 15px;
+        color: var(--text-2);
+    }
+
+    .lyric-line.is-v2 .line-text {
+        text-align: right;
+    }
+
+    .lyric-line.is-v3 .line-text {
+        text-align: center;
+    }
+
+    /* Singer filter (lead layer) */
+    .app-container[data-singer="v1"] .lane-lead .lyric-line:not(.is-v1),
+    .app-container[data-singer="v2"] .lane-lead .lyric-line:not(.is-v2),
+    .app-container[data-singer="v3"] .lane-lead .lyric-line:not(.is-v3) {
+        display: none;
+    }
+
+    /* Words */
+    .word-span {
+        display: inline-block;
+        padding: 0 4px;
+        margin: 1px 0;
+        border-radius: var(--r-sm);
+        cursor: pointer;
+        user-select: none;
+        transition: color var(--glow-speed) ease-out, background 0.1s;
+    }
+
+    .app-container:not(.is-editing):not(.is-preview) .word-span:hover {
+        background: var(--press);
+    }
+
+    .word-span.synced {
+        text-decoration: underline;
+        text-decoration-color: var(--accent-line);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 5px;
+    }
+
+    .word-span.active-word,
+    .app-container:not(.is-editing):not(.is-preview) .word-span.active-word:hover {
+        background: var(--accent);
+        color: var(--accent-ink);
+        text-decoration: none;
+    }
+
+    /* Row actions */
+    .line-actions {
+        position: absolute;
+        top: 5px;
+        right: 8px;
+        z-index: 5;
+        display: none;
+        gap: 2px;
+        padding: 2px;
+        background: var(--raised);
+        border: 1px solid var(--line-strong);
+        border-radius: var(--r);
+    }
+
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        border: 0;
+        border-radius: var(--r-sm);
+        background: transparent;
+        color: var(--text-2);
+    }
+
+    .action-btn:hover {
+        background: var(--press);
+        color: var(--text);
+    }
+
+    .action-btn.btn-delete:hover {
+        color: var(--danger);
+    }
+
+    .lyric-line:hover .line-actions,
+    .lyric-line:focus-within .line-actions,
+    .app-container.is-editing .line-actions {
+        display: flex;
+    }
+
+    .app-container.is-editing .lyric-line {
+        padding-right: 84px;
+    }
+
+    /* Preview: both layers play at the same time, each lights the line it is on */
+    .app-container.is-preview .lyric-line {
+        opacity: 0.5;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .app-container.is-preview .lyric-line.is-playing {
+        opacity: 1;
+    }
+
+    .app-container.is-preview .word-span {
+        color: var(--text-2);
+        cursor: default;
+        pointer-events: none;
+        text-decoration: none;
+    }
+
+    .app-container.is-preview .word-span.preview-glow {
+        color: var(--text);
+    }
+
+    .app-container.is-preview .line-actions {
+        display: none !important;
+    }
+
+    .app-container.is-preview .timestamp-group {
+        pointer-events: none;
+    }
+
+    .app-container.is-preview .layerbar {
+        display: none;
+    }
+
+    .app-container.is-preview .lane-head {
+        box-shadow: none;
+        color: var(--text-2);
+        cursor: default;
+    }
+
+    .app-container.is-preview .lane-dot {
+        background: transparent;
+        border-color: var(--text-3);
+    }
+
+    .app-container.is-preview .lane-head .icon-btn,
+    .app-container.is-preview .lane-filter {
+        visibility: hidden;
+    }
+
+    .app-container.is-preview .lyric-line.is-playing::before {
+        background: var(--accent);
+    }
+
+    /* Word context (previous word -> target word) */
+    #word-context-ui {
+        position: absolute;
+        left: 50%;
+        bottom: 14px;
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        max-width: calc(100% - 24px);
+        padding: 8px 14px;
+        background: var(--raised);
+        border: 1px solid var(--line-strong);
+        border-radius: var(--r-lg);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        opacity: 0;
+        pointer-events: none;
+        transform: translate(-50%, 6px);
+        transition: opacity 0.12s, transform 0.12s;
+    }
+
+    #word-context-ui.visible {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+
+    .ctx-layer {
+        padding-right: 10px;
+        border-right: 1px solid var(--line-strong);
+        color: var(--text-3);
+        font-size: 12px;
+    }
+
+    .ctx-prev,
+    .ctx-curr {
+        max-width: 30vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 15px;
+    }
+
+    .ctx-prev {
+        color: var(--text-2);
+    }
+
+    .ctx-curr {
+        color: var(--text);
+        font-weight: 600;
+    }
+
+    .ctx-arrow {
+        display: inline-flex;
+        color: var(--text-3);
+    }
+
+    #word-context-ui.mode-hold .ctx-prev {
+        color: var(--accent-text);
+        font-weight: 600;
+    }
+
+    #word-context-ui.mode-hold .ctx-curr {
+        color: var(--text-2);
+        font-weight: 400;
+    }
+
+    /* Welcome */
+    .welcome-container {
+        display: none;
+        flex: 1;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 24px;
+        text-align: center;
+    }
+
+    .app-container.is-empty .welcome-container {
+        display: flex;
+    }
+
+    .welcome-title {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+    }
+
+    .welcome-sub {
+        max-width: 46ch;
+        margin: 0 0 20px;
+        color: var(--text-2);
+        line-height: 1.55;
+    }
+
+    .welcome-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .welcome-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: 40px;
+        padding: 0 16px;
+        background: var(--raised);
+        border: 1px solid var(--line-strong);
+        border-radius: var(--r);
+        color: var(--text);
+        font-weight: 500;
+        transition: background 0.12s;
+    }
+
+    .welcome-btn:hover:not(:disabled) {
+        background: var(--hover);
+    }
+
+    .welcome-btn.primary {
+        background: var(--text);
+        border-color: var(--text);
+        color: #121316;
+        font-weight: 600;
+    }
+
+    .welcome-btn.primary:hover:not(:disabled) {
+        background: #fff;
+    }
+
+    .welcome-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    .welcome-foot {
+        margin-top: 28px;
+        color: var(--text-3);
+        font-size: 12px;
+    }
+
+    .welcome-foot a {
+        color: inherit;
+    }
+
+    /* 7. Dock ------------------------------------------------------------ */
+    .control-dock {
+        flex: none;
+        padding: 10px 16px calc(12px + env(safe-area-inset-bottom));
+        background: var(--panel);
+        border-top: 1px solid var(--line);
+    }
+
+    .control-dock.active-hold-glow {
+        border-top-color: var(--accent);
+    }
+
+    .dock-inner {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-width: 880px;
+        margin: 0 auto;
+    }
+
+    .dock-seek {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .seek-time {
+        min-width: 38px;
+        color: var(--text-2);
+        font: 12px var(--mono);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .dock-seek .seek-time:last-child {
+        text-align: right;
+    }
+
+    input[type="range"] {
+        --fill: 0%;
+        -webkit-appearance: none;
+        appearance: none;
+        height: 18px;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+    }
+
+    input[type="range"]:focus {
+        outline: none;
+    }
+
+    input[type="range"]:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+        height: 4px;
+        border-radius: 2px;
+        background: linear-gradient(to right, var(--accent) var(--fill), var(--press) var(--fill));
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 12px;
+        height: 12px;
+        margin-top: -4px;
+        border: 0;
+        border-radius: 50%;
+        background: var(--text);
+    }
+
+    input[type="range"]::-moz-range-track {
+        height: 4px;
+        border-radius: 2px;
+        background: var(--press);
+    }
+
+    input[type="range"]::-moz-range-progress {
+        height: 4px;
+        border-radius: 2px;
+        background: var(--accent);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+        width: 12px;
+        height: 12px;
+        border: 0;
+        border-radius: 50%;
+        background: var(--text);
+    }
+
+    .seek-slider {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .dock-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .dock-left,
+    .dock-right {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .dock-right {
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+    .player-controls {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .ctl-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+        height: 40px;
+        padding: 0 8px;
+        border: 0;
+        border-radius: var(--r-lg);
+        background: transparent;
+        color: var(--text-2);
+        transition: background 0.12s, color 0.12s;
+    }
+
+    .ctl-btn:hover {
+        background: var(--hover);
+        color: var(--text);
+    }
+
+    .ctl-btn .ic {
+        width: 22px;
+        height: 22px;
+    }
+
+    .speed-toggle-btn {
+        font: 500 13px var(--mono);
+    }
+
+    .play-btn {
+        width: 46px;
+        height: 46px;
+        padding: 0;
+        background: var(--text);
+        color: #121316;
+    }
+
+    .play-btn:hover {
+        background: #fff;
+        color: #000;
+    }
+
+    .play-btn .ic {
+        width: 22px;
+        height: 22px;
+    }
+
+    .dock-sync-btn,
+    .sync-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        height: 46px;
+        padding: 0 20px;
+        border: 0;
+        border-radius: var(--r-lg);
+        background: var(--accent);
+        color: var(--accent-ink);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        user-select: none;
+        touch-action: manipulation;
+        transition: background 0.08s;
+    }
+
+    .dock-sync-btn {
+        min-width: 128px;
+    }
+
+    .dock-sync-btn kbd {
+        border-color: rgba(255, 255, 255, 0.35);
+        background: transparent;
+        color: rgba(255, 255, 255, 0.78);
+        font-weight: 500;
+        letter-spacing: 0;
+    }
+
+    .dock-sync-btn:hover,
+    .sync-btn:hover {
+        background: #7a43ee;
+    }
+
+    .dock-sync-btn.holding,
+    .sync-btn.holding {
+        background: #6d37de;
+    }
+
+    /* Speed, volume and glow popups */
+    .popup-wrapper {
+        position: relative;
+    }
+
+    .dock-popup {
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 50%;
+        z-index: 40;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 76px;
+        padding: 4px;
+        background: var(--raised);
+        border: 1px solid var(--line-strong);
+        border-radius: var(--r-lg);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateX(-50%) translateY(4px);
+        transition: opacity 0.12s, transform 0.12s, visibility 0s linear 0.12s;
+    }
+
+    .dock-popup.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+        transition: opacity 0.12s, transform 0.12s;
+    }
+
+    .glow-popup {
+        top: calc(100% + 6px);
+        right: 0;
+        bottom: auto;
+        left: auto;
+        transform: translateY(-4px);
+    }
+
+    .glow-popup.active {
+        transform: none;
+    }
+
+    .speed-option {
+        padding: 7px 12px;
+        border: 0;
+        border-radius: var(--r);
+        background: transparent;
+        color: var(--text-2);
+        font: 13px var(--mono);
+        text-align: center;
+    }
+
+    .speed-option:hover {
+        background: var(--hover);
+        color: var(--text);
+    }
+
+    .speed-option.selected {
+        background: var(--accent-soft);
+        color: var(--accent-text);
+    }
+
+    .volume-popup {
+        flex-direction: row;
+        align-items: center;
+        width: 160px;
+        padding: 10px 14px;
+    }
+
+    .vol-slider {
+        width: 100%;
+    }
+
+    .mobile-dock-controls {
+        display: none;
+    }
+
+    /* 8. Modals, sheets, toasts ------------------------------------------ */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        background: rgba(0, 0, 0, 0.6);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.15s, visibility 0s linear 0.15s;
+    }
+
+    .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.15s;
+    }
+
+    .base-modal {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        width: 420px;
+        max-width: 100%;
+        max-height: calc(100vh - 32px);
+        max-height: calc(100dvh - 32px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding: 20px;
+        background: var(--panel);
+        border: 1px solid var(--line-strong);
+        border-radius: var(--r-lg);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-title {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+    .modal-actions .btn {
+        width: auto;
+        min-width: 96px;
+    }
+
+    .modal-actions .btn-danger {
+        margin-right: auto;
+    }
+
+    .offset-modal,
+    .sync-settings-modal {
+        width: 380px;
+    }
+
+    .offset-grid {
+        display: flex;
+        gap: 8px;
+    }
+
+    .offset-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .offset-col input {
+        text-align: center;
+        font-family: var(--mono);
+    }
+
+    .expanded-text-modal {
+        width: 800px;
+        height: 80vh;
+        height: 80dvh;
+    }
+
+    .expanded-textarea {
+        flex: 1;
+        min-height: 0;
+        font: 13px/1.6 var(--mono);
+        resize: none;
+    }
+
+    #expand-modal-actions {
+        display: flex;
+        flex: 1;
+        gap: 8px;
+    }
+
+    #expand-modal-actions .btn:not(.btn-note) {
+        flex: 1;
+    }
+
+    .export-modal {
+        width: 480px;
+    }
+
+    .export-preview {
+        height: 220px;
+        min-height: 0;
+        color: var(--text-2);
+        resize: none;
+    }
+
+    .export-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    /* Sync settings rows */
+    .sync-option-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .sync-option-label {
+        color: var(--text);
+        font-size: 13.5px;
+        font-weight: 500;
+    }
+
+    .sync-option-sub {
+        margin-top: 1px;
+        color: var(--text-3);
+        font-size: 12px;
+    }
+
+    .toggle-group {
+        display: inline-flex;
+        gap: 2px;
+        padding: 2px;
+        background: var(--field);
+        border: 1px solid var(--line);
+        border-radius: var(--r);
+    }
+
+    .toggle-opt {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        height: 28px;
+        padding: 0 12px;
+        border: 0;
+        border-radius: var(--r-sm);
+        background: transparent;
+        color: var(--text-2);
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .toggle-opt:hover {
+        color: var(--text);
+    }
+
+    .toggle-opt.active {
+        background: var(--press);
+        color: var(--text);
+        box-shadow: inset 0 0 0 1px var(--line-strong);
+    }
+
+    .toggle-opt.disabled-mode {
+        opacity: 0.35;
+        pointer-events: none;
+    }
+
+    .toggle-opt .ic {
+        width: 14px;
+        height: 14px;
+    }
+
+    #glow-speed-container {
+        gap: 8px;
+    }
+
+    #glow-speed-container.disabled {
+        opacity: 0.35;
+        pointer-events: none;
+    }
+
+    #custom-glow-input {
+        display: none;
+        width: 72px;
+        height: 32px;
+        padding: 0 8px;
+        text-align: center;
+    }
+
+    #custom-glow-input.active {
+        display: block;
+    }
+
+    /* Edit-line modal */
+    .edit-line-modal {
+        width: 460px;
+    }
+
+    .edit-line-modal textarea {
+        min-height: 84px;
+        font-size: 15px;
+    }
+
+    .confirm-modal {
+        width: 380px;
+    }
+
+    .btn.btn-danger-solid {
+        background: var(--danger);
+        color: #fff;
+    }
+
+    .btn.btn-danger-solid:hover {
+        background: #ee7d76;
+    }
+
+    .edit-singer-row.is-off {
+        opacity: 0.4;
+        pointer-events: none;
+    }
+
+    /* Tools sheet (phones) */
+    .tools-sidebar,
+    .tools-overlay {
+        display: none;
+    }
+
+    .tools-category-label {
+        margin: 4px 0 8px;
+        color: var(--text-3);
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .tools-row-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .tool-item-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 6px 12px;
+        background: var(--raised);
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        color: var(--text);
+        font-size: 12.5px;
+        font-weight: 500;
+    }
+
+    .tool-item-btn:hover {
+        background: var(--hover);
+    }
+
+    .tool-item-btn.active {
+        background: var(--accent-soft);
+        border-color: var(--accent-line);
+        color: var(--accent-text);
+    }
+
+    .tool-item-btn.danger {
+        color: var(--danger);
+    }
+
+    .tool-item-btn .ic {
+        width: 20px;
+        height: 20px;
+    }
+
+    .tools-footer {
+        flex: none;
+        display: flex;
+        gap: 8px;
+        padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+        border-top: 1px solid var(--line);
+    }
+
+    .tools-footer .btn {
+        flex: 1;
+    }
+
+    /* Toasts */
+    .toasts {
+        position: fixed;
+        top: calc(var(--topbar-h) + 10px);
+        right: 12px;
+        z-index: 700;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+        pointer-events: none;
+    }
+
+    .toast {
+        max-width: min(380px, calc(100vw - 24px));
+        padding: 10px 14px;
+        background: var(--raised);
+        border: 1px solid var(--line-strong);
+        border-left: 3px solid var(--accent);
+        border-radius: var(--r);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+        font-size: 13px;
+        white-space: pre-line;
+        pointer-events: auto;
+        animation: toast-in 0.16s ease-out;
+    }
+
+    .toast.is-error {
+        border-left-color: var(--danger);
+    }
+
+    .toast.is-leaving {
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    @keyframes toast-in {
+        from {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+    }
+
+    /* 9. Audio loading panel --------------------------------------------- */
+    .audio-status {
+        position: fixed;
+        top: 12px;
+        left: 50%;
+        z-index: 800;
+        width: min(92vw, 380px);
+        padding: 12px 14px 14px;
+        background: var(--raised);
+        border: 1px solid var(--line-strong);
+        border-radius: var(--r-lg);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+        font-size: 13px;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translate(-50%, -8px);
+        transition: opacity 0.15s, transform 0.15s, visibility 0s linear 0.15s;
+    }
+
+    .audio-status.active {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translate(-50%, 0);
+        transition: opacity 0.15s, transform 0.15s;
+    }
+
+    .audio-status-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .audio-status-spinner {
+        flex: none;
+        width: 14px;
+        height: 14px;
+        border: 2px solid var(--press);
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: audio-status-spin 0.8s linear infinite;
+    }
+
+    @keyframes audio-status-spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .audio-status-text {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: 500;
+    }
+
+    .audio-status-pct {
+        flex: none;
+        color: var(--text-2);
+        font: 12px var(--mono);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .audio-status-cancel {
+        flex: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        padding: 0;
+        border: 0;
+        border-radius: var(--r);
+        background: transparent;
+        color: var(--text-2);
+    }
+
+    .audio-status-cancel:hover {
+        background: var(--hover);
+        color: var(--text);
+    }
+
+    .audio-status-cancel .ic {
+        width: 15px;
+        height: 15px;
+    }
+
+    .audio-status-note {
+        margin-top: 4px;
+        padding-left: 24px;
+        color: var(--text-3);
+        font-size: 12px;
+    }
+
+    .audio-status-bar {
+        height: 3px;
+        margin-top: 10px;
+        border-radius: 2px;
+        background: var(--press);
+        overflow: hidden;
+    }
+
+    .audio-status-fill {
+        width: 0;
+        height: 100%;
+        border-radius: 2px;
+        background: var(--accent);
+        transition: width 0.15s linear;
+    }
+
+    .audio-status-bar.indeterminate .audio-status-fill {
+        width: 40%;
+        animation: audio-status-slide 1.1s ease-in-out infinite;
+    }
+
+    @keyframes audio-status-slide {
+        from {
+            transform: translateX(-100%);
+        }
+
+        to {
+            transform: translateX(250%);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+
+        .audio-status-spinner {
+            animation: none;
+        }
+    }
+
+    /* 10. Responsive ------------------------------------------------------ */
+    @media not all and (hover: hover) and (pointer: fine) {
+        .lyric-line:hover .line-actions,
+        .lyric-line:focus-within .line-actions {
+            display: none;
+        }
+
+        .app-container.is-editing .lyric-line .line-actions {
+            display: flex;
+        }
+    }
+
+    @media (max-width: 900px) {
+        .topbar {
+            padding: 0 8px 0 12px;
+        }
+
+        .top-left-controls,
+        .top-right-controls {
+            display: none;
+        }
+
+        .mode-indicator {
+            display: inline-flex;
+            align-items: center;
+            height: 24px;
+            padding: 0 8px;
+            border: 1px solid var(--line-strong);
+            border-radius: var(--r-sm);
+            color: var(--text-2);
+            font: 500 12px var(--mono);
+        }
+
+        .mobile-header-right {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .time-display {
+            font-size: 18px;
+        }
+
+        .layerbar {
+            gap: 8px;
+            padding: 8px 12px;
+        }
+
+        .layerbar .grow,
+        .layerbar-hint {
+            display: none;
+        }
+
+        .layerbar .seg {
+            flex: 1;
+        }
+
+        .layerbar .seg-btn {
+            flex: 1;
+            height: 32px;
+        }
+
+        #split-btn {
+            width: 40px;
+            height: 38px;
+            padding: 0;
+            background: var(--field);
+            border: 1px solid var(--line);
+        }
+
+        #split-btn[aria-pressed="true"] {
+            border-color: var(--accent-line);
+        }
+
+        #split-btn .btn-text {
+            display: none;
+        }
+
+        /* Both layers: stacked, so they can still be seen playing together */
+        .app-container.layers-split .lanes {
+            flex-direction: column;
+        }
+
+        .app-container.layers-split .lane + .lane {
+            border-top: 1px solid var(--line-strong);
+            border-left: 0;
+        }
+
+        .app-container.layers-split.is-preview .lane {
+            flex: 3 1 0;
+        }
+
+        .app-container.layers-split.is-preview .lane-bg,
+        .app-container.layers-split.is-preview .lane-v2 {
+            flex: 2 1 0;
+        }
+
+        .lane-body {
+            padding-bottom: 30vh;
+        }
+
+        .app-container.layers-split .lane-body {
+            padding-bottom: 90px;
+        }
+
+        .lyric-line {
+            gap: 8px;
+            padding: 6px 10px;
+        }
+
+        .timestamp-group {
+            padding: 4px 3px;
+            font-size: 12px;
+        }
+
+        .line-text {
+            font-size: 16px;
+        }
+
+        .lane-bg .line-text {
+            font-size: 14.5px;
+        }
+
+        /* Dock: speed - transport - volume on one row, then menu / tap / tools */
+        .control-dock {
+            padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+        }
+
+        .dock-inner {
+            gap: 4px;
+        }
+
+        .dock-left {
+            display: contents;
+        }
+
+        .dock-right {
+            display: none;
+        }
+
+        .dock-row {
+            justify-content: space-between;
+        }
+
+        .dock-left > .popup-wrapper:first-child {
+            order: 1;
+        }
+
+        .player-controls {
+            order: 2;
+            gap: 14px;
+        }
+
+        .dock-left > .popup-wrapper:last-child {
+            order: 3;
+        }
+
+        .ctl-btn {
+            min-width: 44px;
+            height: 44px;
+        }
+
+        .play-btn {
+            width: 52px;
+            height: 52px;
+        }
+
+        .mobile-dock-controls {
+            display: grid;
+            grid-template-columns: 52px 1fr 52px;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .mobile-dock-controls .tb-btn {
+            width: 52px;
+            height: 52px;
+            padding: 0;
+            background: var(--raised);
+            border: 1px solid var(--line-strong);
+            border-radius: var(--r-lg);
+            color: var(--text);
+        }
+
+        .mobile-dock-controls .tb-btn.active {
+            background: var(--accent-soft);
+            border-color: var(--accent-line);
+            color: var(--accent-text);
+        }
+
+        .sync-btn {
+            width: 100%;
+            height: 52px;
+            font-size: 15px;
+        }
+
+        #word-context-ui {
+            bottom: 10px;
+        }
+
+        /* Menu becomes a bottom sheet */
+        .sidebar {
+            top: auto;
+            right: 0;
+            width: 100%;
+            height: 88vh;
+            height: 88dvh;
+            border-right: 0;
+            border-top: 1px solid var(--line-strong);
+            border-radius: 12px 12px 0 0;
+            transform: translateY(100%);
+        }
+
+        .sidebar.active {
+            transform: none;
+        }
+
+        /* Modals become bottom sheets too */
+        .modal-overlay {
+            align-items: flex-end;
+            padding: 0;
+        }
+
+        .base-modal {
+            width: 100%;
+            max-height: 90vh;
+            max-height: 90dvh;
+            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+            border-width: 1px 0 0;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .keybind-modal {
+            width: 100%;
+        }
+
+        .expanded-text-modal {
+            height: 85vh;
+            height: 85dvh;
+        }
+
+        .toasts {
+            left: 12px;
+            right: 12px;
+            align-items: stretch;
+        }
+
+        .toast {
+            max-width: none;
+        }
+
+        /* Tools sheet */
+        .tools-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 240;
+            display: block;
+            background: rgba(0, 0, 0, 0.55);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .tools-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .tools-sidebar {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 250;
+            display: flex;
+            flex-direction: column;
+            max-height: 85vh;
+            max-height: 85dvh;
+            background: var(--panel);
+            border-top: 1px solid var(--line-strong);
+            border-radius: 12px 12px 0 0;
+            transform: translateY(105%);
+            visibility: hidden;
+            transition: transform 0.25s ease, visibility 0s linear 0.25s;
+        }
+
+        .tools-sidebar.active {
+            transform: none;
+            visibility: visible;
+            transition: transform 0.25s ease;
+        }
+
+        .tools-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+            padding: 18px 16px 8px;
+        }
+
+        .welcome-title {
+            font-size: 24px;
+        }
+    }
+
+    /* 11. Singer 2 track, syllables ------------------------------------------ */
+    /* a confirmation always sits on top of the dialog that asked for it */
+    #confirm-modal {
+        z-index: 600;
+    }
+
+    .lane-tag {
+        padding: 1px 6px;
+        border: 1px solid var(--line-strong);
+        border-radius: var(--r-sm);
+        color: var(--text-3);
+        font: 11px/1.4 var(--mono);
+    }
+
+    .add-track {
+        border: 1px dashed var(--line-strong);
+        color: var(--text-2);
+    }
+
+    .add-track:hover {
+        border-color: var(--accent-line);
+        color: var(--text);
+    }
+
+    /* Singer 2 sits on the right, and its lines read from the right */
+    .lane-v2 .lyric-line .line-text {
+        text-align: right;
+    }
+
+    /* the syllables of a word wrap together */
+    .word-group {
+        display: inline-block;
+        white-space: nowrap;
+    }
+
+    .beta-tag {
+        display: inline-block;
+        margin-left: 6px;
+        padding: 0 6px;
+        border: 1px solid var(--accent-line);
+        border-radius: 999px;
+        color: var(--accent-text);
+        font-size: 10.5px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        vertical-align: 2px;
+    }
+
+    /* A word that was split: its syllables read as one word with thin dividers */
+    .word-span.is-join {
+        margin-left: -3px;
+        padding-left: 3px;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        box-shadow: inset 1px 0 0 var(--line-strong);
+    }
+
+    .word-span.has-join {
+        padding-right: 3px;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .word-span.active-word.is-join {
+        box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.35);
+    }
+
+    /* Syllable status in the layer bar */
+    .syl-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-2);
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .syl-chip button {
+        height: 24px;
+        padding: 0 8px;
+        border: 1px solid var(--line-strong);
+        border-radius: var(--r-sm);
+        background: transparent;
+        color: var(--text-2);
+        font-size: 12px;
+    }
+
+    .syl-chip button:hover {
+        color: var(--text);
+        background: var(--hover);
+    }
+
+    /* Split button next to the word under the cursor */
+    .ctx-split {
+        display: none;
+        pointer-events: auto;
+        height: 26px;
+        padding: 0 9px;
+        gap: 6px;
+        align-items: center;
+        border: 1px solid var(--line-strong);
+        border-radius: var(--r-sm);
+        background: transparent;
+        color: var(--text-2);
+        font-size: 12px;
+    }
+
+    .ctx-split:hover {
+        color: var(--text);
+        background: var(--hover);
+    }
+
+    .app-container.syl-on .ctx-split {
+        display: inline-flex;
+    }
+
+    /* Syllable panel */
+    .syl-modal {
+        width: 460px;
+    }
+
+    .check-row {
+        display: flex;
+        align-items: baseline;
+        gap: 9px;
+        padding: 6px 0;
+        color: var(--text);
+        font-size: 13.5px;
+        cursor: pointer;
+    }
+
+    .check-row input {
+        flex: none;
+        width: 16px;
+        height: 16px;
+        margin: 0;
+        accent-color: var(--accent);
+        transform: translateY(3px);
+    }
+
+    .check-row .src-name {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .check-row small {
+        display: block;
+        color: var(--text-3);
+        font-size: 12px;
+    }
+
+    .src-state {
+        flex: none;
+        color: var(--text-3);
+        font-size: 12px;
+        font-style: normal;
+    }
+
+    .src-state[data-state="ok"] {
+        color: #7cc38f;
+    }
+
+    .src-state[data-state="offline"],
+    .src-state[data-state="limited"],
+    .src-state[data-state="partial"] {
+        color: var(--danger);
+    }
+
+    .syl-progress {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 12.5px;
+        color: var(--text-2);
+    }
+
+    .syl-progress[hidden] {
+        display: none;
+    }
+
+    .syl-bar {
+        flex: 0 0 90px;
+        height: 4px;
+        overflow: hidden;
+        border-radius: 2px;
+        background: var(--press);
+    }
+
+    .syl-bar > div {
+        width: 0;
+        height: 100%;
+        background: var(--accent);
+        transition: width 0.2s;
+    }
+
+    .syl-foot {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-3);
+        font-size: 12.5px;
+    }
+
+    .btn-link {
+        padding: 0;
+        border: 0;
+        background: none;
+        color: var(--accent-text);
+        font-size: 12.5px;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    .btn-link:hover {
+        color: var(--text);
+    }
+
+    /* Splitting by hand */
+    .split-modal {
+        width: 520px;
+    }
+
+    .split-list {
+        position: relative;
+        max-height: min(46vh, 380px);
+        overflow-y: auto;
+        border: 1px solid var(--line);
+        border-radius: var(--r);
+        background: var(--bg);
+    }
+
+    .split-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 8px 12px;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .split-row:last-child {
+        border-bottom: 0;
+    }
+
+    .split-row.is-focus {
+        background: var(--hover);
+    }
+
+    .split-word {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        min-width: 0;
+        font-size: 22px;
+        line-height: 1;
+        user-select: none;
+    }
+
+    .sp-l,
+    .sp-x {
+        padding: 6px 0;
+    }
+
+    .sp-x {
+        color: var(--text-3);
+    }
+
+    .sp-gap {
+        position: relative;
+        flex: none;
+        width: 4px;
+        height: 38px;
+        padding: 0;
+        border: 0;
+        border-radius: 3px;
+        background: transparent;
+        cursor: pointer;
+        transition: width 0.1s;
+    }
+
+    /* a bigger target than the gap itself: it reaches halfway into the letters on both sides */
+    .sp-gap::after {
+        content: "";
+        position: absolute;
+        inset: 0 -6px;
+    }
+
+    .sp-gap::before {
+        content: "";
+        position: absolute;
+        top: 5px;
+        bottom: 5px;
+        left: 50%;
+        width: 2px;
+        margin-left: -1px;
+        border-radius: 1px;
+        background: transparent;
+    }
+
+    .sp-gap:hover::before,
+    .sp-gap:focus-visible::before {
+        background: var(--text-3);
+    }
+
+    .sp-gap[aria-pressed="true"] {
+        width: 18px;
+    }
+
+    .sp-gap[aria-pressed="true"]::before {
+        background: var(--accent);
+    }
+
+    .sp-gap:disabled {
+        cursor: default;
+    }
+
+    .split-tools {
+        display: flex;
+        flex: none;
+        align-items: center;
+        gap: 2px;
+    }
+
+    .split-preview {
+        min-width: 4ch;
+        margin-right: 6px;
+        color: var(--text-3);
+        font-size: 13px;
+        text-align: right;
+    }
+
+    .split-row.is-split .split-preview {
+        color: var(--accent-text);
+    }
+
+    .check-line {
+        display: flex;
+        align-items: flex-start;
+        gap: 9px;
+        color: var(--text-2);
+        font-size: 13px;
+        cursor: pointer;
+    }
+
+    .check-line input {
+        flex: none;
+        width: 16px;
+        height: 16px;
+        margin: 1px 0 0;
+        accent-color: var(--accent);
+    }
+
+    .app-container.is-editing.syl-on .lyric-line {
+        padding-right: 114px;
+    }
+
+    .edit-backs-row[hidden],
+    .edit-singer-row[hidden] {
+        display: none;
+    }
+
+    @media (max-width: 900px) {
+        #add-v2-btn {
+            width: 40px;
+            height: 38px;
+            padding: 0;
+            background: var(--field);
+        }
+
+        #add-v2-btn .btn-text {
+            display: none;
+        }
+
+        .syl-chip button {
+            display: none;
+        }
+
+        .app-container.layers-split.is-preview .lane-v2 {
+            flex: 2 1 0;
+        }
+
+        .split-word {
+            font-size: 20px;
+        }
+
+        .sp-gap {
+            width: 6px;
+            height: 44px;
+        }
+
+        .sp-gap::after {
+            inset: 0 -8px;
+        }
+
+        .split-row {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .split-tools {
+            align-self: flex-end;
+        }
+    }
+
+    /* =====================================================================
+       Legacy skin: the layout of the previous build on the shared markup.
+       The layout script moves the top bar and the dock back inside <main> and the four tabs into .sidebar-tabs, so the
+       old rules above find the structure they were written for. What the modern layout added is switched off here.
+       ===================================================================== */
+    .workspace,
+    .sidebar-panel {
+        display: contents;
+    }
+
+    .rail,
+    .wordmark,
+    .panel-title,
+    .preview-close,
+    .dock-clock,
+    .add-line {
+        display: none !important;
+    }
+
+    .tab-btn .ic {
+        display: none;
+    }
+
+    /* the new buttons take the look of their neighbours */
+    .tb-btn.tb-icon .ic {
+        margin: 0;
+    }
+
+    .dock-undo.ctl-round {
+        width: auto;
+        min-width: 44px;
+        height: 44px;
+        background: transparent;
+        border-radius: var(--r);
+    }
+
+    /* =====================================================================
+       Additions (shared by the modern and the legacy skin)
+       - the label variants, touch behaviour
+       - history buttons, converter, toast button, the Keys panel
+       Only tokens that both skins define are used.
+       ===================================================================== */
+    html[data-ui="legacy"] .ui-m {
+        display: none !important;
+    }
+
+    html:not([data-ui="legacy"]) .ui-l {
+        display: none !important;
+    }
+
+    /* Touch ------------------------------------------------------------- */
+    html,
+    body {
+        overscroll-behavior: none;
+    }
+
+    .lane-body {
+        overscroll-behavior: contain;
+    }
+
+    button,
+    .seg-btn,
+    .toggle-opt,
+    .tab-btn,
+    .word-span,
+    .lyric-line,
+    .hotkey-pill,
+    .file-upload-label,
+    .speed-option,
+    .tool-item-btn {
+        touch-action: manipulation;
+    }
+
+    .dock-sync-btn,
+    .sync-btn {
+        touch-action: none;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    html[data-touch="1"] .lyric-line,
+    html[data-touch="1"] .word-span,
+    html[data-touch="1"] .lane-head,
+    html[data-touch="1"] .welcome-container {
+        -webkit-touch-callout: none;
+    }
+
+    html[data-touch="1"] .word-span,
+    html[data-touch="1"] .line-text {
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    input,
+    textarea {
+        -webkit-user-select: text;
+        user-select: text;
+    }
+
+    /* a keyboard hint means nothing on a touch screen without a keyboard */
+    html[data-kbd="off"] kbd[data-keyhint] {
+        display: none !important;
+    }
+
+    /* Top bar: history, clear, convert ------------------------------------ */
+    .tb-btn.tb-icon {
+        width: 34px;
+        padding: 0;
+    }
+
+    .tb-group {
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+    }
+
+    .tb-group + .tb-btn {
+        margin-left: 2px;
+    }
+
+    .ctl-btn:disabled,
+    .md-hist:disabled {
+        opacity: 0.35;
+        pointer-events: none;
+    }
+
+    /* Undo beside TAP: only where a finger is the pointer (a desktop has the top bar and the keyboard) */
+    .dock-undo {
+        display: none;
+    }
+
+    html[data-touch="1"] .dock-undo {
+        display: inline-flex;
+    }
+
+    /* a narrower window: Clear times and Convert become icons (the modern top bar is plain text otherwise) */
+    @media (min-width: 901px) and (max-width: 1220px) {
+        .tb-btn.tb-new {
+            width: 34px;
+            padding: 0;
+        }
+
+        .tb-btn.tb-new .btn-text {
+            display: none;
+        }
+
+        .topbar .tb-btn.tb-new .ic {
+            display: block;
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    /* a touch screen has no hover: rows show their buttons in Edit mode, so the Edit button has to be there */
+    html[data-touch="1"] #edit-mode-toggle {
+        display: inline-flex;
+    }
+
+    @media (max-width: 900px) {
+        .mobile-dock-controls {
+            grid-template-columns: 52px 46px minmax(0, 1fr) 46px 52px;
+            gap: 8px;
+        }
+
+        .mobile-dock-controls .md-hist {
+            width: 46px;
+            height: 46px;
+            align-self: center;
+        }
+    }
+
+    /* Toast with a button -------------------------------------------------- */
+    .toast.has-action {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .toast .toast-act {
+        flex: none;
+        margin-left: 4px;
+        padding: 5px 12px;
+        border: 0;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent-text);
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .toast .toast-act:hover {
+        background: var(--accent);
+        color: var(--accent-ink);
+    }
+
+    /* Converter ------------------------------------------------------------ */
+    .convert-modal {
+        width: min(700px, calc(100vw - 24px));
+        max-height: calc(100vh - 24px);
+        max-height: calc(100dvh - 24px);
+        overflow-y: auto;
+    }
+
+    .cv-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 6px;
+    }
+
+    .cv-head .field-label {
+        margin: 0;
+    }
+
+    .cv-chip {
+        padding: 2px 11px;
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        background: var(--field);
+        color: var(--text-2);
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .cv-chip[data-kind="pro"],
+    .cv-chip[data-kind="advanced"],
+    .cv-chip[data-kind="lines"] {
+        border-color: var(--accent-line);
+        background: var(--accent-soft);
+        color: var(--accent-text);
+    }
+
+    .cv-text {
+        width: 100%;
+        height: 132px;
+        min-height: 96px;
+        resize: vertical;
+        font: 12px/1.6 var(--mono);
+        white-space: pre;
+        overflow: auto;
+        tab-size: 4;
+    }
+
+    .cv-tools {
+        margin-top: 8px;
+    }
+
+    .cv-summary.is-error {
+        color: var(--danger);
+    }
+
+    .cv-actions {
+        flex-wrap: wrap;
+    }
+
+    .cv-actions .btn {
+        flex: 1 1 130px;
+    }
+
+    /* Keys panel: notes and the touch help ------------------------------------ */
+    .touch-help {
+        display: none;
+        margin-top: 18px;
+        padding-top: 14px;
+        border-top: 1px solid var(--line);
+    }
+
+    html[data-touch="1"] .touch-help {
+        display: block;
+    }
+
+    .touch-help h3 {
+        margin: 0 0 8px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--text-2);
+    }
+
+    .touch-help ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 8px;
+        font-size: 13px;
+        line-height: 1.45;
+        color: var(--text-2);
+    }
+
+    .touch-help li b {
+        color: var(--text);
+        font-weight: 600;
+    }
+
+    /* no keyboard, no key table (it shows up the moment a key is pressed) */
+    html[data-device="phone"][data-kbd="off"] #tab-controls .hotkey-container,
+    html[data-device="phone"][data-kbd="off"] #tab-controls [onclick="resetKeybinds()"] {
+        display: none;
+    }
+
+    /* Fingers: larger targets where the pointer is coarse ----------------------- */
+    @media (pointer: coarse) {
+        .tb-btn {
+            height: 42px;
+            padding: 0 12px;
+        }
+
+        .tb-btn.tb-icon,
+        .tb-btn.tb-new {
+            min-width: 42px;
+        }
+
+        .icon-btn {
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        .action-btn {
+            width: 40px;
+            height: 40px;
+        }
+
+        .seg-btn,
+        .toggle-opt {
+            min-height: 40px;
+        }
+
+        .mode-toggle label {
+            height: 40px;
+        }
+
+        .hotkey-pill {
+            min-height: 40px;
+        }
+
+        .btn,
+        .welcome-btn {
+            min-height: 44px;
+        }
+
+        .speed-option {
+            min-height: 44px;
+        }
+
+        .ctx-split,
+        #singer-filter,
+        .file-upload-label {
+            min-height: 44px;
+        }
+
+        .btn-link {
+            padding: 9px 0;
+        }
+    }
+
+    /* A word pill is the same size on a touch screen, but a finger may land a little beside it: the tap area is larger */
+    html[data-touch="1"] .app-container:not(.is-preview) .word-span {
+        position: relative;
+    }
+
+    html[data-touch="1"] .app-container:not(.is-preview) .word-span::before {
+        content: "";
+        position: absolute;
+        top: -6px;
+        right: -3px;
+        bottom: -6px;
+        left: -3px;
+    }
+
+    /* =====================================================================
+       Preview animations, "Smooth" (shared by both skins). "Simple" keeps the earlier preview.
+       Hooks set by the script: .lyric-line[data-a="0..4"] = distance to the line being sung,
+       .word-span { --p: 0..1 } = how much of the word has been sung, .pv-now = being sung, .pv-gap = room for the dots
+       ===================================================================== */
+    html[data-pvfx="rich"] .app-container.is-preview {
+        --pv-lit: #fff;
+        --pv-base: #868a94;
+        --pv-halo: rgba(167, 139, 250, 0.95);
+    }
+
+    html[data-ui="legacy"][data-pvfx="rich"] .app-container.is-preview {
+        --pv-lit: #f6f6f8;
+        --pv-base: var(--text-3);
+        --pv-halo: rgba(150, 112, 255, 0.9);
+    }
+
+    /* lines: the ones around the line being sung step back */
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line {
+        opacity: 0.26;
+        transform: scale(0.94);
+        transform-origin: 0 50%;
+        transition: opacity 0.55s cubic-bezier(0.22, 0.8, 0.26, 1), transform 0.7s cubic-bezier(0.22, 0.9, 0.28, 1);
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line.is-v2 {
+        transform-origin: 100% 50%;
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line.is-v3 {
+        transform-origin: 50% 50%;
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line[data-a="0"] {
+        opacity: 1;
+        transform: none;
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line[data-a="1"] {
+        opacity: 0.72;
+        transform: scale(0.972);
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line[data-a="2"] {
+        opacity: 0.5;
+        transform: scale(0.955);
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line[data-a="3"] {
+        opacity: 0.34;
+        transform: scale(0.945);
+    }
+
+    /* a line that is being sung (a background or a singer 2 line can overlap the lead line) is always in full light */
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line.is-playing {
+        opacity: 1;
+        transform: none;
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line.pv-gap {
+        margin-top: clamp(34px, 4.2vw, 52px);
+    }
+
+    /* words: the colour comes from the fill below, never from the skin */
+    html[data-pvfx="rich"] .app-container.is-preview .word-span {
+        position: relative;
+        color: var(--pv-base) !important;
+        text-shadow: none !important;
+        transform-origin: 50% 80%;
+        transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.25) !important;
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .word-span.pv-now {
+        transform: translateY(-0.055em) scale(1.035);
+    }
+
+    /* the fill: a copy of the word in full light, uncovered from left to right as --p grows */
+    html[data-pvfx="rich"] .app-container.is-preview .word-span::after {
+        content: attr(data-t);
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        padding: inherit;
+        color: var(--pv-lit);
+        white-space: pre;
+        opacity: 0;
+        pointer-events: none;
+        -webkit-mask-image: linear-gradient(90deg, #000 calc(var(--p, 0) * (100% + 0.7em) - 0.7em), transparent calc(var(--p, 0) * (100% + 0.7em)));
+        mask-image: linear-gradient(90deg, #000 calc(var(--p, 0) * (100% + 0.7em) - 0.7em), transparent calc(var(--p, 0) * (100% + 0.7em)));
+        transition: opacity 0.5s ease;
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .lyric-line.is-playing .word-span::after {
+        opacity: 1;
+    }
+
+    /* the glow around the word being sung: a transparent copy of the word that only has a shadow (no filters: they are
+       slow on a phone) */
+    html[data-pvfx="rich"] .app-container.is-preview .word-span::before {
+        content: attr(data-t);
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        padding: inherit;
+        color: transparent;
+        text-shadow: 0 0 0.42em var(--pv-halo), 0 0 0.9em var(--pv-halo);
+        white-space: pre;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.6s ease;
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .word-span.pv-now::before {
+        opacity: 0.8;
+        transition-duration: 0.12s;
+    }
+
+    /* the stage fades in when the preview opens */
+    @keyframes pv-in {
+        from {
+            opacity: 0;
+            transform: translateY(18px) scale(0.985);
+        }
+
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+
+    html[data-pvfx="rich"] .app-container.pv-enter .lanes {
+        animation: pv-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+
+    /* the dots after a long break */
+    .pv-dots {
+        position: absolute;
+        left: 6px;
+        z-index: 3;
+        display: none;
+        gap: 0.6em;
+        padding: 0.2em 0;
+        font-size: clamp(14px, 1.6vw, 22px);
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(8px) scale(0.85);
+        transform-origin: 0 50%;
+        transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+    }
+
+    html[data-pvfx="rich"] .app-container.is-preview .pv-dots {
+        display: flex;
+    }
+
+    .pv-dots.is-on {
+        opacity: 1;
+        transform: none;
+        animation: pv-breathe 2.6s ease-in-out infinite;
+    }
+
+    .pv-dots i {
+        width: 0.7em;
+        height: 0.7em;
+        border-radius: 50%;
+        background: var(--pv-base, #868a94);
+        opacity: 0.5;
+        transition: background 0.35s, opacity 0.35s, transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.4), box-shadow 0.35s;
+    }
+
+    .pv-dots i.lit {
+        background: var(--pv-lit, #fff);
+        opacity: 1;
+        transform: scale(1.22);
+        box-shadow: 0 0 0.9em var(--pv-halo, rgba(167, 139, 250, 0.9));
+    }
+
+    @keyframes pv-breathe {
+        0%, 100% { scale: 1; }
+        50% { scale: 1.07; }
+    }
+    </style>
+    <script>
+        /* Picks the interface (modern / legacy) and the preview animation before anything is drawn.
+           ?ui=legacy or ?ui=modern in the address switches it (and is remembered). */
+        (function () {
+            var root = document.documentElement, ui = 'modern', fx = null, q = null;
+            try { q = /[?&]ui=(legacy|modern)\b/.exec(location.search); } catch (e) { }
+            try {
+                if (q) localStorage.setItem('vx.ui', q[1]);
+                ui = q ? q[1] : (localStorage.getItem('vx.ui') === 'legacy' ? 'legacy' : 'modern');
+                fx = localStorage.getItem('vx.pvfx');
+            } catch (e) { if (q) ui = q[1]; }
+            if (fx !== 'simple' && fx !== 'rich') fx = (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'simple' : 'rich';
+            root.setAttribute('data-ui', ui);
+            root.setAttribute('data-pvfx', fx);
+            document.getElementById('css-modern').media = ui === 'legacy' ? 'not all' : 'all';
+            document.getElementById('css-legacy').media = ui === 'legacy' ? 'all' : 'not all';
+            var m = document.querySelector('meta[name="theme-color"]');
+            if (m && ui === 'legacy') m.setAttribute('content', '#101113');
+        })();
+    </script>
 </head>
 
 <body>
@@ -3495,6 +7473,10 @@
             <symbol id="i-session" viewBox="0 0 24 24"><rect x="4.5" y="3.5" width="15" height="17" rx="3" /><path d="M8.5 8.5h7M8.5 12h7M8.5 15.5h4" /></symbol>
             <symbol id="i-output" viewBox="0 0 24 24"><rect x="3.5" y="8.5" width="12" height="12" rx="2.5" /><path d="M8.5 8.5V6A2.5 2.5 0 0 1 11 3.5h7A2.5 2.5 0 0 1 20.5 6v7a2.5 2.5 0 0 1-2.5 2.5h-2.5" /></symbol>
             <symbol id="i-gear" viewBox="0 0 24 24"><path d="M9.93 5.00 L10.40 2.43 L13.60 2.43 L14.07 5.00 A7.30 7.30 0 0 1 15.48 5.58 L17.63 4.10 L19.90 6.37 L18.42 8.52 A7.30 7.30 0 0 1 19.00 9.93 L21.57 10.40 L21.57 13.60 L19.00 14.07 A7.30 7.30 0 0 1 18.42 15.48 L19.90 17.63 L17.63 19.90 L15.48 18.42 A7.30 7.30 0 0 1 14.07 19.00 L13.60 21.57 L10.40 21.57 L9.93 19.00 A7.30 7.30 0 0 1 8.52 18.42 L6.37 19.90 L4.10 17.63 L5.58 15.48 A7.30 7.30 0 0 1 5.00 14.07 L2.43 13.60 L2.43 10.40 L5.00 9.93 A7.30 7.30 0 0 1 5.58 8.52 L4.10 6.37 L6.37 4.10 L8.52 5.58 A7.30 7.30 0 0 1 9.93 5.00 Z" /><circle cx="12" cy="12" r="2.9" /></symbol>
+            <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5" /><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11" /></symbol>
+            <symbol id="i-redo" viewBox="0 0 24 24"><path d="m15 14 5-5-5-5" /><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13" /></symbol>
+            <symbol id="i-eraser" viewBox="0 0 24 24"><path d="m7 21-4.3-4.3a1.6 1.6 0 0 1 0-2.3L14 3.1a1.6 1.6 0 0 1 2.3 0l5.6 5.6a1.6 1.6 0 0 1 0 2.3L11 21" /><path d="M7 21h13.5" /><path d="m9.5 9.7 7.4 7.4" /></symbol>
+            <symbol id="i-convert" viewBox="0 0 24 24"><path d="M4 8h14l-3.6-3.6" /><path d="M20 16H6l3.6 3.6" /></symbol>
         </defs>
     </svg>
     <div class="app-container is-empty" id="app-container" data-singer="all">
@@ -3515,7 +7497,7 @@
                     </button>
                     <button id="btn-add-top" class="tb-btn" type="button" onclick="addLineAtTop()">
                         <svg class="ic" aria-hidden="true"><use href="#i-plus" /></svg>
-                        <span class="btn-text">Add line</span>
+                        <span class="btn-text"><span class="ui-m">Add line</span><span class="ui-l">Line</span></span>
                     </button>
                     <button id="preview-btn" class="tb-btn" type="button" onclick="togglePreviewMode()">
                         <svg class="ic" aria-hidden="true"><use href="#i-eye" /></svg>
@@ -3524,6 +7506,11 @@
                     <button id="btn-top-offset" class="tb-btn" type="button" onclick="openOffsetModal()">
                         <svg class="ic" aria-hidden="true"><use href="#i-clock" /></svg>
                         <span class="btn-text">Offset</span>
+                    </button>
+                    <button id="btn-top-clear" class="tb-btn tb-new" type="button" onclick="askClearTimestamps()"
+                        title="Clear every timestamp" aria-label="Clear times" data-v6>
+                        <svg class="ic" aria-hidden="true"><use href="#i-eraser" /></svg>
+                        <span class="btn-text">Clear times</span>
                     </button>
                 </div>
             </div>
@@ -3534,13 +7521,26 @@
                 <div class="mobile-header-right">
                     <button id="sync-mode-btn" class="icon-btn" type="button" onclick="openSyncSettings()"
                         aria-label="Sync settings">
-                        <svg class="ic" aria-hidden="true"><use href="#i-gear" /></svg>
+                        <svg class="ic ui-m" aria-hidden="true"><use href="#i-gear" /></svg><svg class="ic ui-l" aria-hidden="true"><use href="#i-sliders" /></svg>
                     </button>
                     <button class="icon-btn" id="fullscreenBtn" type="button" aria-label="Toggle fullscreen">
                         <svg class="ic" aria-hidden="true"><use href="#i-expand" /></svg>
                     </button>
                 </div>
                 <div class="top-right-controls">
+                    <div class="tb-group" role="group" aria-label="History" data-v6>
+                        <button id="btn-undo" class="tb-btn tb-icon" type="button" onclick="vxUndo()" data-undo disabled>
+                            <svg class="ic" aria-hidden="true"><use href="#i-undo" /></svg>
+                        </button>
+                        <button id="btn-redo" class="tb-btn tb-icon" type="button" onclick="vxRedo()" data-redo disabled>
+                            <svg class="ic" aria-hidden="true"><use href="#i-redo" /></svg>
+                        </button>
+                    </div>
+                    <button id="btn-convert" class="tb-btn tb-new" type="button" onclick="openConvertModal()"
+                        title="Convert between Pro and Advanced" aria-label="Convert" data-v6>
+                        <svg class="ic" aria-hidden="true"><use href="#i-convert" /></svg>
+                        <span class="btn-text">Convert</span>
+                    </button>
                     <button class="tb-btn" type="button" onclick="arrangeLines()" title="Sort lines by time (R)">
                         <svg class="ic" aria-hidden="true"><use href="#i-sort" /></svg>
                         <span class="btn-text">Sort</span>
@@ -3561,7 +7561,7 @@
                     <svg class="ic" aria-hidden="true"><use href="#i-media" /></svg><span>Media</span>
                 </button>
                 <button id="tab-btn-controls" class="tab-btn" type="button" onclick="railTab('controls')" aria-pressed="false">
-                    <svg class="ic" aria-hidden="true"><use href="#i-keys" /></svg><span>Keys</span>
+                    <svg class="ic" aria-hidden="true"><use href="#i-keys" /></svg><span><span class="ui-m">Keys</span><span class="ui-l">Controls</span></span>
                 </button>
                 <button id="tab-btn-session" class="tab-btn disabled-area" type="button" onclick="railTab('session')" aria-pressed="false">
                     <svg class="ic" aria-hidden="true"><use href="#i-session" /></svg><span>Session</span>
@@ -3583,13 +7583,15 @@
                     </button>
                 </div>
 
+            <div class="sidebar-tabs" id="sidebar-tabs"></div>
+
             <div class="sidebar-container">
                 <div class="sidebar-inner">
 
                     <div id="tab-media" class="tab-content active">
                         <h2 class="panel-title">Media</h2>
                         <div class="field">
-                            <span class="field-label">Audio source</span>
+                            <span class="field-label"><span class="ui-m">Audio source</span><span class="ui-l">Audio</span></span>
                             <div class="file-upload-wrapper">
                                 <!-- Accepts any audio (and audio-capable containers like MP4/WebM/3GP/OGG). Formats the browser can't
                                      play natively (WMA, AIFF, AMR, AC3, DTS, WavPack, APE, ...) are converted automatically. -->
@@ -3690,6 +7692,20 @@
                             </div>
                         </div>
 
+                        <div class="field" data-v6>
+                            <span class="field-label">Timestamps</span>
+                            <div class="row-2">
+                                <button class="btn btn-secondary" type="button" onclick="openOffsetModal()">Shift all</button>
+                                <button class="btn btn-outline btn-danger" type="button" onclick="askClearTimestamps()">Clear all</button>
+                            </div>
+                        </div>
+
+                        <div class="field" data-v6>
+                            <span class="field-label">Convert</span>
+                            <button class="btn btn-secondary" type="button" onclick="openConvertModal()">Pro &#8644; Advanced&hellip;</button>
+                            <p class="hint">Turn a Pro file into an Advanced one, or the other way round, without touching this session.</p>
+                        </div>
+
                         <hr class="divider">
 
                         <div class="field">
@@ -3717,6 +7733,7 @@
                     <div id="tab-controls" class="tab-content">
                         <h2 class="panel-title">Keys</h2>
                         <p class="hint">Click a key to rebind it.</p>
+                        <p class="hint" id="keys-note" data-v6></p>
                         <div class="hotkey-container">
                             <div class="hotkey-text">Previous line</div>
                             <div class="hotkey-pill" id="kb-prevLine" onclick="rebindKey('prevLine')">W</div>
@@ -3774,8 +7791,26 @@
 
                             <div class="hotkey-text">Sort by time</div>
                             <div class="hotkey-pill" id="kb-arrange" onclick="rebindKey('arrange')">R</div>
+
+                            <div class="hotkey-text" data-v6>Undo</div>
+                            <div class="hotkey-pill" id="kb-undo" onclick="rebindKey('undo')" data-v6>Z</div>
+
+                            <div class="hotkey-text" data-v6>Redo</div>
+                            <div class="hotkey-pill" id="kb-redo" onclick="rebindKey('redo')" data-v6>Y</div>
                         </div>
                         <button class="btn btn-secondary" type="button" onclick="resetKeybinds()">Reset defaults</button>
+
+                        <div class="touch-help" id="touch-help" data-v6>
+                            <h3>Touch</h3>
+                            <ul>
+                                <li><b>TAP</b> sets the time of the highlighted word. In Hold mode, keep your finger down for as long as the word is sung.</li>
+                                <li><b>Tap a word</b> to jump to it and make it the next one to time.</li>
+                                <li><b>Long-press a line</b> to edit it.</li>
+                                <li><b>Double-tap a word</b> to split it into syllables (when syllables are on).</li>
+                                <li><b>Undo and redo</b> are the arrows next to TAP, or in the top bar.</li>
+                                <li><b>Swipe up</b> on the bottom bar to open the tools.</li>
+                            </ul>
+                        </div>
                     </div>
 
                 </div>
@@ -3840,6 +7875,9 @@
                         </button>
                         <button class="welcome-btn" type="button" onclick="initializeEmptyEditor()">
                             <svg class="ic" aria-hidden="true"><use href="#i-plus" /></svg> Add line
+                        </button>
+                        <button class="welcome-btn" type="button" id="welcome-convert-btn" onclick="openConvertModal()" data-v6>
+                            <svg class="ic" aria-hidden="true"><use href="#i-convert" /></svg> Convert LRC
                         </button>
                     </div>
                     <p class="welcome-foot"><span id="welcome-hint">Load an audio file to enable LRC features.</span><br>
@@ -3969,11 +8007,18 @@
                     <div class="dock-clock" id="dock-clock"></div>
 
                     <div class="dock-right">
+                        <button class="ctl-btn ui-l" type="button" onclick="openSyncSettings()" aria-label="Sync settings"
+                            title="Sync settings">
+                            <svg class="ic" aria-hidden="true"><use href="#i-sliders" /></svg>
+                        </button>
+                        <button class="ctl-btn ctl-round dock-undo" id="dock-undo" type="button" onclick="vxUndo()" data-undo disabled data-v6>
+                            <svg class="ic" aria-hidden="true"><use href="#i-undo" /></svg>
+                        </button>
                         <button class="dock-sync-btn" id="main-sync-btn" type="button">
                             <span id="main-sync-btn-text">TAP</span>
                             <kbd data-keyhint="sync">Enter</kbd>
                         </button>
-                        <button class="ctl-btn ctl-round" type="button" onclick="openSyncSettings()" aria-label="Sync settings"
+                        <button class="ctl-btn ctl-round ui-m" type="button" onclick="openSyncSettings()" aria-label="Sync settings"
                             title="Sync settings">
                             <svg class="ic" aria-hidden="true"><use href="#i-gear" /></svg>
                         </button>
@@ -3985,8 +8030,14 @@
                         aria-label="Menu">
                         <svg class="ic" aria-hidden="true"><use href="#i-menu" /></svg>
                     </button>
+                    <button class="tb-btn md-hist" id="mobile-undo" type="button" onclick="vxUndo()" data-undo disabled data-v6>
+                        <svg class="ic" aria-hidden="true"><use href="#i-undo" /></svg>
+                    </button>
                     <button class="sync-btn" id="main-sync-btn-mobile" type="button">
                         <span id="main-sync-btn-text-mobile">TAP</span>
+                    </button>
+                    <button class="tb-btn md-hist" id="mobile-redo" type="button" onclick="vxRedo()" data-redo disabled data-v6>
+                        <svg class="ic" aria-hidden="true"><use href="#i-redo" /></svg>
                     </button>
                     <button class="tb-btn" id="mobile-tools-btn" type="button" onclick="toggleTools(true)"
                         aria-label="Tools">
@@ -3997,19 +8048,32 @@
         </footer>
 
     <script>
-        /* The clock sits in the dock on desktop, between the seek times. On phones it goes back to the top bar.
-           Runs right after the dock so nothing jumps on the first paint. */
+        /* Layout glue, runs right after the dock so nothing jumps on the first paint.
+           Modern: the clock sits in the dock on a wide window; on a phone it goes back to the top bar.
+           Legacy: the top bar and the dock sit inside <main>, the four tabs sit above the panel, and the clock is in the
+           top bar and beside the seek bar, as before. voxArrange() is called again when the interface is switched. */
         (function () {
+            var root = document.documentElement;
             var phone = window.matchMedia('(max-width: 900px)');
-            var clock = document.getElementById('time-display');
-            var curr = document.getElementById('curr-time-lbl');
-            var dur = document.getElementById('dur-time-lbl');
-            var slot = document.getElementById('dock-clock');
-            var seek = document.querySelector('.dock-seek');
+            var $ = function (id) { return document.getElementById(id); };
+            var app = $('app-container');
             var bar = document.querySelector('.topbar');
             var barRight = document.querySelector('.topbar-right');
-            function place() {
-                if (phone.matches) {
+            var workspace = document.querySelector('.workspace');
+            var main = document.querySelector('.editor-area');
+            var dock = document.querySelector('.control-dock');
+            var rail = document.querySelector('.rail');
+            var eye = $('rail-preview-btn');
+            var tabs = $('sidebar-tabs');
+            var clock = $('time-display');
+            var curr = $('curr-time-lbl');
+            var dur = $('dur-time-lbl');
+            var slot = $('dock-clock');
+            var seek = document.querySelector('.dock-seek');
+            var names = ['media', 'controls', 'session', 'output'];
+            function legacy() { return root.getAttribute('data-ui') === 'legacy'; }
+            function placeClock() {
+                if (phone.matches || legacy()) {
                     bar.insertBefore(clock, barRight);
                     seek.insertBefore(curr, seek.firstChild);
                     seek.appendChild(dur);
@@ -4019,8 +8083,21 @@
                     slot.appendChild(dur);
                 }
             }
-            place();
-            if (phone.addEventListener) phone.addEventListener('change', place); else phone.addListener(place);
+            function arrange() {
+                if (legacy()) {
+                    if (bar.parentNode !== main) main.insertBefore(bar, main.firstChild);
+                    if (dock.parentNode !== main) main.appendChild(dock);
+                    names.forEach(function (n) { tabs.appendChild($('tab-btn-' + n)); });
+                } else {
+                    if (bar.parentNode !== app) app.insertBefore(bar, workspace);
+                    if (dock.parentNode !== app) app.appendChild(dock);
+                    names.forEach(function (n) { rail.insertBefore($('tab-btn-' + n), eye); });
+                }
+                placeClock();
+            }
+            window.voxArrange = arrange;
+            arrange();
+            if (phone.addEventListener) phone.addEventListener('change', placeClock); else phone.addListener(placeClock);
         })();
     </script>
     </div>
@@ -4086,6 +8163,28 @@
                             <button class="speed-option" type="button" onclick="toggleCustomGlowInput()">Custom</button>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="sync-option-row" data-v6>
+                <div>
+                    <div class="sync-option-label">Interface</div>
+                    <div class="sync-option-sub">Modern, or the earlier layout</div>
+                </div>
+                <div class="toggle-group">
+                    <button type="button" class="toggle-opt active" id="ui-modern" onclick="setUiMode('modern')">Modern</button>
+                    <button type="button" class="toggle-opt" id="ui-legacy" onclick="setUiMode('legacy')">Legacy</button>
+                </div>
+            </div>
+
+            <div class="sync-option-row" data-v6>
+                <div>
+                    <div class="sync-option-label">Preview animation</div>
+                    <div class="sync-option-sub">Word fill, focus and dots</div>
+                </div>
+                <div class="toggle-group">
+                    <button type="button" class="toggle-opt active" id="pvfx-rich" onclick="setPvfx('rich')">Smooth</button>
+                    <button type="button" class="toggle-opt" id="pvfx-simple" onclick="setPvfx('simple')">Simple</button>
                 </div>
             </div>
 
@@ -4189,6 +8288,15 @@
     <div class="modal-overlay" id="export-modal">
         <div class="base-modal export-modal" role="dialog" aria-label="Export">
             <h2 class="modal-title">Export</h2>
+            <div class="field" data-v6>
+                <span class="field-label">Format</span>
+                <div class="mode-toggle">
+                    <input type="radio" id="fmt-pro-export" name="lrc-fmt-export" value="pro" onchange="exportSetFormat('pro')">
+                    <label for="fmt-pro-export">Pro</label>
+                    <input type="radio" id="fmt-adv-export" name="lrc-fmt-export" value="advanced" onchange="exportSetFormat('advanced')">
+                    <label for="fmt-adv-export">Advanced</label>
+                </div>
+            </div>
             <div class="field">
                 <label class="field-label" for="export-modal-preview">LRC preview</label>
                 <textarea id="export-modal-preview" class="export-preview" readonly></textarea>
@@ -4206,6 +8314,8 @@
                 </button>
             </div>
             <div class="modal-actions">
+                <button class="btn btn-secondary" type="button" data-v6
+                    onclick="document.getElementById('export-modal').classList.remove('active'); openConvertModal()">Convert a file&hellip;</button>
                 <button class="btn btn-outline" type="button"
                     onclick="document.getElementById('export-modal').classList.remove('active')">Close</button>
             </div>
@@ -4244,6 +8354,9 @@
                 <button class="tool-item-btn" type="button" onclick="openExpandModal('lrc')">
                     <svg class="ic" aria-hidden="true"><use href="#i-file" /></svg><span>Open LRC</span>
                 </button>
+                <button class="tool-item-btn" type="button" onclick="openConvertModal()" data-v6>
+                    <svg class="ic" aria-hidden="true"><use href="#i-convert" /></svg><span>Convert</span>
+                </button>
                 <button class="tool-item-btn danger" type="button" onclick="resetProjectWithConfirm()">
                     <svg class="ic" aria-hidden="true"><use href="#i-trash" /></svg><span>Reset</span>
                 </button>
@@ -4270,6 +8383,15 @@
                 </button>
                 <button class="tool-item-btn" type="button" onclick="toggleTools(false); openSyllablePanel();">
                     <svg class="ic" aria-hidden="true"><use href="#i-scissors" /></svg><span>Syllables</span>
+                </button>
+                <button class="tool-item-btn" id="tool-undo" type="button" onclick="toggleTools(false); vxUndo()" data-undo disabled data-v6>
+                    <svg class="ic" aria-hidden="true"><use href="#i-undo" /></svg><span>Undo</span>
+                </button>
+                <button class="tool-item-btn" id="tool-redo" type="button" onclick="toggleTools(false); vxRedo()" data-redo disabled data-v6>
+                    <svg class="ic" aria-hidden="true"><use href="#i-redo" /></svg><span>Redo</span>
+                </button>
+                <button class="tool-item-btn danger" type="button" onclick="askClearTimestamps()" data-v6>
+                    <svg class="ic" aria-hidden="true"><use href="#i-eraser" /></svg><span>Clear times</span>
                 </button>
             </div>
         </div>
@@ -4358,6 +8480,52 @@
                 </button>
                 <button class="btn btn-secondary" type="button" onclick="closeSplitDialog()">Cancel</button>
                 <button class="btn" type="button" onclick="applySplitDialog()">Apply</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="convert-modal" data-v6>
+        <div class="base-modal convert-modal" role="dialog" aria-label="Convert lyrics format">
+            <h2 class="modal-title">Convert Pro &#8644; Advanced</h2>
+            <p class="hint">Paste or open an LRC file in one format and get it in the other. Your session is not touched
+                unless you press Open in editor.</p>
+
+            <div class="field">
+                <div class="cv-head">
+                    <label class="field-label" for="convert-input">From</label>
+                    <span class="cv-chip" id="convert-detected" data-kind="none">Nothing yet</span>
+                </div>
+                <textarea id="convert-input" class="mono cv-text" spellcheck="false" autocomplete="off" autocapitalize="off"
+                    placeholder="[00:12.500]v1:&lt;00:12.500&gt;Hello &lt;00:13.100&gt;world&lt;00:13.800&gt;"></textarea>
+                <input type="file" id="convert-file" accept=".lrc,.txt,text/plain" hidden>
+                <div class="row-3 cv-tools">
+                    <button class="btn btn-secondary" type="button" onclick="document.getElementById('convert-file').click()">Open file</button>
+                    <button class="btn btn-secondary" type="button" onclick="convertUseSession()">Use session</button>
+                    <button class="btn btn-secondary" type="button" onclick="convertClear()">Clear</button>
+                </div>
+            </div>
+
+            <div class="field">
+                <span class="field-label">To</span>
+                <div class="mode-toggle">
+                    <input type="radio" id="cv-to-pro" name="cv-to" value="pro" onchange="convertSetTarget('pro')">
+                    <label for="cv-to-pro">Pro</label>
+                    <input type="radio" id="cv-to-advanced" name="cv-to" value="advanced" onchange="convertSetTarget('advanced')" checked>
+                    <label for="cv-to-advanced">Advanced</label>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="field-label" for="convert-output">Result</label>
+                <textarea id="convert-output" class="mono cv-text" readonly spellcheck="false"></textarea>
+                <p class="hint cv-summary" id="convert-summary" role="status" aria-live="polite"></p>
+            </div>
+
+            <div class="modal-actions cv-actions">
+                <button class="btn btn-outline" type="button" onclick="closeConvertModal()">Close</button>
+                <button class="btn btn-secondary" type="button" id="convert-copy-btn" onclick="convertCopy()" disabled>Copy</button>
+                <button class="btn btn-secondary" type="button" id="convert-save-btn" onclick="convertSave()" disabled>Save .lrc</button>
+                <button class="btn" type="button" id="convert-open-btn" onclick="convertOpenInEditor()" disabled>Open in editor</button>
             </div>
         </div>
     </div>
@@ -4683,7 +8851,7 @@
 
         // --- Playhead: the line each layer is on right now ---
         const playhead = { lead: { playing: new Set(), focus: -1 }, bg: { playing: new Set(), focus: -1 } };
-        const userScrolledAt = { lead: 0, bg: 0 };
+        const userScrolledAt = { lead: -1e9, bg: -1e9, v2: -1e9 };
         let lastPlayheadTime = -1;
 
         function computePlayhead(layer, t) {
@@ -4763,7 +8931,7 @@
             if (!body || !row || !body.clientHeight) return;                          // lane not on screen
             if (!force && performance.now() - userScrolledAt[layer] < 3500) return;   // the user is looking around
             const top = row.offsetTop - body.clientHeight * 0.35 + row.offsetHeight / 2;
-            body.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+            vxScroll(body, Math.max(0, top));
         }
 
         LAYERS.forEach(layer => {
@@ -4826,6 +8994,8 @@
                 toggleSettings(false);
             } else if (document.getElementById('tools-sidebar').classList.contains('active')) {
                 toggleTools(false);
+            } else if (state.isPreviewMode) {
+                togglePreviewMode();
             }
         });
 
@@ -7532,12 +11702,8 @@
             parseAndLoadLRC(exportOutput.value);
         }
 
-        function parseAndLoadLRC(lrcText) {
-            if (state.isPreviewMode) {
-                togglePreviewMode();
-            }
-            if (!lrcText.trim()) return;
-
+        // Reading half of the import: text -> lines. It does not touch the editor (the converter uses it as well).
+        function parseLRCText(lrcText) {
             const lines = lrcText.split(/\r?\n/);
             const newLyrics = [];
 
@@ -7705,6 +11871,18 @@
                 }
             });
 
+            return { lyrics: newLyrics, format: detectedFormat, hasWordData };
+        }
+
+        function parseAndLoadLRC(lrcText) {
+            if (state.isPreviewMode) {
+                togglePreviewMode();
+            }
+            if (!lrcText.trim()) return;
+
+            const parsed = parseLRCText(lrcText);
+            const newLyrics = parsed.lyrics, detectedFormat = parsed.format, hasWordData = parsed.hasWordData;
+
             if (newLyrics.length === 0) { notify("No valid LRC timestamps found.", 'error'); return; }
 
             state.lyrics = newLyrics.map(normalizeLine);
@@ -7848,6 +12026,7 @@
 
                 // Save on change
                 inp.onchange = (e) => {
+                    VoxUndo.mark('Edit time');
                     let val = parseInt(e.target.value) || 0;
                     if (val < 0) val = 0;
                     if (type !== 'min' && val > max) val = max; // clamp seconds/ms
@@ -7903,6 +12082,7 @@
                         const span = document.createElement('span');
                         span.className = 'word-span' + (word.join ? ' is-join' : '') + (next && next.join ? ' has-join' : '');
                         span.textContent = word.text;
+                        span.dataset.t = word.text;
                         span.id = `word-${index}-${wIdx}`;
                         if (word.start !== null) span.classList.add('synced');
 
@@ -8563,6 +12743,8 @@
             // the line a background line backs: the one it overlaps most (the chosen singer's lines only, if one was chosen),
             // else the nearest one, preferring a line that has already started
             const hostOf = (bg) => {
+                const kept = bg.l.hostRef && mains.find(m => m.l === bg.l.hostRef);       // set by the converter only
+                if (kept) return kept;
                 const wanted = ['v1', 'v2', 'v3'].includes(bg.l.backs) ? bg.l.backs : null;
                 let pool = wanted ? mains.filter(m => agentOf(m.l) === wanted) : mains;
                 if (!pool.length) pool = mains;
@@ -8595,7 +12777,9 @@
             return out;
         }
 
-        function generateLRC() {
+        function generateLRC() { exportOutput.value = buildLRCText(); }
+
+        function buildLRCText() {
             let out = "";
 
             const items = exportOrder();
@@ -8639,7 +12823,7 @@
                 }
             });
 
-            exportOutput.value = out;
+            return out;
         }
 
         function downloadLRC() {
@@ -8660,13 +12844,15 @@
 
             if (isTypingTarget(e.target)) return;
 
+            if (vxKeyIntercept(e)) return;               // undo / redo, and keys that belong to the browser
+
             if (e.code === 'ShiftLeft' && !e.repeat) {
                 preShiftSyncMode = state.syncInputMode;
                 setSyncInputMode('hold');
                 updateSyncUI();
             }
 
-            const code = e.code;
+            const code = vxCode(e);
 
             // --- Actions ---
             if (code === keyMap.play) { e.preventDefault(); togglePlay(); }
@@ -8713,7 +12899,7 @@
                 e.preventDefault();
                 splitCurrentWord();
             }
-            if (code === keyMap.del) {
+            if (vxIsDelete(code)) {
                 e.preventDefault();
                 const doomed = state.lyrics[state.currentIndex];
                 if (doomed) askConfirm("Delete this line?", doomed.text, "Delete", () => deleteLine(state.lyrics.indexOf(doomed)), true);
@@ -8722,7 +12908,10 @@
            // --- Navigation: LINES (W/S) ---
         if (code === keyMap.prevLine) {
             e.preventDefault();
-            if (state.lyrics[state.currentIndex]) state.lyrics[state.currentIndex].time = null;
+            if (state.lyrics[state.currentIndex]) {
+                if (state.lyrics[state.currentIndex].time !== null) VoxUndo.mark('Clear line time');
+                state.lyrics[state.currentIndex].time = null;
+            }
             
             const prevIdx = getPrevValidLineIndex(state.currentIndex - 1);
             if (prevIdx !== -1) {
@@ -8800,8 +12989,8 @@
         document.addEventListener('keyup', (e) => {
             if (isTypingTarget(e.target)) return;
 
-            // Release Enter
-            if (e.code === 'Enter') {
+            // Release the sync key
+            if (vxCode(e) === keyMap.sync) {
                 e.preventDefault();
                 handleSyncUp(e);
             }
@@ -8815,7 +13004,7 @@
 
         document.addEventListener('keyup', (e) => {
             if (isTypingTarget(e.target)) return;
-            if (e.code === 'Enter') {
+            if (vxCode(e) === keyMap.sync) {
                 e.preventDefault();
                 handleSyncUp(e);
             }
@@ -9179,6 +13368,7 @@
 
         // Rail buttons: open the panel on that tab. Pressing the tab that is open closes the panel again.
         function railTab(tabName) {
+            if (document.documentElement.getAttribute('data-ui') === 'legacy') { switchTab(tabName); return; }
             const showing = document.getElementById('tab-' + tabName).classList.contains('active');
             if (sidebar.classList.contains('active') && showing && !phoneLayout.matches) {
                 toggleSettings(false);
@@ -9427,6 +13617,1156 @@
             notify('Sorted by time');
         }
     
+    </script>
+    <script id="voxen-tools">
+/* =====================================================================================================================
+   Voxen tools: history (undo / redo), clear timestamps, Pro <-> Advanced converter, keys for every device,
+   preview animations and the interface switch (modern / legacy).
+   This block sits on top of the editor script above and only talks to it through its functions and `state`.
+   ===================================================================================================================== */
+(function () {
+    'use strict';
+
+    const root = document.documentElement;
+    const $ = (id) => document.getElementById(id);
+    const isNum = (v) => typeof v === 'number' && isFinite(v);
+
+    // localStorage can be blocked (sandboxed frames, private modes): every use is guarded
+    const store = {
+        get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } },
+        set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* not saved */ } },
+        del(k) { try { localStorage.removeItem(k); } catch (e) { /* nothing to remove */ } }
+    };
+
+    // ---- the device ----------------------------------------------------------------------------------------------
+    const UA = navigator.userAgent || '';
+    const isIPad = /iPad/.test(UA) || (/Macintosh/.test(UA) && (navigator.maxTouchPoints || 0) > 1);   // iPadOS says "Mac"
+    const isIOS = isIPad || /iPhone|iPod/.test(UA);
+    const isApple = isIOS || /Mac/.test(navigator.platform || '') || /Macintosh/.test(UA);
+    const mq = (q) => (window.matchMedia ? window.matchMedia(q) : { matches: false, addEventListener() { } });
+    const coarse = mq('(pointer: coarse)');
+
+    // 'desktop' = a mouse or trackpad is the main pointer; 'tablet' / 'phone' = a finger is (by the short side of the screen)
+    function deviceClass() {
+        if (!coarse.matches && !isIOS) return 'desktop';
+        const short = Math.min(screen.width || 0, screen.height || 0) || Math.min(innerWidth, innerHeight);
+        return short >= 600 ? 'tablet' : 'phone';
+    }
+
+    // ---- small UI helpers ----------------------------------------------------------------------------------------
+    // A toast with a button ("Cleared 64 line times.  [Undo]")
+    function toastAction(message, label, fn, ms) {
+        const host = $('toasts');
+        if (!host) return;
+        const el = document.createElement('div');
+        el.className = 'toast has-action';
+        el.setAttribute('role', 'status');
+        const text = document.createElement('span');
+        text.className = 'toast-text';
+        text.textContent = message;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'toast-act';
+        btn.textContent = label;
+        let gone = false;
+        const dismiss = () => {
+            if (gone) return;
+            gone = true;
+            el.classList.add('is-leaving');
+            setTimeout(() => el.remove(), 220);
+        };
+        btn.onclick = () => { dismiss(); fn(); };
+        el.append(text, btn);
+        host.appendChild(el);
+        while (host.children.length > 3) host.firstChild.remove();
+        setTimeout(dismiss, ms || 7000);
+    }
+
+    // One toast that is updated instead of stacking (undo pressed ten times in a row)
+    const flashes = {};
+    function flash(key, message) {
+        const host = $('toasts');
+        if (!host) return;
+        let f = flashes[key];
+        if (!f || !f.el.isConnected || f.el.classList.contains('is-leaving')) {
+            const el = document.createElement('div');
+            el.className = 'toast';
+            el.setAttribute('role', 'status');
+            host.appendChild(el);
+            while (host.children.length > 3) host.firstChild.remove();
+            f = flashes[key] = { el, timer: 0 };
+        }
+        f.el.textContent = message;
+        clearTimeout(f.timer);
+        f.timer = setTimeout(() => {
+            f.el.classList.add('is-leaving');
+            setTimeout(() => f.el.remove(), 220);
+        }, 1700);
+    }
+
+    const plural = (n, one, many) => n + ' ' + (n === 1 ? one : (many || one + 's'));
+
+    // =================================================================================================================
+    // 1. History: undo / redo, and "clear all timestamps"
+    // =================================================================================================================
+    // Every change to the lyrics takes a snapshot of the document first (lines, words, times, layers, the sync
+    // cursors). Undo puts the snapshot back, and what it replaced goes onto the redo stack. The change functions of the
+    // editor are wrapped below, so the editor code itself does not know about history. A change that does nothing is
+    // skipped when undoing, and a change made inside another change (a confirmed delete calling deleteLine) is one step.
+    const Undo = (function () {
+        const MAX_STEPS = 300;
+        const MAX_CHARS = 30e6;                       // snapshots are JSON strings: this keeps them under ~60 MB
+        const undoStack = [];
+        const redoStack = [];
+        let chars = 0;
+        let depth = 0;                                // > 0 while a wrapped change is running
+        let quiet = 0;                                // > 0 while a snapshot is being put back
+
+        const modKey = () => (isApple ? '\u2318' : 'Ctrl+');
+
+        function snap(label) {
+            const cursors = LAYERS.map((layer) => {
+                const c = layerCursors[layer];
+                return [c.line ? state.lyrics.indexOf(c.line) : -1, c.word, c.end ? 1 : 0];
+            });
+            const lyrics = JSON.stringify(state.lyrics);
+            return {
+                label: label || '', lyrics, mode: state.mode, v2: !!state.v2Track, syl: !!state.syllables,
+                layer: state.activeLayer, cursors, size: lyrics.length
+            };
+        }
+        const sameDoc = (a, b) => a.lyrics === b.lyrics && a.mode === b.mode && a.v2 === b.v2 && a.syl === b.syl;
+
+        function push(s, soon) {
+            const top = undoStack[undoStack.length - 1];
+            if (top && sameDoc(top, s)) {             // the change before this one did nothing: keep the fresher cursor
+                chars += s.size - top.size;
+                undoStack[undoStack.length - 1] = s;
+            } else {
+                undoStack.push(s);
+                chars += s.size;
+            }
+            redoStack.length = 0;
+            while (undoStack.length > MAX_STEPS || chars > MAX_CHARS) chars -= undoStack.shift().size;
+            if (soon) refreshSoon(); else refresh();
+        }
+
+        // a tap must not wait for the buttons to be updated: that is done on the next frame
+        let refreshQueued = false;
+        function refreshSoon() {
+            if (refreshQueued) return;
+            refreshQueued = true;
+            (window.requestAnimationFrame || setTimeout)(() => { refreshQueued = false; refresh(); });
+        }
+
+        // Runs fn as one undoable step. Only the outermost call takes the snapshot. A label function may return null
+        // for "this will not change anything" (a tap with nothing to tap), which takes no snapshot.
+        function run(label, fn, ctx, args, soon) {
+            if (quiet) return fn.apply(ctx, args || []);
+            const outer = depth === 0;
+            depth++;
+            try {
+                if (outer) {
+                    const l = typeof label === 'function' ? label.apply(ctx, args || []) : label;
+                    if (l !== null) push(snap(l), soon);
+                }
+                return fn.apply(ctx, args || []);
+            } finally {
+                depth--;
+            }
+        }
+
+        // For a place inside a handler where a change is about to happen
+        function mark(label) {
+            if (quiet || depth > 0) return;
+            push(snap(label));
+        }
+
+        function wrap(name, label, soon) {
+            const orig = window[name];
+            if (typeof orig !== 'function') { console.warn('history: ' + name + ' not found'); return; }
+            window[name] = function () { return run(label, orig, this, arguments, soon); };
+        }
+
+        function restore(s) {
+            quiet++;
+            try {
+                cancelSyllableRun();
+                sylQueue.splice(0);                   // lines that were waiting for a split no longer exist
+                const scroll = LAYERS.map((l) => $('lane-' + l + '-body').scrollTop);
+                state.lyrics = JSON.parse(s.lyrics);
+                state.mode = s.mode;
+                state.v2Track = s.v2;
+                state.syllables = s.syl;
+                state.activeLayer = enabledLayers().includes(s.layer) ? s.layer : 'lead';
+                if (state.v2Track && state.singerFilter === 'v2') state.singerFilter = 'all';
+                updateSingerFilterOptions();
+                LAYERS.forEach((layer, k) => {
+                    const c = layerCursors[layer];
+                    const at = s.cursors[k];
+                    c.line = at[0] >= 0 ? (state.lyrics[at[0]] || null) : null;
+                    c.word = at[1];
+                    c.end = !!at[2];
+                });
+                const radio = $(state.mode === 'line' ? 'mode-line' : (state.syllables ? 'mode-syllable' : 'mode-word'));
+                if (radio) radio.checked = true;
+                syncSyllableUI();
+                renderEditor();
+                updateWordContextUI();
+                updateAutoModeLabel();
+                generateLRC();
+                LAYERS.forEach((l, i) => { $('lane-' + l + '-body').scrollTop = scroll[i]; });
+                // the row the next tap goes to must be in view
+                const row = $('line-' + cursorIndex(state.activeLayer));
+                if (row && row.parentElement) {
+                    const body = row.parentElement;
+                    const top = row.offsetTop - body.scrollTop;
+                    if (top < 0 || top > body.clientHeight - row.offsetHeight) scrollToActive();
+                }
+            } finally {
+                quiet--;
+            }
+        }
+
+        function blocked() {
+            return holdActive || state.isPreviewMode || depth > 0;
+        }
+
+        function step(from, to, verb) {
+            if (blocked()) return false;
+            if (!from.length) { flash('history', 'Nothing to ' + verb.toLowerCase()); refresh(); return false; }
+            const cur = snap();
+            let target = null;
+            while (from.length) {
+                const s = from.pop();
+                if (from === undoStack) chars -= s.size;
+                if (!sameDoc(s, cur)) { target = s; break; }          // steps that changed nothing are passed over
+            }
+            if (!target) { flash('history', 'Nothing to ' + verb.toLowerCase()); refresh(); return false; }
+            cur.label = target.label;
+            to.push(cur);
+            if (to === undoStack) chars += cur.size;
+            try {
+                restore(target);
+            } catch (err) {
+                console.error(err);
+                notify('Could not ' + verb.toLowerCase() + ' that', 'error');
+                return false;
+            }
+            refresh();
+            flash('history', (verb === 'Undo' ? 'Undid' : 'Redid') + (target.label ? ': ' + target.label.toLowerCase() : ''));
+            return true;
+        }
+        const undo = () => step(undoStack, redoStack, 'Undo');
+        const redo = () => step(redoStack, undoStack, 'Redo');
+
+        function clear() { undoStack.length = 0; redoStack.length = 0; chars = 0; refresh(); }
+
+        function refresh() {
+            const off = state.isPreviewMode || !state.lyrics.length && !undoStack.length;
+            const u = undoStack[undoStack.length - 1];
+            const r = redoStack[redoStack.length - 1];
+            document.querySelectorAll('[data-undo]').forEach((b) => {
+                const tip = u ? 'Undo ' + (u.label ? u.label.toLowerCase() + ' ' : '') + '(' + modKey() + 'Z)' : 'Nothing to undo';
+                b.disabled = !u || off;
+                b.title = tip;
+                b.setAttribute('aria-label', tip);
+            });
+            document.querySelectorAll('[data-redo]').forEach((b) => {
+                const tip = r ? 'Redo ' + (r.label ? r.label.toLowerCase() + ' ' : '') + '(' + (isApple ? '\u21E7\u2318Z' : 'Ctrl+Shift+Z') + ')' : 'Nothing to redo';
+                b.disabled = !r || off;
+                b.title = tip;
+                b.setAttribute('aria-label', tip);
+            });
+        }
+
+        return {
+            run, mark, wrap, undo, redo, clear, refresh,
+            canUndo: () => undoStack.length > 0,
+            canRedo: () => redoStack.length > 0,
+            depth: () => depth,
+            sizes: () => [undoStack.length, redoStack.length, chars],
+            labels: () => undoStack.map((s) => s.label)
+        };
+    })();
+
+    // what each change is called in the tooltips and the toast
+    const tapLabel = () => {
+        if (!state.lyrics.length || state.isEditMode || state.isPreviewMode || holdActive || state.currentIndex >= state.lyrics.length) return null;
+        return state.mode === 'line' ? 'Set line time' : 'Set word time';
+    };
+    Undo.wrap('handleSyncDown', tapLabel, true);
+    Undo.wrap('initializeEditor', 'Create editor');
+    Undo.wrap('initializeEmptyEditor', 'New project');
+    Undo.wrap('parseAndLoadLRC', 'Import LRC');
+    Undo.wrap('loadProject', 'Load project');
+    Undo.wrap('addLine', 'Add line');
+    Undo.wrap('addLineAtTop', 'Add line');
+    Undo.wrap('addLineToLayer', 'Add line');
+    Undo.wrap('addLinesToLayer', 'Add lines');
+    Undo.wrap('deleteLine', 'Delete line');
+    Undo.wrap('applyOffset', 'Shift timestamps');
+    Undo.wrap('arrangeLines', 'Sort lines');
+    Undo.wrap('applySingleLineChanges', 'Edit line');
+    Undo.wrap('deleteLineFromModal', 'Delete line');
+    Undo.wrap('addLineFromModal', 'Add line');
+    Undo.wrap('toggleBgVocal', 'Move line');
+    Undo.wrap('hotkeySetLineType', 'Change singer');
+    Undo.wrap('applySplitDialog', 'Split syllables');
+    Undo.wrap('mergeAllSyllables', 'Merge syllables');
+    Undo.wrap('runSyllableSplit', 'Split all lines');
+    Undo.wrap('setSyllableMode', 'Syllable mode');
+    Undo.wrap('setV2Track', 'Singer 2 track');
+    // confirmed actions (delete a line, reset the project, ...) are named after their question
+    Undo.wrap('runConfirm', () => {
+        const title = (($('confirm-title') || {}).textContent || '').replace(/\?\s*$/, '').trim();
+        return /^delete this line$/i.test(title) ? 'Delete line' : (title || 'Change');
+    });
+
+    window.VoxUndo = Undo;
+    window.vxUndo = () => Undo.undo();
+    window.vxRedo = () => Undo.redo();
+
+    // ---- clear all timestamps ------------------------------------------------------------------------------------
+    function timeCounts() {
+        let lines = 0, words = 0;
+        state.lyrics.forEach((l) => {
+            if (isNum(l.time)) lines++;
+            (l.words || []).forEach((w) => { if (isNum(w.start) || isNum(w.end)) words++; });
+        });
+        return { lines, words };
+    }
+
+    window.askClearTimestamps = function () {
+        if (state.isPreviewMode || holdActive) return;
+        toggleTools(false);
+        const n = timeCounts();
+        if (!n.lines && !n.words) { notify('There are no timestamps to clear.'); return; }
+        askConfirm('Clear all timestamps?',
+            'This removes the time of ' + plural(n.lines, 'line') + (n.words ? ' and ' + plural(n.words, 'word') : '') +
+            ', on every layer. The lyrics stay as they are. You can undo it.',
+            'Clear all', () => window.clearAllTimestamps(), true);
+    };
+
+    window.clearAllTimestamps = function () {
+        const n = timeCounts();
+        Undo.run('Clear timestamps', () => {
+            state.lyrics.forEach((l) => {
+                l.time = null;
+                (l.words || []).forEach((w) => { w.start = null; w.end = null; });
+            });
+            resetCursors();                           // every layer starts again from its first line
+            renderEditor();
+            updateWordContextUI();
+            updateAutoModeLabel();
+            generateLRC();
+            scrollToActive();
+        });
+        toastAction('Cleared ' + plural(n.lines, 'line time') + (n.words ? ' and ' + plural(n.words, 'word time') : ''), 'Undo', () => Undo.undo());
+    };
+
+    // ---- the cursor stays on a word that exists ------------------------------------------------------------------
+    // Editing a line down to fewer words used to leave the sync cursor on a word that was no longer there, and the next
+    // redraw threw (this was in the editor before). Before the cursor is read for a redraw it is put back on a real word.
+    function clampCursors() {
+        LAYERS.forEach((layer) => {
+            const c = layerCursors[layer];
+            if (c.end) return;
+            const line = state.lyrics[cursorIndex(layer)];
+            if (line && line.words && c.word > line.words.length - 1) c.word = Math.max(0, line.words.length - 1);
+        });
+    }
+    const origContext = window.updateWordContextUI;
+    window.updateWordContextUI = function () {
+        clampCursors();
+        return origContext.apply(this, arguments);
+    };
+    window.vxClampCursors = clampCursors;
+
+    // =================================================================================================================
+    // 2. Converter: Pro <-> Advanced
+    // =================================================================================================================
+    // Reads an LRC text with the same parser the editor imports with, and writes it with the same exporter the editor
+    // exports with (the editor's own `state` is lent to them for the moment of the call and put back right after), so
+    // a conversion gives exactly what opening the file and exporting it in the other format would give - without
+    // touching the session.
+    function withDoc(over, fn) {
+        const keep = { lyrics: state.lyrics, lrcFormat: state.lrcFormat, thirdSingerLabel: state.thirdSingerLabel, v2Track: state.v2Track };
+        try {
+            Object.assign(state, over);
+            return fn();
+        } finally {
+            Object.assign(state, keep);
+        }
+    }
+
+    const FORMAT_NAME = { pro: 'Pro', advanced: 'Advanced' };
+
+    function analyseLRC(text) {
+        const parsed = parseLRCText(text);
+        const lyrics = parsed.lyrics.map(normalizeLine);
+        // an Advanced line stamp has hundredths only ([00:22.93]) while its words have milliseconds (22.925): the line
+        // starts where its first word does, so a stamp that is that word's time, rounded, is put back to the exact time
+        lyrics.forEach((l) => {
+            const w = l.words && l.words[0];
+            if (isNum(l.time) && w && isNum(w.start) && Math.abs(l.time - w.start) <= 0.0051) l.time = w.start;
+        });
+        // a background line belongs to the line above it in the file: that is how Metrolist and Gramophone read it, and it is
+        // kept when the file is written again (the editor itself works out the line a background line backs from the times)
+        let above = null;
+        lyrics.forEach((l) => {
+            if (l.isBg) { if (above) l.hostRef = above; } else above = l;
+        });
+        const timed = lyrics.filter((l) => isNum(l.time)).length;
+        let kind = 'none';
+        if (timed) kind = parsed.format === 'pro' ? 'pro' : (parsed.hasWordData ? 'advanced' : 'lines');
+        return { lyrics, kind, timed, untimed: lyrics.length - timed };
+    }
+
+    // text -> { text, kind, target, stats } | { error }
+    function convertLRC(text, target) {
+        if (!String(text || '').trim()) return { error: '' };
+        const a = analyseLRC(text);
+        if (!a.lyrics.length) return { error: 'No valid LRC timestamps found.' };
+        if (!a.timed) return { error: 'None of the lines has a timestamp, so there is nothing to convert.' };
+        // keep the name the file uses for a third singer (v3 or v1000)
+        const label = /\{agent:v1000\}|(^|\n)\s*\[[^\]]*\]\s*v1000:/.test(text) ? 'v1000'
+            : (/\{agent:v3\}|(^|\n)\s*\[[^\]]*\]\s*v3:/.test(text) ? 'v3' : state.thirdSingerLabel);
+        const stats = { lead: 0, v2: 0, bg: 0, units: 0, joins: 0, whole: 0, gaps: 0, untimed: a.untimed };
+        let out = '';
+        withDoc({
+            lyrics: a.lyrics, lrcFormat: target, thirdSingerLabel: label,
+            v2Track: a.lyrics.some((l) => !l.isBg && l.singer === 'v2')
+        }, () => {
+            out = buildLRCText();
+            exportOrder().forEach((item) => {
+                if (item.bg) stats.bg++; else if (item.l.singer === 'v2') stats.v2++; else stats.lead++;
+                const units = exportUnits(item.l);
+                if (units[0] && units[0].whole) { stats.whole++; return; }
+                stats.units += units.length;
+                units.forEach((u, i) => {
+                    if (u.join) stats.joins++;
+                    const next = units[i + 1];
+                    if (next && u.end < next.start - 0.02) stats.gaps++;
+                });
+            });
+        });
+        return { text: out, kind: a.kind, target, stats };
+    }
+
+    function describeConversion(r) {
+        if (r.error !== undefined) return r.error;
+        const s = r.stats;
+        const from = r.kind === 'lines' ? 'Line times' : FORMAT_NAME[r.kind];
+        const parts = [plural(s.lead, 'lead line')];
+        if (s.v2) parts.push(plural(s.v2, 'singer 2 line'));
+        if (s.bg) parts.push(plural(s.bg, 'background line'));
+        let msg = from + ' \u2192 ' + FORMAT_NAME[r.target] + '. ' + parts.join(', ') + (s.units ? ', ' + plural(s.units, 'timed word') +
+            (s.joins ? ' (' + plural(s.joins, 'syllable') + ' joined)' : '') : '') + '.';
+        if (r.kind === r.target) msg += ' It was already in this format, so this is a tidied copy.';
+        if (s.whole) msg += ' ' + plural(s.whole, 'line has', 'lines have') + ' no word times, so ' + (s.whole === 1 ? 'it is' : 'each is') + ' written as one block.';
+        if (r.target === 'pro' && s.gaps) msg += ' Pro keeps one stamp per word, so ' + plural(s.gaps, 'pause') + ' between words ' + (s.gaps === 1 ? 'is' : 'are') + ' closed.';
+        if (s.untimed) msg += ' ' + plural(s.untimed, 'line has', 'lines have') + ' no timestamp and ' + (s.untimed === 1 ? 'was' : 'were') + ' left out.';
+        return msg;
+    }
+
+    // ---- the dialog ----------------------------------------------------------------------------------------------
+    const cv = { target: 'advanced', picked: false, name: '', last: null, timer: 0 };
+
+    function cvEls() {
+        return {
+            modal: $('convert-modal'), input: $('convert-input'), output: $('convert-output'), chip: $('convert-detected'),
+            summary: $('convert-summary'), open: $('convert-open-btn'), copy: $('convert-copy-btn'), save: $('convert-save-btn'),
+            toPro: $('cv-to-pro'), toAdv: $('cv-to-advanced')
+        };
+    }
+
+    function cvRun() {
+        const e = cvEls();
+        if (!e.modal) return;
+        const text = e.input.value;
+        let r;
+        try { r = convertLRC(text, cv.target); } catch (err) { console.error(err); r = { error: 'This text could not be read.' }; }
+        cv.last = r;
+        const ok = r.error === undefined;
+        // the other format is the default target, until you pick one yourself
+        if (ok && !cv.picked) {
+            const want = r.kind === 'pro' ? 'advanced' : 'pro';
+            if (want !== cv.target) { cv.target = want; return cvRun(); }
+        }
+        e.toPro.checked = cv.target === 'pro';
+        e.toAdv.checked = cv.target === 'advanced';
+        e.output.value = ok ? r.text : '';
+        e.summary.textContent = text.trim() ? describeConversion(r) : 'Paste or open an LRC file in the Pro or the Advanced format.';
+        e.summary.classList.toggle('is-error', !ok && !!text.trim());
+        e.chip.textContent = !text.trim() ? 'Nothing yet' : ok ? (r.kind === 'lines' ? 'Line times only' : FORMAT_NAME[r.kind] + ' format') : 'Not recognised';
+        e.chip.dataset.kind = ok ? r.kind : 'none';
+        [e.copy, e.save].forEach((b) => { b.disabled = !ok; });
+        e.open.disabled = !ok || !audioPlayer.src;
+        e.open.title = !ok ? '' : (audioPlayer.src ? 'Replace the lyrics in the editor with this result' : 'Load a song first');
+    }
+
+    function cvSoon() { clearTimeout(cv.timer); cv.timer = setTimeout(cvRun, 120); }
+
+    window.openConvertModal = function (text) {
+        const e = cvEls();
+        toggleTools(false);
+        e.modal.classList.add('active');
+        if (typeof text === 'string') { e.input.value = text; cv.picked = false; }
+        cvRun();
+        setTimeout(() => e.input.focus(), 0);
+    };
+    window.closeConvertModal = function () {
+        const m = cvEls().modal;
+        m.classList.remove('active');
+        const a = document.activeElement;
+        if (a && m.contains(a)) a.blur();             // a hidden text box must not keep the keys (Ctrl+Z right after Open in editor)
+    };
+    window.convertSetTarget = function (t) { cv.target = t === 'pro' ? 'pro' : 'advanced'; cv.picked = true; cvRun(); };
+    window.convertClear = function () {
+        const e = cvEls();
+        e.input.value = '';
+        cv.picked = false;
+        cv.name = '';
+        cvRun();
+        e.input.focus();
+    };
+    window.convertUseSession = function () {
+        const e = cvEls();
+        const text = withDoc({}, () => buildLRCText());
+        if (!text.trim()) { notify('Nothing in the session has a timestamp yet.', 'error'); return; }
+        e.input.value = text;
+        cv.picked = false;
+        cv.name = '';
+        cvRun();
+    };
+    function cvReadFile(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+            cvEls().input.value = String(reader.result || '');
+            cv.name = file.name.replace(/(\.(lrc|txt))+$/i, '');
+            cv.picked = false;
+            cvRun();
+        };
+        reader.readAsText(file);
+    }
+    window.convertCopy = function () {
+        const e = cvEls();
+        if (!e.output.value) return;
+        copyText(e.output.value).then(() => notify('Copied the ' + FORMAT_NAME[cv.target] + ' lyrics'), () => notify('Could not copy to the clipboard', 'error'));
+    };
+    window.convertSave = function () {
+        const e = cvEls();
+        if (!e.output.value) return;
+        const blob = new Blob([e.output.value], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = (cv.name || currentFileName || 'lyrics') + '-' + cv.target + '.lrc';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    };
+    window.convertOpenInEditor = function () {
+        const e = cvEls();
+        if (!e.output.value || !audioPlayer.src) return;
+        const text = e.output.value;
+        closeConvertModal();
+        parseAndLoadLRC(text);
+    };
+    // the session itself, in the other format (the Export dialog uses this)
+    window.exportSetFormat = function (fmt) {
+        setLRCFormat(fmt);
+        openExportModal();
+    };
+
+    // wires the dialog once the page is there
+    function initConvert() {
+        const e = cvEls();
+        if (!e.modal) return;
+        e.input.addEventListener('input', cvSoon);
+        $('convert-file').addEventListener('change', (ev) => { cvReadFile(ev.target.files[0]); ev.target.value = ''; });
+        ['dragover', 'drop'].forEach((type) => e.input.addEventListener(type, (ev) => {
+            ev.preventDefault();
+            if (type === 'drop' && ev.dataTransfer && ev.dataTransfer.files[0]) cvReadFile(ev.dataTransfer.files[0]);
+        }));
+    }
+
+    window.VoxConvert = { convert: convertLRC, analyse: analyseLRC, describe: describeConversion };
+
+    // =================================================================================================================
+    // 3. Keys and touch, for computers, iPads and phones
+    // =================================================================================================================
+    // * A key is read by its position (event.code); where a browser leaves it empty it is worked out from event.key.
+    // * Shortcuts that carry Ctrl, Cmd or Alt belong to the browser (copy, reload, save ...) and are never taken, except
+    //   undo and redo. On Apple keyboards the delete key (Backspace) deletes a line, and keys are named as on the keys.
+    // * The keys you set are kept in this browser. A key already in use swaps places with the key you pick.
+    // * Without a hardware keyboard the key hints stay hidden; with one (an iPad with a keyboard) they show up the
+    //   moment a key is pressed. Touch gets its own gestures: long-press a line to edit it, double-tap a word to split it.
+    const ALIAS = { Esc: 'Escape', Left: 'ArrowLeft', Right: 'ArrowRight', Up: 'ArrowUp', Down: 'ArrowDown', Spacebar: 'Space', Del: 'Delete' };
+
+    function codeOf(e) {
+        if (e.code && e.code !== 'Unidentified') return e.code;
+        const k = e.key;
+        if (!k || k === 'Unidentified') return '';
+        if (k.length === 1) {
+            if (/[a-z]/i.test(k)) return 'Key' + k.toUpperCase();
+            if (/\d/.test(k)) return 'Digit' + k;
+            return k === ' ' ? 'Space' : '';
+        }
+        return ALIAS[k] || k;
+    }
+    window.vxCode = codeOf;
+
+    window.vxIsDelete = (code) => code === keyMap.del || (isApple && keyMap.del === 'Delete' && code === 'Backspace');
+
+    // runs first in the editor's key handler: true = the key is dealt with (or is not ours)
+    window.vxKeyIntercept = function (e) {
+        if (e.ctrlKey || e.metaKey) {
+            if (!e.altKey) {
+                const k = (e.key || '').toLowerCase();
+                if (k === 'z') { e.preventDefault(); if (e.shiftKey) Undo.redo(); else Undo.undo(); return true; }
+                if (k === 'y' && !isApple) { e.preventDefault(); Undo.redo(); return true; }
+            }
+            return true;                                     // any other Ctrl / Cmd shortcut is the browser's
+        }
+        if (e.altKey) return true;
+        const code = codeOf(e);
+        if (code === keyMap.undo) { e.preventDefault(); Undo.undo(); return true; }
+        if (code === keyMap.redo) { e.preventDefault(); Undo.redo(); return true; }
+        return false;
+    };
+
+    // ---- how a key is written ------------------------------------------------------------------------------------
+    const KEY_TEXT = {
+        ArrowLeft: '\u2190', ArrowRight: '\u2192', ArrowUp: '\u2191', ArrowDown: '\u2193', Space: 'Space',
+        Enter: isApple ? 'Return' : 'Enter', NumpadEnter: 'Num Enter', Backspace: '\u232B', Delete: isApple ? '\u2326' : 'Del',
+        Escape: 'Esc', ShiftLeft: '\u21E7 Left', ShiftRight: '\u21E7 Right', ControlLeft: 'Ctrl', ControlRight: 'Ctrl',
+        AltLeft: isApple ? '\u2325' : 'Alt', AltRight: isApple ? '\u2325' : 'Alt', Tab: 'Tab', CapsLock: 'Caps',
+        Comma: ',', Period: '.', Slash: '/', Semicolon: ';', Quote: "'", BracketLeft: '[', BracketRight: ']',
+        Backslash: '\\', Minus: '-', Equal: '=', Backquote: '`'
+    };
+    window.formatKeyCode = function (code) {
+        if (!code) return '';
+        if (KEY_TEXT[code]) return KEY_TEXT[code];
+        if (/^Key[A-Z]$/.test(code)) return code.slice(3);
+        if (/^Digit\d$/.test(code)) return code.slice(5);
+        if (/^Numpad\d$/.test(code)) return 'Num ' + code.slice(6);
+        return code;
+    };
+
+    // ---- the key map: two more keys, saved between visits ---------------------------------------------------------
+    const KEYS_STORE = 'vx.keys.v1';
+    const ACTION_NAME = {
+        prevLine: 'Previous line', nextLine: 'Next line', prevWord: 'Previous word', nextWord: 'Next word', seekBack: 'Seek back',
+        seekFwd: 'Seek forward', play: 'Play / pause', sync: 'Set timestamp', switchLayer: 'Switch layer', add: 'Add line below',
+        editLine: 'Edit line', setV1: 'Set singer 1', setV2: 'Set singer 2', setV3: 'Set singer 3', toggleBg: 'Move line to other layer',
+        del: 'Delete line', togglePreview: 'Toggle preview', splitWord: 'Split word', arrange: 'Sort by time', undo: 'Undo', redo: 'Redo'
+    };
+    const RESERVED = /^(|Unidentified|Tab|CapsLock|ContextMenu|MetaLeft|MetaRight|OSLeft|OSRight|ShiftLeft|F5|F11|F12)$/;
+
+    defaultKeyMap.undo = 'KeyZ';
+    defaultKeyMap.redo = 'KeyY';
+    keyMap.undo = keyMap.undo || defaultKeyMap.undo;
+    keyMap.redo = keyMap.redo || defaultKeyMap.redo;
+    try {
+        const saved = JSON.parse(store.get(KEYS_STORE, 'null'));
+        if (saved && typeof saved === 'object') {
+            Object.keys(defaultKeyMap).forEach((a) => { if (typeof saved[a] === 'string' && saved[a] && !RESERVED.test(saved[a])) keyMap[a] = saved[a]; });
+        }
+    } catch (err) { /* a damaged entry is ignored */ }
+    updateKeybindUI();
+
+    function saveKeys() { store.set(KEYS_STORE, JSON.stringify(keyMap)); }
+
+    window.handleRebindInput = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const code = codeOf(e);
+        if (code === 'Escape') { closeKeybindModal(); return; }
+        if (RESERVED.test(code)) {
+            const anim = $('keybind-anim-target');
+            if (anim) { anim.textContent = '?'; }
+            notify('That key is kept for the browser or for the hold mode. Pick another one.', 'error');
+            return;
+        }
+        const action = rebindingAction;
+        const other = Object.keys(keyMap).find((a) => a !== action && keyMap[a] === code);
+        let swapped = '';
+        if (other) { keyMap[other] = keyMap[action]; swapped = ACTION_NAME[other] || other; }
+        keyMap[action] = code;
+        saveKeys();
+        updateKeybindUI();
+        closeKeybindModal();
+        if (swapped) notify(formatKeyCode(code) + ' was used for ' + swapped + ', which now has ' + formatKeyCode(keyMap[other]) + '.');
+    };
+
+    const origReset = window.resetKeybinds;
+    window.resetKeybinds = function () {
+        origReset();
+        store.del(KEYS_STORE);
+    };
+
+    // ---- device, keyboard and hints ------------------------------------------------------------------------------
+    let keyboard = false;
+    function applyDevice() {
+        const d = deviceClass();
+        root.dataset.device = d;
+        root.dataset.apple = isApple ? '1' : '0';
+        root.dataset.touch = d === 'desktop' ? '0' : '1';
+        root.dataset.kbd = d === 'desktop' || keyboard ? 'on' : 'off';
+        const note = $('keys-note');
+        if (note) {
+            const undoKey = isApple ? '\u2318Z' : 'Ctrl+Z';
+            const redoKey = isApple ? '\u21E7\u2318Z' : 'Ctrl+Shift+Z';
+            const shortcuts = undoKey + ' undoes and ' + redoKey + ' redoes. Shortcuts with ' + (isApple ? '\u2318, \u2303 or \u2325' : 'Ctrl or Alt') + ' stay with the browser.';
+            note.textContent = d === 'desktop' || root.dataset.kbd === 'on'
+                ? shortcuts
+                : 'Keys only work with a keyboard. On this ' + (d === 'tablet' ? 'tablet' : 'phone') + ' the buttons do the same: see Touch below.';
+        }
+        // the hint about the B key: without a keyboard only its first sentence is of any use
+        const hint = document.querySelector('.layerbar-hint');
+        if (hint) {
+            if (hint.dataset.full === undefined) hint.dataset.full = hint.innerHTML;
+            if (root.dataset.kbd === 'on') { if (hint.innerHTML !== hint.dataset.full) hint.innerHTML = hint.dataset.full; }
+            else hint.textContent = 'Taps go to the selected layer.';
+        }
+        updateKeybindUI();
+    }
+    coarse.addEventListener && coarse.addEventListener('change', applyDevice);
+    window.addEventListener('keydown', (e) => {
+        if (keyboard || !e.isTrusted || !e.key || e.key === 'Unidentified' || isTypingTarget(e.target)) return;
+        keyboard = true;                                     // a key was pressed: there is a keyboard on this device
+        applyDevice();
+    }, true);
+    applyDevice();
+
+    // ---- touch: long-press a line to edit it, double-tap a word to split it -----------------------------------------
+    (function touchGestures() {
+        const LONG = 520;
+        const SLOP = 10;
+        let press = null;
+        let hushClickUntil = 0;
+        let lastTap = { t: 0, el: null, x: 0, y: 0 };
+        const idle = () => state.isPreviewMode || state.isEditMode || holdActive || document.querySelector('.modal-overlay.active');
+
+        function cancel() { if (press) { clearTimeout(press.timer); press = null; } }
+
+        document.addEventListener('pointerdown', (e) => {
+            cancel();
+            if (e.pointerType === 'mouse' || !e.isPrimary || idle()) return;
+            const row = e.target.closest && e.target.closest('.lyric-line');
+            if (!row || e.target.closest('input, button, select, textarea, a')) return;
+            const index = parseInt(row.id.replace('line-', ''), 10);
+            if (!(index >= 0)) return;
+            press = {
+                id: e.pointerId, x: e.clientX, y: e.clientY,
+                timer: setTimeout(() => {
+                    press = null;
+                    hushClickUntil = performance.now() + 700;
+                    if (navigator.vibrate) { try { navigator.vibrate(12); } catch (err) { /* not allowed */ } }
+                    if (state.lyrics[index] && !idle()) openSingleLineEditModal(index);
+                }, LONG)
+            };
+        }, true);
+        document.addEventListener('pointermove', (e) => {
+            if (press && e.pointerId === press.id && Math.hypot(e.clientX - press.x, e.clientY - press.y) > SLOP) cancel();
+        }, true);
+        ['pointerup', 'pointercancel'].forEach((type) => document.addEventListener(type, (e) => {
+            if (press && e.pointerId === press.id) cancel();
+        }, true));
+        document.addEventListener('click', (e) => {
+            if (performance.now() < hushClickUntil) { e.stopPropagation(); e.preventDefault(); }
+        }, true);
+        // the long-press menu of the browser would sit on top of ours
+        document.addEventListener('contextmenu', (e) => {
+            if (root.dataset.touch === '1' && e.target.closest && e.target.closest('.lyric-line')) e.preventDefault();
+        });
+
+        // a second tap on the same word: split it into syllables (iOS does not send dblclick for a double tap)
+        document.addEventListener('pointerup', (e) => {
+            if (e.pointerType === 'mouse' || !state.syllables || idle()) { lastTap.el = null; return; }
+            const span = e.target.closest && e.target.closest('.word-span');
+            if (!span) { lastTap.el = null; return; }
+            const now = performance.now();
+            if (lastTap.el === span && now - lastTap.t < 380 && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 28) {
+                lastTap.el = null;
+                const m = /^word-(\d+)-(\d+)$/.exec(span.id);
+                if (m) openSplitDialog(+m[1], +m[2]);
+            } else {
+                lastTap = { t: now, el: span, x: e.clientX, y: e.clientY };
+            }
+        }, true);
+        // the double-tap above and a browser's own dblclick must not both open the dialog
+        const origSplit = window.openSplitDialog;
+        let lastSplit = -1e9;
+        window.openSplitDialog = function () {
+            const now = performance.now();
+            if (now - lastSplit < 450) return;
+            lastSplit = now;
+            return origSplit.apply(this, arguments);
+        };
+    })();
+
+    // iPhones have no fullscreen for a page: the button would do nothing
+    (function () {
+        const b = $('fullscreenBtn');
+        if (b && !(root.requestFullscreen || root.webkitRequestFullscreen)) b.hidden = true;
+    })();
+
+    // =================================================================================================================
+    // 4. Preview animations
+    // =================================================================================================================
+    // "Smooth" (default) adds, on top of the preview that was there before:
+    //  * a word is filled as it is sung, from its first letter to its last, over the length of the word (Auto) or over
+    //    the glow speed (Custom). A syllable is filled on its own. The word being sung lifts a little and glows.
+    //  * the lines around the line being sung step back: the further away, the dimmer and smaller (and a bit blurred).
+    //  * the lane follows the song on a spring, not on the browser's linear smooth scroll.
+    //  * after a long break (an intro, an instrumental) three dots fill up, in the room above the next line.
+    //  * the stage fades in when the preview opens.
+    // "Simple" keeps the earlier preview. With "reduce motion" on in the system, Simple is the default.
+    const reduce = mq('(prefers-reduced-motion: reduce)');
+    const PVFX_STORE = 'vx.pvfx';
+    const GAP_MIN = 5;                    // seconds of silence before the dots come
+    const INTRO_MIN = 4;
+
+    const pv = { on: false, glow: 0.1, focus: {}, scrolls: new Map(), dots: null, gaps: [], dotsOn: false, dotsLit: 0 };
+    const rich = () => root.getAttribute('data-pvfx') === 'rich';
+
+    function resetWord(s) {
+        if (s.classList.contains('pv-now')) s.classList.remove('pv-now');
+        if (s._p !== undefined) { s._p = undefined; s.style.removeProperty('--p'); }
+    }
+
+    // ---- words: the fill ---------------------------------------------------------------------------------------
+    const origGlow = window.animateWordGlow;
+    const origCleanLine = window.cleanupLineGlow;
+    const origCleanAll = window.cleanupGlowEffects;
+
+    window.animateWordGlow = function (lineIdx, t) {
+        if (!rich()) return origGlow.call(this, lineIdx, t);
+        const line = state.lyrics[lineIdx];
+        if (!line || !line.words) return;
+        const words = line.words;
+        for (let w = 0; w < words.length; w++) {
+            const word = words[w];
+            if (!isNum(word.start)) continue;
+            const span = document.getElementById('word-' + lineIdx + '-' + w);
+            if (!span) continue;
+            let dur = pv.glow;
+            if (state.glowMode === 'auto') {
+                const next = words[w + 1];
+                const end = isNum(word.end) && word.end > word.start ? word.end : (next && isNum(next.start) && next.start > word.start ? next.start : word.start + 0.5);
+                dur = Math.max(0.1, end - word.start);
+            }
+            const p = t <= word.start ? 0 : t >= word.start + dur ? 1 : (t - word.start) / dur;
+            const sung = t >= word.start;
+            if (sung !== span.classList.contains('preview-glow')) span.classList.toggle('preview-glow', sung);
+            const now = p > 0 && p < 1;
+            if (now !== span.classList.contains('pv-now')) span.classList.toggle('pv-now', now);
+            if (span._p === undefined || Math.abs(span._p - p) > 0.004 || ((p === 0 || p === 1) && span._p !== p)) {
+                span._p = p;
+                span.style.setProperty('--p', p.toFixed(3));
+            }
+        }
+    };
+    window.cleanupLineGlow = function (lineIdx) {
+        origCleanLine.call(this, lineIdx);
+        const line = state.lyrics[lineIdx];
+        if (!line || !line.words) return;
+        for (let w = 0; w < line.words.length; w++) {
+            const s = document.getElementById('word-' + lineIdx + '-' + w);
+            if (s) resetWord(s);
+        }
+    };
+    window.cleanupGlowEffects = function () {
+        origCleanAll.call(this);
+        document.querySelectorAll('.word-span').forEach(resetWord);
+    };
+    const origGlowSpeed = window.setGlowSpeed;
+    window.setGlowSpeed = function (val) {
+        const v = parseFloat(val);
+        if (!isNaN(v)) pv.glow = Math.max(0.05, v);
+        return origGlowSpeed.apply(this, arguments);
+    };
+
+    // ---- lines: how far each one is from the line being sung (data-a: 0 = this one, 4 = far away) ----------------------
+    function focusRows(layer, focusIdx) {
+        const rows = [];
+        let at = -1;
+        for (let i = 0; i < state.lyrics.length; i++) {
+            if (layerOf(state.lyrics[i]) !== layer) continue;
+            if (i === focusIdx) at = rows.length;
+            rows.push(i);
+        }
+        rows.forEach((idx, k) => {
+            const row = document.getElementById('line-' + idx);
+            if (!row) return;
+            const d = at < 0 ? k + 1 : k - at;              // before the first line, everything is still ahead
+            const a = Math.min(Math.abs(d), 4);
+            const side = at < 0 ? 'next' : (d < 0 ? 'past' : (d > 0 ? 'next' : 'now'));
+            if (row._a !== a) { row._a = a; row.dataset.a = a; }
+            if (row.dataset.side !== side) row.dataset.side = side;
+        });
+    }
+
+    // ---- the dots after a long break ---------------------------------------------------------------------------------
+    function lineEnd(i) { return Math.max(getLineEndTime(i), lineStartTime(state.lyrics[i]) || 0); }
+
+    function prepareGaps() {
+        document.querySelectorAll('.lyric-line.pv-gap').forEach((r) => r.classList.remove('pv-gap'));
+        pv.gaps = [];
+        const timed = [];
+        state.lyrics.forEach((l, i) => {
+            if (layerOf(l) !== 'lead') return;
+            const st = lineStartTime(l);
+            if (st !== null) timed.push({ i, st });
+        });
+        timed.sort((a, b) => a.st - b.st);
+        let end = 0;
+        timed.forEach((x, k) => {
+            const need = k === 0 ? INTRO_MIN : GAP_MIN;
+            if (x.st - end >= need) {
+                pv.gaps.push({ idx: x.i, from: end, to: x.st });
+                const row = document.getElementById('line-' + x.i);
+                if (row) row.classList.add('pv-gap');
+            }
+            end = Math.max(end, lineEnd(x.i));
+        });
+        const body = $('lane-lead-body');
+        if (body && pv.gaps.length) {
+            if (!pv.dots) {
+                pv.dots = document.createElement('div');
+                pv.dots.className = 'pv-dots';
+                pv.dots.setAttribute('aria-hidden', 'true');
+                pv.dots.innerHTML = '<i></i><i></i><i></i>';
+            }
+            if (pv.dots.parentNode !== body) body.appendChild(pv.dots);
+        } else if (pv.dots) {
+            pv.dots.remove();
+        }
+        if (pv.dots) pv.dots.classList.remove('is-on');
+        pv.dotsOn = false;
+    }
+
+    function updateDots(t) {
+        const dots = pv.dots;
+        if (!dots || !dots.isConnected) return;
+        let g = null;
+        for (let k = 0; k < pv.gaps.length; k++) {
+            const x = pv.gaps[k];
+            if (t >= x.from + 0.6 && t < x.to - 0.15) { g = x; break; }
+        }
+        if (!g) {
+            if (pv.dotsOn) { pv.dotsOn = false; dots.classList.remove('is-on'); }
+            return;
+        }
+        if (!pv.dotsOn || pv.dotsFor !== g) {
+            const row = document.getElementById('line-' + g.idx);
+            if (!row) return;
+            dots.style.top = Math.max(0, row.offsetTop - dots.offsetHeight - 12) + 'px';
+            pv.dotsFor = g;
+            pv.dotsOn = true;
+            pv.dotsLit = -1;
+            dots.classList.add('is-on');
+        }
+        const p = (t - g.from) / Math.max(0.1, g.to - g.from);
+        const lit = p < 0.34 ? 1 : (p < 0.67 ? 2 : 3);
+        if (lit !== pv.dotsLit) {
+            pv.dotsLit = lit;
+            const kids = dots.children;
+            for (let k = 0; k < kids.length; k++) kids[k].classList.toggle('lit', k < lit);
+        }
+    }
+
+    // ---- the lane follows the song on a spring --------------------------------------------------------------------
+    const SPRING_W = 2 * Math.PI / 0.62;             // about 0.6 s to settle
+    // (the lanes have scroll-behavior: smooth in the style sheet: while the spring runs, every step must be an instant one)
+    function endScroll(body) {
+        const job = pv.scrolls.get(body);
+        if (job) { cancelAnimationFrame(job.raf); pv.scrolls.delete(body); }
+        body.style.scrollBehavior = '';
+    }
+    window.vxScroll = function (body, target) {
+        if (!(pv.on && rich())) {
+            body.scrollTo({ top: target, behavior: reduce.matches ? 'auto' : 'smooth' });
+            return;
+        }
+        target = Math.max(0, Math.min(target, body.scrollHeight - body.clientHeight));
+        let job = pv.scrolls.get(body);
+        if (job) { job.target = target; return; }
+        body.style.scrollBehavior = 'auto';
+        job = { pos: body.scrollTop, v: 0, target, last: performance.now(), raf: 0 };
+        pv.scrolls.set(body, job);
+        const tick = (now) => {
+            const dt = Math.min(0.05, Math.max(0.001, (now - job.last) / 1000));
+            job.last = now;
+            // critically damped spring, solved exactly for this step
+            const w = SPRING_W;
+            const e = Math.exp(-w * dt);
+            const x0 = job.pos - job.target;
+            const b = job.v + w * x0;
+            const x = (x0 + b * dt) * e;
+            job.v = (b - w * (x0 + b * dt)) * e;
+            job.pos = job.target + x;
+            if (Math.abs(x) < 0.4 && Math.abs(job.v) < 4) {
+                body.scrollTop = job.target;
+                endScroll(body);
+                return;
+            }
+            body.scrollTop = job.pos;
+            job.raf = requestAnimationFrame(tick);
+        };
+        job.raf = requestAnimationFrame(tick);
+    };
+    LAYERS.forEach((layer) => {
+        const body = $('lane-' + layer + '-body');
+        ['wheel', 'touchstart', 'pointerdown'].forEach((type) => body.addEventListener(type, () => endScroll(body), { passive: true }));
+    });
+
+    // ---- hooks: the frame loop, the preview switch, a fresh render ---------------------------------------------------
+    const origPlayhead = window.updatePlayhead;
+    window.updatePlayhead = function (t, opts) {
+        const r = origPlayhead.apply(this, arguments);
+        if (opts && opts.glow && rich()) {
+            LAYERS.forEach((layer) => {
+                const f = playhead[layer].focus;
+                if (f !== pv.focus[layer]) { pv.focus[layer] = f; focusRows(layer, f); }
+            });
+            updateDots(t);
+        }
+        return r;
+    };
+    const origResetPlayhead = window.resetPlayheadCache;
+    window.resetPlayheadCache = function () {
+        pv.focus = {};
+        return origResetPlayhead.apply(this, arguments);
+    };
+
+    function startPreviewFx() {
+        pv.on = true;
+        pv.focus = {};
+        if (rich()) {
+            prepareGaps();
+            if (!reduce.matches) {
+                appContainer.classList.add('pv-enter');
+                setTimeout(() => appContainer.classList.remove('pv-enter'), 900);
+            }
+        }
+    }
+    function stopPreviewFx() {
+        pv.on = false;
+        Array.from(pv.scrolls.keys()).forEach(endScroll);
+        document.querySelectorAll('.lyric-line').forEach((r) => {
+            delete r.dataset.a;
+            r._a = undefined;
+            delete r.dataset.side;
+            r.classList.remove('pv-gap');
+        });
+        if (pv.dots) pv.dots.remove();
+        pv.dotsOn = false;
+        appContainer.classList.remove('pv-enter');
+    }
+    const origTogglePreview = window.togglePreviewMode;
+    window.togglePreviewMode = function () {
+        const was = state.isPreviewMode;
+        const r = origTogglePreview.apply(this, arguments);
+        if (state.isPreviewMode && !was) startPreviewFx();
+        else if (!state.isPreviewMode && was) stopPreviewFx();
+        const clear = $('btn-top-clear');
+        if (clear) clear.disabled = state.isPreviewMode;        // like Offset and Add line, nothing to change while previewing
+        Undo.refresh();
+        return r;
+    };
+    const origRender = window.renderEditor;
+    window.renderEditor = function () {
+        const r = origRender.apply(this, arguments);
+        if (pv.on && rich()) { pv.focus = {}; prepareGaps(); }
+        return r;
+    };
+
+    window.VoxPv = pv;                                   // (read by the tests)
+
+    // =================================================================================================================
+    // 5. Interface: modern or legacy
+    // =================================================================================================================
+    // Two skins on the same page. The modern one is the purple layout; the legacy one is the layout and the
+    // look of the build before it, with purple where the yellow was. Both stylesheets are in the page: the one that is
+    // not in use is switched off (media="not all"). The markup is shared; the small layout script after the dock moves
+    // the top bar, the dock and the tabs where each skin has them. Nothing else changes, so a switch keeps your work.
+    const UI_STORE = 'vx.ui';
+
+    function setUiMode(mode, keep) {
+        mode = mode === 'legacy' ? 'legacy' : 'modern';
+        root.setAttribute('data-ui', mode);
+        const m = $('css-modern'), l = $('css-legacy');
+        if (m) m.media = mode === 'legacy' ? 'not all' : 'all';
+        if (l) l.media = mode === 'legacy' ? 'all' : 'not all';
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', mode === 'legacy' ? '#101113' : '#0e1012');
+        if (window.voxArrange) window.voxArrange();
+        if (!keep) store.set(UI_STORE, mode);
+        syncToggles();
+        requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
+    }
+    window.setUiMode = setUiMode;
+
+    function setPvfx(mode, keep) {
+        mode = mode === 'simple' ? 'simple' : 'rich';
+        const was = pv.on;
+        if (was) { stopPreviewFx(); window.cleanupGlowEffects(); }
+        root.setAttribute('data-pvfx', mode);
+        if (!keep) store.set(PVFX_STORE, mode);
+        if (was) { startPreviewFx(); resetPlayheadCache(); }
+        syncToggles();
+    }
+    window.setPvfx = setPvfx;
+
+    function syncToggles() {
+        const ui = root.getAttribute('data-ui') === 'legacy' ? 'legacy' : 'modern';
+        const fx = root.getAttribute('data-pvfx') === 'simple' ? 'simple' : 'rich';
+        [['ui-modern', ui === 'modern'], ['ui-legacy', ui === 'legacy'], ['pvfx-rich', fx === 'rich'], ['pvfx-simple', fx === 'simple']].forEach(([id, on]) => {
+            const b = $(id);
+            if (b) { b.classList.toggle('active', on); b.setAttribute('aria-pressed', on); }
+        });
+    }
+    window.voxSyncToggles = syncToggles;
+
+    // =================================================================================================================
+    // start-up
+    // =================================================================================================================
+    // the export dialog shows the format of the session
+    const origExport = window.openExportModal;
+    window.openExportModal = function () {
+        const r = origExport.apply(this, arguments);
+        const pro = $('fmt-pro-export'), adv = $('fmt-adv-export');
+        if (pro) pro.checked = state.lrcFormat === 'pro';
+        if (adv) adv.checked = state.lrcFormat === 'advanced';
+        return r;
+    };
+    // the settings dialog shows which interface and which preview animation are on
+    const origSyncSettings = window.openSyncSettings;
+    window.openSyncSettings = function () {
+        const r = origSyncSettings.apply(this, arguments);
+        syncToggles();
+        return r;
+    };
+
+    if (!root.getAttribute('data-ui')) root.setAttribute('data-ui', 'modern');
+    if (!root.getAttribute('data-pvfx')) root.setAttribute('data-pvfx', store.get(PVFX_STORE, reduce.matches ? 'simple' : 'rich') === 'simple' ? 'simple' : 'rich');
+    initConvert();
+    Undo.refresh();
+    syncToggles();
+})();
+    </script>
+    <script id="voxen-fallbacks">
+        /* What the editor's handlers call. They exist already when the tools script ran; if it did not (an error), the editor keeps working. */
+        window.vxCode = window.vxCode || function (e) { return e.code; };
+        window.vxKeyIntercept = window.vxKeyIntercept || function () { return false; };
+        window.vxIsDelete = window.vxIsDelete || function (code) { return code === keyMap.del; };
+        window.VoxUndo = window.VoxUndo || { mark: function () { }, run: function (l, fn, c, a) { return fn.apply(c, a || []); }, refresh: function () { } };
+        window.vxScroll = window.vxScroll || function (body, top) { body.scrollTo({ top: top, behavior: 'smooth' }); };
     </script>
 </body>
 </html>

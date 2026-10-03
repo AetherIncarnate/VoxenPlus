@@ -7,27 +7,17 @@
     <meta name="theme-color" content="#0e1012">
     <title>Voxen</title>
     <style>
-    /* =====================================================================
-       Voxen styles - purple theme
-       1  Tokens            7  Dock (player + tap button)
-       2  Base              8  Dialogs, sheets, toasts
-       3  App shell         9  Audio loading panel
-       4  Buttons, fields   10 Singer 2 track, syllables
-       5  Rail and panel    11 Responsive
-       6  Layers and lyric rows
-       ===================================================================== */
 
     /* 1. Tokens ---------------------------------------------------------- */
     :root {
         color-scheme: dark;
 
-        /* Surfaces, darkest to lightest */
-        --bg: #0e1012;              /* top bar, rail, dock */
-        --panel: #101315;           /* side panel */
-        --stage: #14181b;           /* editor */
-        --raised: #1c2124;          /* cards, fields, popups */
-        --well: #0f1214;            /* inset chips (timestamps) */
-        --sheet: #171b1e;           /* dialogs */
+        --bg: #0e1012;              
+        --panel: #101315;           
+        --stage: #14181b;           
+        --raised: #1c2124;          
+        --well: #0f1214;            
+        --sheet: #171b1e;           
         --field: #1c2124;
         --hover: #262d31;
         --press: #313a3f;
@@ -38,23 +28,22 @@
         --text-2: #a9adb9;
         --text-3: #878c99;
 
-        /* Purple */
-        --accent: #8650fa;          /* buttons, seek bar, focus */
+        --accent: #8650fa;          
         --accent-hover: #7a43ee;
         --accent-press: #6d37de;
-        --accent-ink: #ffffff;      /* text on --accent */
-        --accent-text: #b79bff;     /* purple used as text on dark surfaces */
+        --accent-ink: #ffffff;      
+        --accent-text: #b79bff;     
         --accent-soft: rgba(134, 80, 250, 0.16);
         --accent-line: rgba(134, 80, 250, 0.65);
-        --lav: #8f85ff;             /* the tap button */
+        --lav: #8f85ff;             
         --lav-hover: #a39bff;
         --lav-press: #7b70f0;
         --lav-ink: #14103a;
-        --pill: #4f3e72;            /* a word that has a time */
+        --pill: #4f3e72;            
         --pill-hover: #5e4a86;
-        --pill-dim: #37304d;        /* a word that has none yet */
+        --pill-dim: #37304d;        
         --pill-dim-ink: #a39fb8;
-        --tab-on: #36345d;          /* selected tab or segment */
+        --tab-on: #36345d;          
 
         --danger: #ef6b73;
         --ok: #7cc38f;
@@ -195,7 +184,7 @@
     }
 
     /* 3. App shell ------------------------------------------------------- */
-    /* top bar, then rail + panel + editor, then the dock */
+    
     .app-container {
         position: relative;
         display: flex;
@@ -265,7 +254,6 @@
         gap: 10px;
     }
 
-    /* The clock: in the dock on desktop (see 7), in the top bar on phones */
     .time-display {
         position: absolute;
         left: 50%;
@@ -286,7 +274,6 @@
         display: none;
     }
 
-    /* Top bar buttons: plain text on desktop, like a menu bar */
     .tb-btn {
         display: inline-flex;
         align-items: center;
@@ -344,7 +331,6 @@
         color: #0e1012;
     }
 
-    /* Desktop: rows get their actions on hover, so no separate Edit button */
     #edit-mode-toggle,
     #btn-add-top {
         display: none;
@@ -354,7 +340,6 @@
         display: inline-flex;
     }
 
-    /* Layer bar */
     .layerbar {
         flex: none;
         display: flex;
@@ -630,7 +615,6 @@
         background-position: right 12px center;
     }
 
-    /* File pickers: a dashed drop box */
     .file-upload-wrapper,
     .load-project-wrapper {
         position: relative;
@@ -714,7 +698,7 @@
     }
 
     /* 5. Rail and panel -------------------------------------------------- */
-    /* Desktop: the rail is always there; a tab opens its panel beside it */
+    
     .sidebar {
         position: relative;
         z-index: 30;
@@ -773,7 +757,6 @@
         color: var(--text);
     }
 
-    /* with the panel shut, no tab is "on" */
     .sidebar:not(.active) .tab-btn.active {
         background: transparent;
         color: var(--text-2);
@@ -794,7 +777,6 @@
         height: 28px;
     }
 
-    /* the eye is a switch: lit while the preview is on */
     .rail-eye.active {
         color: var(--accent-text);
     }
@@ -826,7 +808,6 @@
         }
     }
 
-    /* desktop: the head is only the close button, in the corner */
     .sidebar-head {
         position: absolute;
         top: 16px;
@@ -842,7 +823,6 @@
         text-transform: uppercase;
     }
 
-    /* a fixed width, so the contents do not reflow while the panel opens */
     .sidebar-container {
         flex: 1;
         width: var(--panel-w);
@@ -912,7 +892,6 @@
         background: var(--line);
     }
 
-    /* Keybinds */
     .hotkey-container {
         display: grid;
         grid-template-columns: 1fr auto;
@@ -1074,7 +1053,6 @@
         font-size: 12px;
     }
 
-    /* the rows are cards with a gap between them; the bottom spacer lets the last rows scroll up */
     .lane-body {
         position: relative;
         flex: 1;
@@ -1121,7 +1099,6 @@
         gap: 8px;
     }
 
-    /* Add a line at the end of a layer */
     .add-line {
         flex: none;
         display: flex;
@@ -1149,7 +1126,6 @@
         height: 15px;
     }
 
-    /* Row: a card with the time on the left and the words as pills */
     .lyric-line {
         position: relative;
         display: flex;
@@ -1265,7 +1241,6 @@
         text-align: center;
     }
 
-    /* background vocals are a size smaller */
     .lane-bg .line-meta,
     .lane-bg .timestamp-group,
     .lane-bg .line-text {
@@ -1286,14 +1261,12 @@
         color: var(--text-2);
     }
 
-    /* Singer filter (lead layer) */
     .app-container[data-singer="v1"] .lane-lead .lyric-line:not(.is-v1),
     .app-container[data-singer="v2"] .lane-lead .lyric-line:not(.is-v2),
     .app-container[data-singer="v3"] .lane-lead .lyric-line:not(.is-v3) {
         display: none;
     }
 
-    /* Words: pills. Dim until they have a time, then purple. */
     .word-span {
         display: inline-flex;
         align-items: center;
@@ -1338,7 +1311,6 @@
         font-size: 13.5px;
     }
 
-    /* Row actions */
     .line-actions {
         position: absolute;
         top: 8px;
@@ -1385,8 +1357,6 @@
         padding-right: 84px;
     }
 
-    /* Preview: a dark stage with big lyrics. Both layers play at the same time, each lights the line it is on,
-       and the words glow as they are sung. */
     .preview-close {
         position: absolute;
         top: 14px;
@@ -1519,7 +1489,6 @@
         display: none;
     }
 
-    /* Word context (previous word -> target word) */
     #word-context-ui {
         position: absolute;
         left: 50%;
@@ -1588,7 +1557,6 @@
         font-weight: 400;
     }
 
-    /* Welcome */
     .welcome-container {
         display: none;
         flex: 1;
@@ -1675,8 +1643,7 @@
     }
 
     /* 7. Dock ------------------------------------------------------------ */
-    /* transport on the left, the clock in the middle, the tap button on the right.
-       The seek bar is a thin line along the top edge. */
+    
     .control-dock {
         position: relative;
         z-index: 35;
@@ -1704,7 +1671,6 @@
         height: 16px;
     }
 
-    /* the seek times live next to the clock on desktop (moved there by the script) */
     .dock-seek > .seek-time {
         display: none;
     }
@@ -1793,7 +1759,6 @@
         height: 16px;
     }
 
-    /* a flat, full-width bar on desktop */
     .seek-slider::-webkit-slider-runnable-track {
         border-radius: 0;
     }
@@ -1812,7 +1777,6 @@
         padding: 0 28px 0 24px;
     }
 
-    /* speed, transport and volume sit together on the left */
     .dock-left {
         display: contents;
     }
@@ -1974,7 +1938,6 @@
         transform: scale(0.985);
     }
 
-    /* Speed, volume and glow popups */
     .popup-wrapper {
         position: relative;
     }
@@ -2075,7 +2038,6 @@
         transition: opacity 0.15s;
     }
 
-    /* fields inside a dialog are inset: darker than the dialog */
     .base-modal,
     .tools-sidebar {
         --field: var(--well);
@@ -2181,7 +2143,6 @@
         gap: 8px;
     }
 
-    /* Sync settings rows */
     .sync-option-row {
         display: flex;
         align-items: center;
@@ -2267,7 +2228,6 @@
         display: block;
     }
 
-    /* Edit-line modal */
     .edit-line-modal {
         width: 480px;
     }
@@ -2295,7 +2255,6 @@
         pointer-events: none;
     }
 
-    /* Tools sheet (phones) */
     .tools-sidebar,
     .tools-overlay {
         display: none;
@@ -2360,7 +2319,6 @@
         flex: 1;
     }
 
-    /* Toasts */
     .toasts {
         position: fixed;
         top: calc(var(--topbar-h) + 12px);
@@ -2557,7 +2515,7 @@
     }
 
     /* 10. Singer 2 track, syllables -------------------------------------- */
-    /* a confirmation always sits on top of the dialog that asked for it */
+    
     #confirm-modal {
         z-index: 600;
     }
@@ -2583,13 +2541,11 @@
         color: var(--text);
     }
 
-    /* Singer 2 sits on the right, and its lines read from the right */
     .lane-v2 .lyric-line .line-text {
         justify-content: flex-end;
         text-align: right;
     }
 
-    /* the syllables of a word stay together and wrap as one */
     .word-group {
         display: inline-flex;
         flex: none;
@@ -2611,7 +2567,6 @@
         vertical-align: 2px;
     }
 
-    /* A word that was split: its syllables are one pill in pieces */
     .word-span.is-join {
         padding-left: 11px;
         border-top-left-radius: 5px;
@@ -2624,7 +2579,6 @@
         border-bottom-right-radius: 5px;
     }
 
-    /* Syllable status in the layer bar */
     .syl-chip {
         display: inline-flex;
         align-items: center;
@@ -2649,7 +2603,6 @@
         background: var(--hover);
     }
 
-    /* Split button next to the word under the cursor */
     .ctx-split {
         display: none;
         pointer-events: auto;
@@ -2672,7 +2625,6 @@
         display: inline-flex;
     }
 
-    /* Syllable panel */
     .syl-modal {
         width: 480px;
     }
@@ -2773,7 +2725,6 @@
         color: var(--text);
     }
 
-    /* Splitting by hand */
     .split-modal {
         width: 540px;
     }
@@ -2835,7 +2786,6 @@
         transition: width 0.1s;
     }
 
-    /* a bigger target than the gap itself: it reaches halfway into the letters on both sides */
     .sp-gap::after {
         content: "";
         position: absolute;
@@ -2917,7 +2867,7 @@
     }
 
     /* 11. Responsive ------------------------------------------------------ */
-    /* Narrow desktop window: the panel floats over the editor instead of pushing it aside */
+    
     @media (min-width: 901px) and (max-width: 1199px) {
         .sidebar-panel {
             position: absolute;
@@ -3032,7 +2982,6 @@
             display: none;
         }
 
-        /* Both layers: stacked, so they can still be seen playing together */
         .lanes {
             gap: 6px;
             padding: 0 10px;
@@ -3136,7 +3085,6 @@
             height: 40px;
         }
 
-        /* Dock: speed - transport - volume on one row, then menu / tap / tools */
         .control-dock {
             padding: 12px 14px calc(10px + env(safe-area-inset-bottom));
         }
@@ -3228,7 +3176,6 @@
             bottom: 10px;
         }
 
-        /* Menu becomes a bottom sheet: the rail turns into a strip of tabs */
         .sidebar {
             position: absolute;
             top: auto;
@@ -3327,7 +3274,6 @@
             display: none;
         }
 
-        /* Modals become bottom sheets too */
         .modal-overlay {
             align-items: flex-end;
             padding: 0;
@@ -3361,7 +3307,6 @@
             max-width: none;
         }
 
-        /* Tools sheet */
         .tools-overlay {
             position: fixed;
             inset: 0;
@@ -3414,7 +3359,6 @@
             font-size: 30px;
         }
 
-        /* singer 2 and syllables */
         #add-v2-btn {
             width: 42px;
             height: 42px;
@@ -3457,7 +3401,6 @@
 </head>
 
 <body>
-    <!-- Icons: one inline sprite, referenced as <svg class="ic"><use href="#i-name"/></svg> -->
     <svg class="sprite" aria-hidden="true" focusable="false">
         <defs>
             <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></symbol>
@@ -3499,7 +3442,6 @@
     </svg>
     <div class="app-container is-empty" id="app-container" data-singer="all">
 
-        <!-- ============ Top bar ============ -->
         <header class="topbar">
             <div class="topbar-left">
                 <div class="wordmark">VOXEN</div>
@@ -3554,7 +3496,6 @@
         </header>
 
         <div class="workspace">
-        <!-- ============ Rail + panel ============ -->
         <aside class="sidebar" id="sidebar" aria-label="Menu">
             <nav class="rail" aria-label="Sections">
                 <button id="tab-btn-media" class="tab-btn active" type="button" onclick="railTab('media')" aria-pressed="false">
@@ -3591,414 +3532,7 @@
                         <div class="field">
                             <span class="field-label">Audio source</span>
                             <div class="file-upload-wrapper">
-                                <!-- Accepts any audio (and audio-capable containers like MP4/WebM/3GP/OGG). Formats the browser can't
-                                     play natively (WMA, AIFF, AMR, AC3, DTS, WavPack, APE, ...) are converted automatically. -->
-                                <input type="file" id="audio-file" class="file-upload-input" accept="audio/*,video/mp4,video/webm,video/ogg,video/3gpp,video/3gpp2,video/x-ms-asf,application/ogg,.mp3,.mp2,.mp1,.mpa,.mpga,.m4a,.m4b,.m4r,.aac,.adts,.mp4,.3gp,.3g2,.3ga,.wav,.wave,.bwf,.w64,.rf64,.aif,.aiff,.aifc,.caf,.au,.snd,.voc,.flac,.ogg,.oga,.opus,.spx,.webm,.weba,.mka,.wma,.asf,.amr,.awb,.ac3,.eac3,.ec3,.dts,.dtshd,.mlp,.thd,.ra,.rm,.ape,.wv,.tta,.tak,.mpc,.shn,.dsf,.dff,.oma,.gsm">
-                                <div class="file-upload-label" id="audio-file-label">
-                                    <svg class="ic" aria-hidden="true"><use href="#i-upload" /></svg>
-                                    <span class="audio-label-inner">
-                                        <span class="audio-label-main">Upload audio</span>
-                                        <small class="audio-label-sub">MP3, WAV, FLAC, M4A, OGG, WMA, AIFF &amp; more</small>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="field disabled-area" id="media-project-section">
-                            <span class="field-label">Project file (.vxn)</span>
-                            <div class="row-flex">
-                                <div class="load-project-wrapper">
-                                    <input type="file" id="project-upload" accept=".vxn" class="file-upload-input"
-                                        onchange="loadProject(this)">
-                                    <div class="file-upload-label">
-                                        <svg class="ic" aria-hidden="true"><use href="#i-folder" /></svg>
-                                        <span>Load project</span>
-                                    </div>
-                                </div>
-                                <button class="btn btn-secondary btn-auto" type="button" onclick="saveProject()">
-                                    <svg class="ic" aria-hidden="true"><use href="#i-save" /></svg> Save
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="tab-session" class="tab-content">
-                        <h2 class="panel-title">Session</h2>
-                        <div class="field">
-                            <label class="field-label" for="raw-lyrics">Lead lyrics</label>
-                            <textarea id="raw-lyrics" placeholder="Paste your lyrics here, one line per row"></textarea>
-                        </div>
-
-                        <div class="field">
-                            <label class="field-label" for="raw-v2-lyrics">Singer 2 lyrics <span class="optional">optional</span></label>
-                            <textarea id="raw-v2-lyrics" style="min-height: 84px;"
-                                placeholder="A second singer (agent v2). One line per row"></textarea>
-                            <p class="hint">Singer 2 gets its own track on the right, timed on its own, so it can overlap singer 1.</p>
-                        </div>
-
-                        <div class="field">
-                            <label class="field-label" for="raw-bg-lyrics">Background lyrics <span class="optional">optional</span></label>
-                            <textarea id="raw-bg-lyrics" style="min-height: 84px;"
-                                placeholder="(ooh), (yeah, yeah)&#10;One line per row"></textarea>
-                            <p class="hint">Background lines get their own layer. They are timed separately, so they can overlap the lead lyrics.</p>
-                        </div>
-
-                        <div class="field">
-                            <span class="field-label">Sync mode</span>
-                            <div class="mode-toggle">
-                                <input type="radio" id="mode-line" name="mode" value="line">
-                                <label for="mode-line">Line</label>
-                                <input type="radio" id="mode-word" name="mode" value="word" checked>
-                                <label for="mode-word">Word</label>
-                                <input type="radio" id="mode-syllable" name="mode" value="syllable">
-                                <label for="mode-syllable">Syllable <span class="beta-tag">beta</span></label>
-                            </div>
-                        </div>
-
-                        <button class="btn" type="button" onclick="initializeEditor()">Create editor</button>
-                    </div>
-
-                    <div id="tab-output" class="tab-content">
-                        <h2 class="panel-title">Output</h2>
-                        <div class="field">
-                            <label class="field-label" for="offset-val">Reaction offset (ms)</label>
-                            <input type="number" id="offset-val" value="-200" step="50">
-                            <p class="hint">Added to every tap. A negative value compensates for your reaction time.</p>
-                        </div>
-
-                        <div class="field">
-                            <span class="field-label">Third singer label</span>
-                            <div class="mode-toggle">
-                                <input type="radio" id="lbl-v3" name="third-singer-lbl" value="v3"
-                                    onchange="setThirdSingerLabel('v3')">
-                                <label for="lbl-v3">v3</label>
-                                <input type="radio" id="lbl-v1000" name="third-singer-lbl" value="v1000" checked
-                                    onchange="setThirdSingerLabel('v1000')">
-                                <label for="lbl-v1000">v1000</label>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <span class="field-label">Format</span>
-                            <div class="mode-toggle">
-                                <input type="radio" id="fmt-adv-sidebar" name="lrc-fmt" value="advanced"
-                                    onchange="setLRCFormat('advanced')">
-                                <label for="fmt-adv-sidebar">Advanced</label>
-                                <input type="radio" id="fmt-pro-sidebar" name="lrc-fmt" value="pro" checked
-                                    onchange="setLRCFormat('pro')">
-                                <label for="fmt-pro-sidebar">Pro</label>
-                            </div>
-                        </div>
-
-                        <hr class="divider">
-
-                        <div class="field">
-                            <label class="field-label" for="export-output">Output</label>
-                            <textarea id="export-output" class="mono"
-                                placeholder="[00:00.00] Output will appear here..."></textarea>
-                            <div class="row-2">
-                                <button class="btn btn-outline" type="button" onclick="generateLRC()">Update text</button>
-                                <button class="btn btn-secondary" type="button" onclick="copyLRC()">Copy text</button>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <span class="field-label">Files</span>
-                            <input type="file" id="lrc-file-input" accept=".lrc,.txt" hidden onchange="handleLRCFile(this)">
-                            <div class="row-3">
-                                <button class="btn btn-secondary" type="button"
-                                    onclick="document.getElementById('lrc-file-input').click()">Open</button>
-                                <button class="btn btn-secondary" type="button" onclick="loadLRCFromSidebar()">Load text</button>
-                                <button class="btn" type="button" onclick="downloadLRC()">Save .lrc</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="tab-controls" class="tab-content">
-                        <h2 class="panel-title">Keys</h2>
-                        <p class="hint">Click a key to rebind it.</p>
-                        <div class="hotkey-container">
-                            <div class="hotkey-text">Previous line</div>
-                            <div class="hotkey-pill" id="kb-prevLine" onclick="rebindKey('prevLine')">W</div>
-
-                            <div class="hotkey-text">Next line</div>
-                            <div class="hotkey-pill" id="kb-nextLine" onclick="rebindKey('nextLine')">S</div>
-
-                            <div class="hotkey-text">Previous word</div>
-                            <div class="hotkey-pill" id="kb-prevWord" onclick="rebindKey('prevWord')">A</div>
-
-                            <div class="hotkey-text">Next word</div>
-                            <div class="hotkey-pill" id="kb-nextWord" onclick="rebindKey('nextWord')">D</div>
-
-                            <div class="hotkey-text">Seek back 5 s</div>
-                            <div class="hotkey-pill" id="kb-seekBack" onclick="rebindKey('seekBack')">ArrowLeft</div>
-
-                            <div class="hotkey-text">Seek forward 5 s</div>
-                            <div class="hotkey-pill" id="kb-seekFwd" onclick="rebindKey('seekFwd')">ArrowRight</div>
-
-                            <div class="hotkey-text">Play / pause</div>
-                            <div class="hotkey-pill" id="kb-play" onclick="rebindKey('play')">Space</div>
-
-                            <div class="hotkey-text">Set timestamp</div>
-                            <div class="hotkey-pill" id="kb-sync" onclick="rebindKey('sync')">Enter</div>
-
-                            <div class="hotkey-text">Switch layer</div>
-                            <div class="hotkey-pill" id="kb-switchLayer" onclick="rebindKey('switchLayer')">B</div>
-
-                            <div class="hotkey-text">Add line below</div>
-                            <div class="hotkey-pill" id="kb-add" onclick="rebindKey('add')">C</div>
-
-                            <div class="hotkey-text">Edit line</div>
-                            <div class="hotkey-pill" id="kb-editLine" onclick="rebindKey('editLine')">E</div>
-
-                            <div class="hotkey-text">Set singer 1</div>
-                            <div class="hotkey-pill" id="kb-setV1" onclick="rebindKey('setV1')">1</div>
-
-                            <div class="hotkey-text">Set singer 2</div>
-                            <div class="hotkey-pill" id="kb-setV2" onclick="rebindKey('setV2')">2</div>
-
-                            <div class="hotkey-text">Set singer 3</div>
-                            <div class="hotkey-pill" id="kb-setV3" onclick="rebindKey('setV3')">3</div>
-
-                            <div class="hotkey-text">Move line to other layer</div>
-                            <div class="hotkey-pill" id="kb-toggleBg" onclick="rebindKey('toggleBg')">4</div>
-
-                            <div class="hotkey-text">Delete line</div>
-                            <div class="hotkey-pill" id="kb-del" onclick="rebindKey('del')">Delete</div>
-
-                            <div class="hotkey-text">Toggle preview</div>
-                            <div class="hotkey-pill" id="kb-togglePreview" onclick="rebindKey('togglePreview')">V</div>
-
-                            <div class="hotkey-text">Split word (syllables)</div>
-                            <div class="hotkey-pill" id="kb-splitWord" onclick="rebindKey('splitWord')">X</div>
-
-                            <div class="hotkey-text">Sort by time</div>
-                            <div class="hotkey-pill" id="kb-arrange" onclick="rebindKey('arrange')">R</div>
-                        </div>
-                        <button class="btn btn-secondary" type="button" onclick="resetKeybinds()">Reset defaults</button>
-                    </div>
-
-                </div>
-            </div>
-            </div>
-        </aside>
-        <div class="sidebar-overlay-pc" onclick="toggleSettings(false)"></div>
-
-        <!-- ============ Editor ============ -->
-        <main class="editor-area">
-
-            <div class="layerbar" id="layerbar">
-                <div class="seg" role="group" aria-label="Layer that receives taps">
-                    <button type="button" class="seg-btn is-on" id="layer-btn-lead" onclick="setActiveLayer('lead')"
-                        aria-pressed="true">Lead <span class="seg-count" id="count-lead">0</span></button>
-                    <button type="button" class="seg-btn" id="layer-btn-bg" onclick="setActiveLayer('bg')"
-                        aria-pressed="false">Background <span class="seg-count" id="count-bg">0</span></button>
-                    <button type="button" class="seg-btn" id="layer-btn-v2" onclick="setActiveLayer('v2')"
-                        aria-pressed="false" hidden>Singer 2 <span class="seg-count" id="count-v2">0</span></button>
-                </div>
-                <button type="button" class="tb-btn add-track" id="add-v2-btn" onclick="setV2Track(true)"
-                    title="Give singer 2 (agent v2) its own track on the right" aria-label="Add a track for singer 2">
-                    <svg class="ic" aria-hidden="true"><use href="#i-plus" /></svg>
-                    <span class="btn-text">Singer 2</span>
-                </button>
-                <span class="layerbar-hint">Taps go to the selected layer. <kbd data-keyhint="switchLayer">B</kbd> switches.</span>
-                <span class="grow"></span>
-                <span class="syl-chip" id="syl-status" role="status" hidden>
-                    <span class="audio-status-spinner" aria-hidden="true"></span>
-                    <span id="syl-status-text"></span>
-                    <button type="button" onclick="cancelSyllableRun()">Cancel</button>
-                </span>
-                <button type="button" class="tb-btn" id="split-btn" onclick="toggleSplit()" aria-pressed="false"
-                    title="Show every layer side by side">
-                    <svg class="ic" aria-hidden="true"><use href="#i-columns" /></svg>
-                    <span class="btn-text">Show both</span>
-                </button>
-            </div>
-
-            <audio id="audio-player"></audio>
-
-            <div class="lanes-wrap">
-                <button type="button" class="preview-close" onclick="togglePreviewMode()" aria-label="Close preview"
-                    title="Close preview">
-                    <svg class="ic" aria-hidden="true"><use href="#i-x" /></svg>
-                </button>
-                <div class="welcome-container" id="welcome">
-                    <h1 class="welcome-title">Voxen</h1>
-                    <p class="welcome-sub">Time lyrics to a song, line by line, word by word or syllable by syllable. Background
-                        vocals and a second singer sit on their own layers, so they can overlap the lead lyrics.</p>
-                    <div class="welcome-actions">
-                        <button class="welcome-btn primary" type="button" id="welcome-song-btn"
-                            onclick="document.getElementById('audio-file').click()">
-                            <svg class="ic" aria-hidden="true"><use href="#i-music" /></svg> Select song
-                        </button>
-                        <button class="welcome-btn" type="button" id="welcome-paste-btn"
-                            onclick="toggleSettings(true); switchTab('session')" disabled>
-                            <svg class="ic" aria-hidden="true"><use href="#i-pencil" /></svg> Paste lyrics
-                        </button>
-                        <button class="welcome-btn" type="button" id="welcome-lrc-btn" onclick="openExpandModal('lrc')" disabled>
-                            <svg class="ic" aria-hidden="true"><use href="#i-file" /></svg> Open LRC
-                        </button>
-                        <button class="welcome-btn" type="button" onclick="initializeEmptyEditor()">
-                            <svg class="ic" aria-hidden="true"><use href="#i-plus" /></svg> Add line
-                        </button>
-                    </div>
-                    <p class="welcome-foot"><span id="welcome-hint">Load an audio file to enable LRC features.</span><br>
-                        <a href="https://github.com/Raqhael-ux/Voxen-LRC-Editor" target="_blank" rel="noopener">GitHub</a> &middot; v9.2b</p>
-                </div>
-
-                <div class="lanes" id="lyrics-container">
-                    <section class="lane lane-lead is-active" id="lane-lead" data-layer="lead">
-                        <div class="lane-head" onclick="setActiveLayer('lead')">
-                            <span class="lane-dot"></span>
-                            <span class="lane-title">Lead</span>
-                            <span class="lane-meta" id="lane-lead-meta"></span>
-                            <span class="grow"></span>
-                            <label class="lane-filter" title="Show and sync one singer at a time">
-                                <select id="singer-filter" onchange="setSingerFilter(this.value)"
-                                    onclick="event.stopPropagation()" aria-label="Singer filter">
-                                    <option value="all">All singers</option>
-                                    <option value="v1">Singer 1 (left)</option>
-                                    <option value="v2">Singer 2 (right)</option>
-                                    <option value="v3">Singer 3 (center)</option>
-                                </select>
-                            </label>
-                            <button class="icon-btn" type="button" title="Add a lead line" aria-label="Add a lead line"
-                                onclick="event.stopPropagation(); addLineToLayer('lead')">
-                                <svg class="ic" aria-hidden="true"><use href="#i-plus" /></svg>
-                            </button>
-                        </div>
-                        <div class="lane-body" id="lane-lead-body"></div>
-                    </section>
-
-                    <section class="lane lane-bg" id="lane-bg" data-layer="bg">
-                        <div class="lane-head" onclick="setActiveLayer('bg')">
-                            <span class="lane-dot"></span>
-                            <span class="lane-title">Background</span>
-                            <span class="lane-meta" id="lane-bg-meta"></span>
-                            <span class="grow"></span>
-                            <button class="icon-btn" type="button" title="Add a background line"
-                                aria-label="Add a background line"
-                                onclick="event.stopPropagation(); addLineToLayer('bg')">
-                                <svg class="ic" aria-hidden="true"><use href="#i-plus" /></svg>
-                            </button>
-                        </div>
-                        <div class="lane-body" id="lane-bg-body"></div>
-                    </section>
-
-                    <section class="lane lane-v2" id="lane-v2" data-layer="v2" hidden>
-                        <div class="lane-head" onclick="setActiveLayer('v2')">
-                            <span class="lane-dot"></span>
-                            <span class="lane-title">Singer 2</span>
-                            <span class="lane-tag" title="Agent v2, shown on the right">v2</span>
-                            <span class="lane-meta" id="lane-v2-meta"></span>
-                            <span class="grow"></span>
-                            <button class="icon-btn" type="button" title="Add a singer 2 line" aria-label="Add a singer 2 line"
-                                onclick="event.stopPropagation(); addLineToLayer('v2')">
-                                <svg class="ic" aria-hidden="true"><use href="#i-plus" /></svg>
-                            </button>
-                            <button class="icon-btn" type="button" title="Take singer 2 off its own track (the lines stay in the lead lane)"
-                                aria-label="Remove the singer 2 track" onclick="event.stopPropagation(); setV2Track(false)">
-                                <svg class="ic" aria-hidden="true"><use href="#i-x" /></svg>
-                            </button>
-                        </div>
-                        <div class="lane-body" id="lane-v2-body"></div>
-                    </section>
-                </div>
-
-                <div id="word-context-ui">
-                    <span class="ctx-layer" id="ctx-layer">Lead</span>
-                    <span class="ctx-prev" id="ctx-prev-word">Previous</span>
-                    <span class="ctx-arrow"><svg class="ic" aria-hidden="true"><use href="#i-chevron-right" /></svg></span>
-                    <span class="ctx-curr" id="ctx-next-word">Target word</span>
-                    <button type="button" class="ctx-split" id="ctx-split" onclick="splitCurrentWord()" title="Split this word into syllables (X)">
-                        <svg class="ic" aria-hidden="true"><use href="#i-scissors" /></svg> Split
-                    </button>
-                </div>
-            </div>
-
-        </main>
-        </div>
-
-        <footer class="control-dock">
-            <div class="dock-inner">
-                <div class="dock-seek">
-                    <span class="seek-time" id="curr-time-lbl">0:00</span>
-                    <input type="range" id="seek-slider" class="seek-slider" value="0" min="0" max="100" step="0.1"
-                        aria-label="Seek">
-                    <span class="seek-time" id="dur-time-lbl">0:00</span>
-                </div>
-
-                <div class="dock-row">
-                    <div class="dock-left">
-                        <div class="popup-wrapper">
-                            <button class="ctl-btn speed-toggle-btn" id="speed-btn" type="button"
-                                onclick="toggleSpeedMenu()" aria-label="Playback speed">1.0x</button>
-                            <div class="dock-popup speed-popup" id="speed-popup">
-                                <button class="speed-option" type="button" onclick="setSpeed(0.5)">0.5x</button>
-                                <button class="speed-option" type="button" onclick="setSpeed(0.75)">0.75x</button>
-                                <button class="speed-option selected" type="button" onclick="setSpeed(1.0)">1.0x</button>
-                                <button class="speed-option" type="button" onclick="setSpeed(1.25)">1.25x</button>
-                                <button class="speed-option" type="button" onclick="setSpeed(1.5)">1.5x</button>
-                            </div>
-                        </div>
-                        <div class="popup-wrapper volume-wrapper">
-                            <button class="ctl-btn" id="vol-btn" type="button" onclick="toggleVolumeMenu()"
-                                aria-label="Volume">
-                                <svg class="ic" aria-hidden="true"><use href="#i-volume" /></svg>
-                            </button>
-                            <div class="dock-popup volume-popup" id="volume-popup">
-                                <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="1"
-                                    class="vol-slider" oninput="updateVolume(this.value)" aria-label="Volume">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="player-controls">
-                        <button class="ctl-btn" type="button" onclick="seekAudio(-5)" aria-label="Back 5 seconds">
-                            <svg class="ic" aria-hidden="true"><use href="#i-back5" /></svg>
-                        </button>
-                        <button class="ctl-btn play-btn" id="play-pause-btn" type="button" onclick="togglePlay()"
-                            aria-label="Play">
-                            <svg class="ic ic-fill" aria-hidden="true"><use href="#i-play" /></svg>
-                        </button>
-                        <button class="ctl-btn" type="button" onclick="seekAudio(5)" aria-label="Forward 5 seconds">
-                            <svg class="ic" aria-hidden="true"><use href="#i-fwd5" /></svg>
-                        </button>
-                    </div>
-
-                    <div class="dock-clock" id="dock-clock"></div>
-
-                    <div class="dock-right">
-                        <button class="dock-sync-btn" id="main-sync-btn" type="button">
-                            <span id="main-sync-btn-text">TAP</span>
-                            <kbd data-keyhint="sync">Enter</kbd>
-                        </button>
-                        <button class="ctl-btn ctl-round" type="button" onclick="openSyncSettings()" aria-label="Sync settings"
-                            title="Sync settings">
-                            <svg class="ic" aria-hidden="true"><use href="#i-gear" /></svg>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="mobile-dock-controls">
-                    <button id="mobile-dock-settings" class="tb-btn" type="button" onclick="toggleSettings(true)"
-                        aria-label="Menu">
-                        <svg class="ic" aria-hidden="true"><use href="#i-menu" /></svg>
-                    </button>
-                    <button class="sync-btn" id="main-sync-btn-mobile" type="button">
-                        <span id="main-sync-btn-text-mobile">TAP</span>
-                    </button>
-                    <button class="tb-btn" id="mobile-tools-btn" type="button" onclick="toggleTools(true)"
-                        aria-label="Tools">
-                        <svg class="ic" aria-hidden="true"><use href="#i-grid" /></svg>
-                    </button>
-                </div>
-            </div>
-        </footer>
-
-    <script>
-        /* The clock sits in the dock on desktop, between the seek times. On phones it goes back to the top bar.
-           Runs right after the dock so nothing jumps on the first paint. */
+                                <input type="file" id="audio-file" class="file-upload-input" accept="audio
         (function () {
             var phone = window.matchMedia('(max-width: 900px)');
             var clock = document.getElementById('time-display');
@@ -4025,7 +3559,6 @@
     </script>
     </div>
 
-    <!-- ============ Dialogs ============ -->
     <div class="modal-overlay" id="sync-settings-modal">
         <div class="base-modal sync-settings-modal" role="dialog" aria-label="Sync settings">
             <h2 class="modal-title">Sync settings</h2>
@@ -4232,7 +3765,6 @@
         </div>
     </div>
 
-    <!-- Tools sheet (phones) -->
     <div class="tools-overlay" id="tools-overlay" onclick="toggleTools(false)"></div>
     <div class="tools-sidebar" id="tools-sidebar">
         <div class="tools-content-wrapper">
@@ -4400,15 +3932,6 @@
         };
 
         // --- Layers ---
-        // Lyrics live on up to three layers. Each layer has its own sync cursor and its own lane, so a layer can be
-        // timed on its own while the others play, and lines of different layers may overlap in time.
-        //   lead  singer 1 (agent v1, left) and singer 3 (the group, centred)
-        //   bg    background vocals
-        //   v2    singer 2 (agent v2, right) - optional; without this track, singer 2 lines stay in the lead lane
-        // A line says where it lives with its `isBg` flag and its `singer`, so the lines stay one flat list and
-        // .vxn files and LRC import / export work the same either way. A cursor remembers the line object, which
-        // keeps it correct when lines are inserted, deleted or sorted. state.currentIndex / state.currentWordIndex
-        // always mean "the cursor of the active layer", which is what the sync code below works with.
         const LAYERS = ['lead', 'bg', 'v2'];
         const LAYER_NAMES = { lead: 'Lead', bg: 'Background', v2: 'Singer 2' };
         const layerCursors = {
@@ -4423,7 +3946,6 @@
             return state.v2Track && line.singer === 'v2' ? 'v2' : 'lead';
         }
 
-        // The layers that can be used right now (the singer 2 track is optional)
         function enabledLayers() { return state.v2Track ? LAYERS : ['lead', 'bg']; }
 
         function countLayer(layer) {
@@ -4432,7 +3954,6 @@
             return n;
         }
 
-        // Is the line part of the layer (and, for the lead layer, shown under the current singer filter)?
         function lineInLayer(line, layer) {
             if (layerOf(line) !== layer) return false;
             if (layer === 'lead' && state.singerFilter !== 'all') return (line.singer || 'v1') === state.singerFilter;
@@ -4474,7 +3995,6 @@
             LAYERS.forEach(l => Object.assign(layerCursors[l], { line: null, word: 0, end: false }));
         }
 
-        // A cursor whose line has left its layer moves on to the next line of that layer instead of jumping to the top
         function reseatCursors() {
             LAYERS.forEach(layer => {
                 const c = layerCursors[layer];
@@ -4500,7 +4020,6 @@
         function getNextValidLineIndex(startIndex) { return nextIndexInLayer(startIndex, state.activeLayer); }
         function getPrevValidLineIndex(startIndex) { return prevIndexInLayer(startIndex, state.activeLayer); }
 
-        // The singer filter of the lead lane lists the singers that live there
         function updateSingerFilterOptions() {
             const select = document.getElementById('singer-filter');
             const options = [['all', 'All singers'], ['v1', 'Singer 1 (left)']];
@@ -4515,8 +4034,6 @@
             select.value = state.singerFilter;
         }
 
-        // A fresh set of lyrics: both cursors back to the start, lead layer active, no singer filter.
-        // (state.v2Track is set by the caller before this runs.)
         function resetLayers(showBoth) {
             resetCursors();
             state.activeLayer = 'lead';
@@ -4529,7 +4046,6 @@
 
         function applyLayerClasses() {
             const multi = state.v2Track || state.lyrics.some(l => l.isBg);
-            // the preview always shows every layer that is in use, so you see them play together
             appContainer.classList.toggle('layers-split', state.split || (state.isPreviewMode && multi));
             appContainer.classList.toggle('has-v2', state.v2Track);
             document.getElementById('lane-v2').hidden = !state.v2Track;
@@ -4566,7 +4082,6 @@
             scrollToActive();
         }
 
-        // B: Lead -> Background -> Singer 2 -> Lead ...
         function toggleActiveLayer() {
             const list = enabledLayers();
             setActiveLayer(list[(list.indexOf(state.activeLayer) + 1) % list.length]);
@@ -4577,8 +4092,6 @@
             updateLayerUI();
         }
 
-        // Turns the Singer 2 track on or off. Singer 2 lines are never lost: without the track they simply stay in
-        // the lead lane (right-aligned, as singer 2 lines always were).
         function setV2Track(on) {
             on = !!on;
             if (state.v2Track === on || holdActive) return;
@@ -4597,7 +4110,6 @@
             notify(on ? 'Singer 2 now has its own track, on the right' : 'Singer 2 lines are back in the lead lane');
         }
 
-        // Put the cursor of the line's layer on that line (and make the layer active)
         function focusLine(index, wordIdx) {
             const line = state.lyrics[index];
             if (!line || holdActive) return;
@@ -4620,7 +4132,6 @@
             const select = document.getElementById('singer-filter');
             if (select.value !== state.singerFilter) select.value = state.singerFilter;
             if (document.activeElement === select) select.blur();       // so the hotkeys keep working
-            // keep the lead cursor on a line that is still shown
             const c = layerCursors.lead;
             const from = c.line ? Math.max(0, state.lyrics.indexOf(c.line)) : 0;
             let j = nextIndexInLayer(from, 'lead');
@@ -4633,7 +4144,6 @@
             if (state.activeLayer === 'lead') scrollToActive();
         }
 
-        // The cursors of a layer that sit on `line` move on to the next line of that layer (or the previous at the end)
         function releaseCursors(line, index) {
             LAYERS.forEach(layer => {
                 const c = layerCursors[layer];
@@ -4646,8 +4156,6 @@
             });
         }
 
-        // Moves a line to a layer ('lead' | 'bg' | 'v2'). `singer` ('v1' | 'v3') only matters for the lead layer.
-        // Returns true if the layer changed.
         function moveLineToLayer(line, layer, singer) {
             const index = state.lyrics.indexOf(line);
             if (index === -1) return false;
@@ -4673,7 +4181,6 @@
             return true;
         }
 
-        // First synced time of a line (its own timestamp, else its first timed word)
         function lineStartTime(line) {
             if (!line) return null;
             if (line.time !== null && line.time !== undefined) return line.time;
@@ -4697,7 +4204,6 @@
                 if (st === null || st > t) continue;
                 if (st >= focusStart) { focus = i; focusStart = st; }
                 if (layer !== 'lead' || l.singer === 'v2') {
-                    // background and singer 2 lines are only "on" while they are sung, so they can overlap other lines
                     if (t < getLineEndTime(i)) playing.add(i);
                 } else if (st >= mainStart) {
                     main = i;
@@ -4713,8 +4219,6 @@
             if (row) row.classList.toggle('is-playing', on);
         }
 
-        // opts.glow: light up words (preview). opts.follow: 'all' | 'inactive' | false - keep lanes at the song position.
-        // opts.moveCursors: let each layer's cursor follow the song (preview).
         function updatePlayhead(t, opts) {
             const o = opts || {};
             const jumped = lastPlayheadTime < 0 || t < lastPlayheadTime || t - lastPlayheadTime > 0.75;
@@ -4725,7 +4229,6 @@
                 next.playing.forEach(i => { if (!prev.playing.has(i)) setLinePlaying(i, true); });
                 if (o.glow) {
                     if (jumped) {
-                        // after a seek, bring every line of the layer in line with the new position
                         state.lyrics.forEach((l, i) => {
                             if (layerOf(l) !== layer) return;
                             const st = lineStartTime(l);
@@ -4773,15 +4276,12 @@
             });
         });
 
-        // Keys typed into a visible text field belong to the field, not to the hotkeys. A field inside a panel that
-        // was just closed can keep focus in some browsers (WebKit) - it must not swallow the hotkeys.
         function isTypingTarget(el) {
             const typing = el.isContentEditable || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' ||
                 (el.tagName === 'INPUT' && el.type !== 'range' && el.type !== 'file' && el.type !== 'radio');
             return typing && getComputedStyle(el).visibility !== 'hidden';
         }
 
-        // In-app replacement for confirm(): native dialogs are blocked in sandboxed / embedded pages and look out of place
         let confirmAction = null;
 
         function askConfirm(title, text, okLabel, action, danger) {
@@ -4806,7 +4306,6 @@
             if (action) action();
         }
 
-        // Esc closes whatever is open: dialog, menu or tools sheet
         document.addEventListener('keydown', (e) => {
             if (e.code !== 'Escape' || rebindingAction) return;     // (the rebind dialog handles its own Esc)
             const opened = [...document.querySelectorAll('.modal-overlay.active')];
@@ -4864,7 +4363,7 @@
                 document.body.appendChild(ta);
                 ta.select();
                 let ok = false;
-                try { ok = document.execCommand('copy'); } catch (e) { /* handled below */ }
+                try { ok = document.execCommand('copy'); } catch (e) {  }
                 ta.remove();
                 if (ok) resolve(); else reject(new Error('copy failed'));
             });
@@ -4890,7 +4389,6 @@
                 btn.disabled = !hasAudio;
                 btn.title = hasAudio ? '' : 'Please upload audio first';
             });
-            // the next step is the primary action
             document.getElementById('welcome-song-btn').classList.toggle('primary', !hasAudio);
             document.getElementById('welcome-paste-btn').classList.toggle('primary', hasAudio);
             document.getElementById('welcome-hint').textContent = hasAudio
@@ -4899,18 +4397,6 @@
         }
 
         // ---------------------------------------------------------------------------------------------------------
-        // Syllable engine (pure functions, no network). Beta.
-        //
-        // A word is split with the help of several "evidence" sources (see SylSources further down):
-        //   wik    Wiktionary hyphenation       -> an exact split (parts)
-        //   wipa   Wiktionary IPA               -> a syllable count
-        //   cmu    CMU Pronouncing Dictionary   -> a syllable count
-        //   dm     Datamuse                     -> a syllable count
-        //   tex    TeX hyphenation patterns     -> candidate break positions (per language)
-        //   rule   built-in spelling rules      -> a count and candidate positions (works offline)
-        // The count the sources vote for decides how many breaks a word gets. Where the breaks go depends on the language:
-        // English is cut the way a word is sung (fee-ling, bea-ten, figh-ting, drea-ming: the consonant in front of a
-        // vowel starts that vowel's syllable), other languages follow the most trusted dictionary split that fits.
         // ---------------------------------------------------------------------------------------------------------
         const Syl = (() => {
             const LATIN_V = 'aeiouyàáâãäåæèéêëìíîïòóôõöøùúûüýÿœāăąēĕėęěĩīĭįıōŏőũūŭůűųǎǐǒǔ';
@@ -4918,7 +4404,6 @@
             const isVowelLetter = (c) => !!c && (LATIN_V.includes(c) || OTHER_V.includes(c));
 
             // ---- tokens ------------------------------------------------------------------------------------
-            // The letters of a token (combining marks stay with their letter). Returns [{i, len}] by token index.
             function lettersOf(token) {
                 const out = [];
                 for (let i = 0; i < token.length;) {
@@ -4931,8 +4416,6 @@
                 return out;
             }
 
-            // Lookup key: lowercase, straight apostrophes, no surrounding punctuation. '' when the token should not be
-            // split (no letters, digits inside, a single letter).
             function keyOf(token) {
                 if (/\d/.test(token)) return '';
                 const L = lettersOf(token);
@@ -4941,7 +4424,6 @@
                 return token.slice(first, last.i + last.len).replace(/[’‘`´]/g, "'").toLowerCase();
             }
 
-            // Letters only (what the break positions refer to)
             function lettersString(token) {
                 return lettersOf(token).map(l => {
                     const ch = token.substr(l.i, l.len);
@@ -4950,8 +4432,6 @@
                 }).join('');
             }
 
-            // Cut a token at letter positions. A cut goes right after the previous letter, so an apostrophe between two
-            // letters travels with the right-hand piece (did-n't).
             function cutToken(token, breaks) {
                 const L = lettersOf(token);
                 const cuts = [...new Set(breaks)].filter(p => p > 0 && p < L.length).sort((a, b) => a - b)
@@ -4967,8 +4447,6 @@
             const SMALL_KANA = 'ゃゅょぁぃぅぇぉゎゕゖャュョァィゥェォヮヵヶー々ゝゞヽヾっッ';
             function hasSyllabicScript(token) { return /[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7a3\uf900-\ufaff]/.test(token); }
 
-            // Hangul blocks, Han characters and kana are one syllable (mora) each; small kana, the long-vowel mark and the
-            // sokuon stay with the kana before them.
             function syllabicBreaks(token) {
                 const L = lettersOf(token);
                 const breaks = [];
@@ -5013,7 +4491,6 @@
                 return { map, maxLen, exc };
             }
 
-            // Break positions {p, lvl}; p = index of the first letter of the right-hand piece
             function texBreaks(P, word) {
                 if (!P || !P.map.size || word.length < 2) return [];
                 if (P.exc.has(word)) return P.exc.get(word).map(p => ({ p, lvl: 9 }));
@@ -5031,7 +4508,6 @@
             }
 
             // ---- spelling rules ---------------------------------------------------------------------------
-            // 'y' is a consonant at the start of a word and between two vowels (yes, beyond, player), else a vowel
             function isV(w, i) {
                 const c = w[i];
                 if (c !== 'y') return isVowelLetter(c);
@@ -5039,7 +4515,6 @@
                 return !(isVowelLetter(w[i - 1]) && w[i - 1] !== 'y' && isVowelLetter(w[i + 1]));
             }
 
-            // Vowel groups, minus the silent endings (-e, -es, -ed). Returns [{a, b}] (inclusive letter indexes).
             function nuclei(w, lang) {
                 const en = !lang || lang === 'en' || lang === 'en-GB';
                 const n = w.length;
@@ -5055,7 +4530,6 @@
                 }
                 if (!groups.length) return groups;
 
-                // a vowel directly before -ing is a syllable of its own (go-ing, be-ing, cry-ing)
                 if (en && n > 4 && w.endsWith('ing') && isV(w, n - 4)) {
                     const gi = groups.findIndex(x => x.b === n - 3 && x.a < n - 3);
                     if (gi !== -1) {
@@ -5064,8 +4538,6 @@
                     }
                 }
 
-                // Spanish, Italian, Portuguese, Catalan: two strong vowels (po-e-ta), a repeated vowel (cre-er) and an
-                // accented weak vowel next to another vowel (dí-a) are separate syllables
                 if (['es', 'it', 'pt', 'ca'].includes(lang)) {
                     const STRONG = 'aeoáéóàèò', ACCENTED_WEAK = 'íìúù';
                     for (let g = groups.length - 1; g >= 0; g--) {
@@ -5083,7 +4555,6 @@
                     }
                 }
 
-                // hiatus inside a few common spellings
                 for (let g = groups.length - 1; en && g >= 0; g--) {
                     const grp = groups[g];
                     if (grp.b === grp.a) continue;
@@ -5097,8 +4568,6 @@
                     if (at !== -1) groups.splice(g, 1, { a: grp.a, b: at - 1 }, { a: at, b: grp.b });
                 }
 
-                // silent endings and silent e before a suffix stay in the list, marked weak: they only become a syllable
-                // when a dictionary says the word has more syllables than the spelling suggests (fi-re)
                 const strong = () => groups.filter(g => !g.weak).length;
                 if (en && strong() > 1) {
                     const last = groups[groups.length - 1];
@@ -5114,8 +4583,6 @@
                         }
                     }
                 }
-                // a single e after consonant-vowel-consonant, in front of -ly, -ment, -ness, -ful, -less, -some, -time and the like
-                // (lone-ly, care-ful, life-style)
                 groups.forEach((g, gi) => {
                     if (!en || g.a !== g.b || w[g.a] !== 'e' || gi === 0 || gi === groups.length - 1 || strong() < 3) return;
                     const prevG = groups[gi - 1];
@@ -5128,14 +4595,12 @@
             const ONSETS2 = new Set(['bl', 'br', 'ch', 'cl', 'cr', 'dr', 'dw', 'fl', 'fr', 'gl', 'gr', 'ph', 'pl', 'pr', 'qu', 'sh', 'th', 'tr', 'tw', 'wh', 'wr']);
             const ONSETS3 = new Set(['sch', 'scr', 'shr', 'spl', 'spr', 'str', 'thr', 'squ']);
 
-            // Where the break goes inside the consonants between two vowel groups: p in [lo, hi]
             function ruleCut(w, lo, hi) {
                 const run = w.slice(lo, hi);                       // consonants between the groups
                 const k = run.length;
                 if (k <= 1) return run === 'x' ? lo + 1 : lo;      // before the single consonant (ti-ger), ex-it
                 if (run[0] === run[1]) return lo + 1;              // double consonant: split between (bit-ter)
                 if (/^ck/.test(run)) return lo + 2;                // pack-et
-                // the longest legal onset at the end of the run goes with the next syllable
                 let on = 1;
                 if (k >= 3 && ONSETS3.has(run.slice(-3))) on = 3;
                 else if (ONSETS2.has(run.slice(-2))) on = 2;
@@ -5143,17 +4608,12 @@
             }
 
             // ---- English: where a break goes between two vowel groups -------------------------------------
-            // Syllables are cut the way a word is sung, not where a dictionary hyphenates it: the consonant in front of a
-            // vowel starts that vowel's syllable (fee-ling, bea-ten, drea-ming, a-way, be-long), a silent gh stays behind
-            // (figh-ting), double letters are split (bet-ter) and clusters that can start a word stay together (a-fraid).
             const EN2 = new Set(['bl', 'br', 'ch', 'cl', 'cr', 'dr', 'fl', 'fr', 'gh', 'gl', 'gr', 'ph', 'pl', 'pr', 'qu', 'sh', 'th', 'tr', 'tw', 'wh', 'wr']);
             const EN_S2 = new Set(['sc', 'sk', 'sl', 'sm', 'sn', 'sp', 'st', 'sw']);
             const EN3 = new Set(['shr', 'thr']);                                        // always start a syllable
             const EN_S3 = new Set(['sch', 'scr', 'spl', 'spr', 'str']);
             const NG_ONE_SOUND = /(?:sing|ring|bring|hang|bang|swing|sting|sling|cling|wing|spring|wring|fling)ers?$/;
 
-            // w: the letters of the word; lo..hi: the consonants between two vowel groups; ctx.left: the vowel group in
-            // front of them; ctx.phones: the CMU pronunciation, when there is one. Returns the first letter of the right piece.
             function ruleCutEn(w, lo, hi, ctx) {
                 const left = (ctx && ctx.left) || w.slice(0, lo);
                 const phones = ctx && ctx.phones;
@@ -5163,7 +4623,6 @@
                 if (!r) return lo;                                          // two vowels in a row (go-ing)
                 const eat = (n) => { s += n; r = w.slice(s, hi); return !r; };
 
-                // a w or y that belongs to the vowel before it (show-ing, flow-er, play-er) - but not in a-way, be-ware, re-wind, be-yond
                 const glide = !(ctx && ctx.silentE);
                 if (glide && r === 'w' && /[aeo]$/.test(left) && !/ee$/.test(left) && !(left === 'a' && lo === 1 && !/^awe/.test(w)) && !/^[br]ew[aeiou]/.test(w)) return hi;
                 if (glide && r === 'y' && (/[aou]$/.test(left) || (/e$/.test(left) && !/^beyo/.test(w)))) return hi;
@@ -5187,15 +4646,12 @@
                     eat(1);
                 }
 
-                // the longest legal onset goes with the next syllable
                 let on = 1;
                 const t3 = r.slice(-3), t2 = r.slice(-2);
                 const sc = r.length >= 3 && EN_S3.has(t3) ? 3 : EN_S2.has(t2) ? 2 : 0;           // s + stop(+ liquid): st, sp, str ...
                 if (r.length >= 3 && EN3.has(t3)) on = 3;
                 else if (sc && r.length > sc) on = sc;                                           // a consonant in front: mon-ster, in-stead
                 else if (sc) {
-                    // right behind a vowel the s stays with a stressed syllable (mas-ter, his-to-ry, au-stra-lia) and goes with the
-                    // next one after an unstressed prefix (re-store, de-stroy, a-sleep); without a pronunciation spelling decides
                     const stress = ctx && ctx.stress;
                     const prefix = left.length === 1 && lo <= 2;
                     const dis = r[0] === 's' && /^(?:dis|mis)$/.test(w.slice(0, s + 1));
@@ -5209,24 +4665,17 @@
 
             const isEnglish = (lang) => !lang || lang === 'en' || lang === 'en-GB';
 
-            // The every- words: the second e is not a syllable of its own (ev-ery, not e-ve-ry), and spelling gives no hint.
-            // Break positions are letter positions.
-            // ou + r that a dictionary counts as two syllables but that has no place to cut: never split these
             const EN_WHOLE = new Set(['our', 'ours', 'hour', 'hours', 'flour', 'flours', 'sour', 'sours', 'scour', 'dour']);
             const EN_FIXED = {
                 every: [2], everything: [2, 5], everybody: [2, 5, 7], everyone: [2, 5], everywhere: [2, 5], everyday: [2, 5],
                 everytime: [2, 5], everyplace: [2, 5], everyways: [2, 5]
             };
 
-            // Candidate breaks from spelling: one per gap between vowel groups, plus splits inside vowel groups
             function ruleStructure(w, lang, phones) {
                 const all = nuclei(w, lang);
-                // a silent e belongs to the syllable before it; it only becomes a syllable of its own when a dictionary asks
-                // for more syllables than the spelling gives (fi-re)
                 const gs = [];
                 const weak = [];
                 const en = isEnglish(lang);
-                // the vowels of the pronunciation, when there are as many as the spelling has vowel groups
                 const vowelPh = en && phones ? String(phones).trim().split(/\s+/).filter(x => /\d$/.test(x)) : [];
                 const vowels = vowelPh.map(x => x.replace(/\d$/, ''));
                 const stresses = vowelPh.map(x => +x.slice(-1));
@@ -5262,7 +4711,6 @@
             }
 
             const IPA_V = 'aeiouyæɑɒɔəɛɜɝɚɪʊʌøœɐɨʉɯɘɵɤɞɶɩɿʅ';
-            // Syllables in an IPA transcription: every run of vowel symbols is one nucleus, as is a syllabic consonant
             function ipaCount(ipa) {
                 const s = String(ipa).replace(/\([^)]*\)/g, '').replace(/[\/\[\]ˈˌːˑ‿ʰʲʷ]/g, '').replace(/\{\{[^}]*\}\}/g, '');
                 let n = 0, prevV = false;
@@ -5275,8 +4723,6 @@
                 return n;
             }
 
-            // Pulls a hyphenation and an IPA count for `lang` out of a Wiktionary page. wikitext of the whole page is fine:
-            // only the section of that language is read.
             function parseWiktionary(wikitext, lang, key) {
                 const res = { parts: null, ipa: null };
                 if (!wikitext) return res;
@@ -5314,12 +4760,9 @@
             }
 
             // ---- putting the evidence together ------------------------------------------------------------
-            // ev: { wik: parts[]|null, wipa: n|null, cmu: n|null, dm: n|null, tex: [{p,lvl}], texTrusted: bool }
-            // Returns { breaks: [p...], n, conf: 'high'|'ok'|'low', sources: [...] }
             const WEIGHT = { wik: 3, cmu: 3, dm: 2.5, wipa: 2, tex: 2, rule: 1 };
             const ORDER = ['wik', 'cmu', 'dm', 'wipa', 'tex', 'rule'];
 
-            // Drops hyphenation points that would leave a piece without a vowel (a-ll, ne-xt), weakest first
             function texFiltered(word, tex) {
                 let kept = tex.slice().sort((a, b) => a.p - b.p);
                 const hasV = (a, b) => { for (let i = a; i < b; i++) if (isV(word, i)) return true; return false; };
@@ -5354,7 +4797,6 @@
                 const en = isEnglish(ev.lang);
                 const tex = (ev.tex || []).filter(b => b.p > 0 && b.p < L);
 
-                // 1. how many syllables?
                 const votes = {};
                 const add = (name, n) => {
                     if (!n || n < 1) return;
@@ -5383,16 +4825,11 @@
                 out.n = n;
                 if (n <= 1) return out;
 
-                // 2. where do the breaks go?
                 const wikSet = new Set();
                 if (ev.wik && ev.wik.length > 1) {
                     let acc = 0;
                     ev.wik.slice(0, -1).forEach(part => { acc += part.replace(/[^\p{L}]/gu, '').length; wikSet.add(acc); });
                 }
-                // Dictionaries hyphenate by spelling (feel-ing, beat-en); English is cut the way it is sung instead, so there
-                // their splits only help to tell which places get a break, not where inside the consonants it goes. The one
-                // exception: a word with a silent vowel (ev-ery) - the spelling has more vowel groups than the word has
-                // syllables - where the dictionary split also settles which vowel is the silent one.
                 const silentVowel = en && n < rs.count;
                 const byDictionary = !en || silentVowel;
                 if (!en && ev.wik && ev.wik.length === n && [...wikSet].every(p => p > 0 && p < L)) {
@@ -5401,7 +4838,6 @@
                 }
                 const texAt = new Map(tex.map(b => [b.p, b.lvl]));
                 const cands = [];
-                // a lone vowel between consonants in front of r/l/n/m is the one most often skipped in speech (ev-e-ry, fam-i-ly)
                 const skippable = (gi) => {
                     const g = rs.groups[gi];
                     return !!g && gi > 0 && gi < rs.groups.length - 1 && g.a === g.b && 'eioa'.includes(word[g.a]) && 'rlnm'.includes(word[g.a + 1] || '-');
@@ -5424,9 +4860,6 @@
                 rs.weak.forEach(c => cands.push({ p: c.p, s: c.w }));
                 cands.sort((a, b) => b.s - a.s || a.p - b.p);
                 const chosen = [];
-                // English: a break goes between vowel groups first; a break inside a vowel group (re-act) or in front of a
-                // silent e (fi-re) is only needed when the word has more syllables than the spelling has vowel groups; and a
-                // break inside letters like ou or oo (ho-ur) needs a dictionary behind it
                 const pick = (list) => list.forEach(c => {
                     if (chosen.length < n - 1 && !chosen.some(x => x.p === c.p)) chosen.push(c);
                 });
@@ -5444,8 +4877,6 @@
         })();
 
         // ---------------------------------------------------------------------------------------------------------
-        // Syllable dictionaries (network). Everything here is optional: a source that can't be reached is skipped and
-        // the spelling rules take over.
         // ---------------------------------------------------------------------------------------------------------
         const SylNet = (() => {
             const TEX = 'https://cdn.jsdelivr.net/gh/hyphenation/tex-hyphen@5684c0f51c0b81133db2efbe60a408b4155a3ff5/hyph-utf8/tex/generic/hyph-utf8/patterns/txt/';
@@ -5456,16 +4887,14 @@
                 id: 'hyph-id', ca: 'hyph-ca'
             };
 
-            // localStorage can be missing or blocked (sandboxed pages): fall back to memory
             const mem = {};
             const store = {
-                get(k) { try { const v = localStorage.getItem(k); if (v !== null) return v; } catch (e) { /* blocked */ } return mem[k] != null ? mem[k] : null; },
-                set(k, v) { mem[k] = v; try { localStorage.setItem(k, v); } catch (e) { /* full or blocked */ } },
-                del(k) { delete mem[k]; try { localStorage.removeItem(k); } catch (e) { /* blocked */ } }
+                get(k) { try { const v = localStorage.getItem(k); if (v !== null) return v; } catch (e) {  } return mem[k] != null ? mem[k] : null; },
+                set(k, v) { mem[k] = v; try { localStorage.setItem(k, v); } catch (e) {  } },
+                del(k) { delete mem[k]; try { localStorage.removeItem(k); } catch (e) {  } }
             };
             const readJSON = (k, fallback) => { try { const v = JSON.parse(store.get(k)); return v && typeof v === 'object' ? v : fallback; } catch (e) { return fallback; } };
 
-            // v2: splits are cut the way words are sung (fee-ling); the v1 answers were dictionary style (feel-ing)
             const KEY = { user: 'vx.syl.user', cache: 'vx.syl.cache.v2', cfg: 'vx.syl.cfg', pat: 'vx.syl.pat.' };
             store.del('vx.syl.cache.v1');
             const plain = (o) => Object.assign(Object.create(null), o);          // no inherited keys: "constructor" is just a word
@@ -5488,7 +4917,6 @@
                 cacheDirty = 0;
             }
 
-            // fetch with a timeout and the caller's abort signal
             async function get(url, o) {
                 const opts = o || {};
                 const ctl = new AbortController();
@@ -5519,7 +4947,7 @@
                         try {
                             const ex = await get(TEX + PATTERN_FILE[code] + '.hyp.txt', { signal, timeout: 5000 });
                             if (ex.ok) exceptions = await ex.text();
-                        } catch (e) { /* the exception list is optional */ }
+                        } catch (e) {  }
                         if (text.length < 200000) store.set(KEY.pat + code, text + '\n%%EXC\n' + exceptions);
                     } catch (e) {
                         if (signal && signal.aborted) throw e;
@@ -5534,7 +4962,6 @@
                 return patterns[code];
             }
 
-            // The whole CMU dictionary (3.5 MB) is read once; the browser keeps it in its HTTP cache
             function loadCmu(signal, onProgress) {
                 if (cmu !== null) return Promise.resolve(cmu);
                 if (cmuPromise) return cmuPromise;
@@ -5548,7 +4975,6 @@
                             const chunks = [];
                             let got = 0;
                             for (;;) {
-                                // a download that stalls for 15 s is given up on
                                 let stall;
                                 const { done, value } = await Promise.race([reader.read(), new Promise((_, rej) => { stall = setTimeout(() => rej(new Error('stalled')), 15000); })])
                                     .finally(() => clearTimeout(stall));
@@ -5573,7 +4999,6 @@
                 return cmuPromise;
             }
 
-            // The pronunciation of a word (first entry), e.g. "F IY1 L IH0 NG"
             function cmuPhones(key) {
                 if (!cmu) return null;
                 const at = cmu.indexOf('\n' + key + ' ');
@@ -5601,7 +5026,6 @@
                 }
             }
 
-            // Pages of en.wiktionary.org (all languages live there). Returns { map, status }
             async function wiktionary(keys, lang, signal, onStep) {
                 const map = new Map();
                 const code = lang === 'en-GB' ? 'en' : lang;
@@ -5647,7 +5071,6 @@
                 return { map, status };
             }
 
-            // Words that come in a few at a time over the network
             async function pool(items, size, worker, signal) {
                 let next = 0;
                 const runners = Array.from({ length: Math.min(size, items.length) }, async () => {
@@ -5661,8 +5084,6 @@
             }
 
             // ---- guessing the language ----------------------------------------------------------------
-            // Stop words that mark a language. A word that is also at home in English lyrics ("no", "la", "yo", the letters
-            // a/e/o ...) only counts half, and only once, so "la la la" or "no no no" never tips a song into another language.
             const STOP = {
                 en: "the and you your i me my we it is are was be to of in that this for with not but just so on all love baby oh yeah a an at as if or out up down when what who why how " +
                     "there they them he she him her his our its can will would do did get got like know now one cause gonna wanna i'm it's don't can't ain't i'll i've you're that's there's let's won't didn't isn't wasn't",
@@ -5694,7 +5115,6 @@
                         return a + 0.5;
                     }, 0);
                 };
-                // English unless another language is clearly ahead
                 const english = score('en');
                 let best = 'en', bestScore = Math.max(english, 0.99);
                 Object.keys(STOPSETS).forEach(lang => {
@@ -5722,8 +5142,6 @@
             };
         })();
 
-        // Looks the words up in every dictionary that is switched on and settles on a split for each of them.
-        // items: unique [{ id, key, letters, lang }]  ->  { results: Map(id -> {breaks, n, conf, sources}), report }
         async function sylResolve(items, o, progress) {
             const cfg = o.cfg, signal = o.signal;
             const results = new Map();
@@ -5753,8 +5171,6 @@
             const ev = new Map(todo.map(it => [it.id, { lang: it.lang }]));
             const isEn = (it) => it.lang === 'en' || it.lang === 'en-GB';
 
-            // 1+2. The small hyphenation patterns (per language) and, for English, the CMU dictionary (one download of 3.5 MB)
-            //      with syllable counts. Both are fetched at the same time.
             const en = todo.filter(isEn);
             const offline = typeof navigator !== 'undefined' && navigator.onLine === false;
             const fetchTex = async () => {
@@ -5786,15 +5202,12 @@
             await Promise.all([fetchTex(), fetchCmu()]);
             checkAbort();
 
-            // when neither of those could be reached the network is down: asking more servers would only make you wait
             const tried = ['tex', 'cmu'].filter(k => status[k] !== 'off');
             const netDown = offline || (tried.length > 0 && tried.every(k => status[k] === 'offline'));
 
-            // English counts from Datamuse: one tiny request per word
             if (cfg.dm && en.length) {
                 if (netDown) status.dm = 'offline';
                 else {
-                    // words the CMU dictionary already settled with the spelling rules don't need a second opinion
                     const ask = en.filter(it => {
                         const e = ev.get(it.id);
                         return !(e.cmu && e.cmu === Syl.ruleStructure(it.letters, it.lang).count);
@@ -5813,7 +5226,6 @@
                 }
             }
 
-            // 3. Wiktionary for the words the others can't agree on (or all of them when asked)
             if (cfg.wik && netDown) status.wik = 'offline';
             else if (cfg.wik) {
                 const unsure = todo.filter(it => {
@@ -5851,7 +5263,6 @@
                 }
             }
 
-            // 4. decide
             todo.forEach(it => {
                 const r = Syl.combine(it.letters, ev.get(it.id));
                 results.set(it.id, r);
@@ -5864,8 +5275,6 @@
         }
 
         // ---------------------------------------------------------------------------------------------------------
-        // Syllable sync (beta): the editor side. Words are split into syllables - each syllable is its own timed unit
-        // (flagged `join`, so it is written without a space in front of it) - by the dictionaries above, or by hand.
         // ---------------------------------------------------------------------------------------------------------
         const SYL_LANGS = [['auto', 'Detect from the lyrics'], ['en', 'English (US)'], ['en-GB', 'English (UK)'], ['es', 'Spanish'], ['fr', 'French'],
             ['de', 'German'], ['it', 'Italian'], ['pt', 'Portuguese'], ['nl', 'Dutch'], ['ru', 'Russian'], ['uk', 'Ukrainian'], ['el', 'Greek'],
@@ -5876,7 +5285,6 @@
         let sylQueueTimer = 0;
         let lastUncertain = [];             // words the dictionaries disagreed about, for "Review"
 
-        // The words of a line: runs of units where a unit that is flagged `join` belongs to the one before it
         function wordGroups(words) {
             const groups = [];
             words.forEach((w, i) => {
@@ -5886,7 +5294,6 @@
             return groups;
         }
 
-        // Letter positions of the syllable breaks inside a word (what the engine and the dictionaries use)
         function breaksOfUnits(units) {
             const text = units.map(u => u.text).join('');
             const L = Syl.lettersOf(text);
@@ -5899,7 +5306,6 @@
             return out.filter((p, i) => p > 0 && p < L.length && out.indexOf(p) === i);
         }
 
-        // Letter positions of the "·" marks in a typed word
         function breaksFromDotted(token) {
             const out = [];
             let letters = 0;
@@ -5910,9 +5316,6 @@
             return out;
         }
 
-        // Re-splits one word (the units from..to of a line) at the given letter positions and keeps the timing:
-        // a syllable that begins where an old unit began keeps that time, one that begins inside a timed unit gets a time
-        // in proportion to its letters, anything else stays untimed. Returns how many units the word has now.
         function setWordSplit(line, from, to, breaks) {
             const old = line.words.slice(from, to + 1);
             const text = old.map(u => u.text).join('');
@@ -5920,8 +5323,6 @@
             const pieces = Syl.cutToken(text, breaks.filter(p => p > 0 && p < letterCount));
             if (pieces.length === old.length && pieces.every((p, i) => p === old[i].text)) return old.length;
 
-            // the same number of syllables with the breaks in other places (feel-ing -> fee-ling): the times belong to the sung
-            // syllables, not to the letters, so they stay where they are
             if (pieces.length === old.length) {
                 const kept = pieces.map((p, j) => {
                     const u = { text: p, start: old[j].start, end: old[j].end };
@@ -5965,7 +5366,6 @@
             return units.length;
         }
 
-        // The user typed "beau·ti·ful day" into the edit dialog: apply the breaks without losing the timing
         function restructureFromDotted(line, raw) {
             const tokens = raw.replace(/-/g, '- ').split(/\s+/).filter(Boolean);
             const groups = wordGroups(line.words);
@@ -5997,16 +5397,11 @@
             if (run) run.disabled = !!text;
         }
 
-        // The language of the lyrics: the one chosen in the panel, else guessed from the whole song (not from the few lines
-        // that are being split right now, which may say too little)
         function songLanguage() {
             const cfg = SylNet.cfg;
             return cfg.lang === 'auto' ? SylNet.detectLang(state.lyrics.map(l => l.text)) : cfg.lang;
         }
 
-        // Splits the words of `lines` into syllables. opts.quiet: no progress, no message unless something went wrong.
-        // opts.fresh: ask the dictionaries again instead of using what they said last time.
-        // opts.keepSplit: leave words that are already split alone (new and edited lines).
         async function autoSplitLines(lines, opts) {
             const o = opts || {};
             lines = lines.filter(l => state.lyrics.includes(l) && l.words && l.words.length);
@@ -6050,7 +5445,6 @@
             sylRun = null;
             setSylStatus(null);
 
-            // apply: the last word of a line first, so the unit numbers of the earlier words stay valid
             let words = 0, syllables = 0;
             lastUncertain = [];
             entries.slice().reverse().forEach(e => {
@@ -6079,7 +5473,6 @@
                 notify(bits.join(' · '));
                 showSylReport(report, words, syllables);
             }
-            // a dictionary that was switched on but could not be reached: say so once
             const unreachable = Object.entries(report.status).filter(([k, v]) => SylNet.cfg[k] && (v === 'offline' || v === 'limited' || v === 'partial'));
             if (unreachable.length) notify('Some dictionaries could not be reached, so spelling rules were used for those words.', 'error');
             flushSylQueue();
@@ -6092,7 +5485,6 @@
             setTimeout(() => autoSplitLines(batch, { quiet: true, keepSplit: true }), 0);
         }
 
-        // Lines that are added while syllable mode is on are split a moment later, all together
         function queueSplit(item) {
             sylQueue.push(item);
             clearTimeout(sylQueueTimer);
@@ -6105,7 +5497,6 @@
 
         function cancelSyllableRun() { if (sylRun) sylRun.ctl.abort(); }
 
-        // Joins every syllable back into its word
         function mergeAllSyllables() {
             let n = 0;
             state.lyrics.forEach(line => {
@@ -6211,7 +5602,6 @@
             }, true);
         }
 
-        // Opens the manual splitter on the next word the dictionaries were unsure about
         function reviewUncertain() {
             lastUncertain = lastUncertain.filter(u => state.lyrics.includes(u.line));
             const next = lastUncertain.shift();
@@ -6224,7 +5614,6 @@
         // ---- splitting by hand --------------------------------------------------------------------------------
         let splitState = null;
 
-        // X, or the Split button next to the word under the cursor
         function splitCurrentWord() {
             if (document.activeElement && document.activeElement.id === 'ctx-split') document.activeElement.blur();   // keep Space / Enter for the hotkeys
             if (state.mode === 'line' || state.isPreviewMode) return;
@@ -6265,7 +5654,6 @@
             word.className = 'split-word';
             word.setAttribute('role', 'group');
             word.setAttribute('aria-label', 'Syllables of ' + r.text);
-            // Left / Right move between the places where a word can be split
             word.addEventListener('keydown', (e) => {
                 if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
                 const gaps = [...document.querySelectorAll('#split-list .sp-gap:not(:disabled)')];
@@ -6352,7 +5740,6 @@
             row.classList.toggle('is-split', pieces.length > 1);
         }
 
-        // One word, asked of the dictionaries (offline: the spelling rules answer)
         async function suggestBreaks(text) {
             if (Syl.hasSyllabicScript(text)) return Syl.syllabicBreaks(text);
             const key = Syl.keyOf(text);
@@ -6403,7 +5790,6 @@
             let elsewhere = 0;
             if (remember && changed.length) {
                 changed.forEach(r => { if (r.key) SylNet.setUser(r.key, sorted(r)); });
-                // the same word in other lines of the song
                 const todo = new Map(changed.filter(r => r.key).map(r => [r.key, sorted(r)]));
                 state.lyrics.forEach(other => {
                     if (other === line) return;
@@ -6424,8 +5810,6 @@
             if (changed.length) notify('Saved' + (remember ? ' and remembered' : '') + (elsewhere ? ' · ' + elsewhere + ' more in the song' : ''));
         }
 
-
-        // Older projects and imports may lack some fields
         function normalizeLine(l) {
             const text = typeof l.text === 'string' ? l.text : '';
             const num = (v) => (typeof v === 'number' && isFinite(v) ? v : null);
@@ -6473,7 +5857,6 @@
         const sidebar = document.getElementById('sidebar');
         const playBtn = document.getElementById('play-pause-btn');
 
-        // Popups
         const speedBtn = document.getElementById('speed-btn');
         const speedPopup = document.getElementById('speed-popup');
         const volumePopup = document.getElementById('volume-popup');
@@ -6481,7 +5864,6 @@
         const glowPopup = document.getElementById('glow-popup');
         const glowTrigger = document.getElementById('glow-trigger');
 
-        // Modals
         const offsetModal = document.getElementById('offset-modal');
         const expandModal = document.getElementById('expand-modal');
         const expandTextarea = document.getElementById('expand-textarea');
@@ -6503,13 +5885,11 @@
         const currTimeLbl = document.getElementById('curr-time-lbl');
         const durTimeLbl = document.getElementById('dur-time-lbl');
 
-        // Indicators
         const mainSyncBtnText = document.getElementById('main-sync-btn-text');
         const mobileModeIndicator = document.getElementById('mobile-mode-indicator');
         const controlDock = document.querySelector('.control-dock');
         const fullscreenBtn = document.getElementById("fullscreenBtn");
 
-        // Fullscreen
         fullscreenBtn.addEventListener("click", () => {
             const root = document.documentElement;
             if (!document.fullscreenElement) {
@@ -6566,10 +5946,6 @@
             });
         }
 
-        // =========================================
-        // 2. CORE LOGIC (MODEL)
-        // =========================================
-
         function initializeEditor() {
             const rawText = rawLyricsInput.value;
             if (!rawText.trim()) return notify("Paste your lead lyrics first.", 'error');
@@ -6585,7 +5961,6 @@
             resetEditUI();
 
             const toLines = (text) => text.split('\n').map(l => l.trim()).filter(l => l);
-            // new lines are split into syllables in one go below, not one by one
             const wasSyllables = state.syllables;
             state.syllables = false;
             const lead = toLines(rawText).map(t => newLineItem('lead', 'v1', t));
@@ -6601,7 +5976,6 @@
             syncSyllableUI();
             if (state.syllables) autoSplitLines(state.lyrics, { quiet: false });
         }
-
 
         // --- UI/UX Helpers ---
         function toggleSettings(show) {
@@ -6641,7 +6015,6 @@
 
             state.isPreviewMode = !state.isPreviewMode;
 
-            // Buttons that make no sense while previewing
             const buttons = [
                 'edit-mode-toggle',
                 'btn-top-offset',
@@ -6669,7 +6042,6 @@
             }
         }
 
-
         // --- GLOW SPEED LOGIC (UPDATED) ---
         function toggleGlowMenu() {
             glowPopup.classList.toggle('active');
@@ -6686,7 +6058,6 @@
                 label.textContent = "Custom";
             } else {
                 label.textContent = val + "s";
-                // Hide custom input if preset selected
                 document.getElementById('custom-glow-input').classList.remove('active');
             }
 
@@ -6745,34 +6116,17 @@
         });
 
         // --- File Input: any audio format ---
-        // How it works:
-        //   1. The file is tried natively in the browser's <audio> element first (instant, works offline).
-        //   2. If the browser can't decode it (WMA, AIFF, AMR, AC3, DTS, WavPack, APE, MP2 ...), a WebAssembly build
-        //      of FFmpeg is lazy-loaded from a CDN (one-time download of about 10 MB, cached by the browser). The audio track
-        //      is converted to WAV inside a Web Worker and that WAV is played instead.
-        //   Nothing is uploaded anywhere - decoding always happens on this device. Lyric timings are unaffected:
-        //   the editor only ever reads audioPlayer.currentTime / duration.
-        //
-        // Offline use: download the two files named below (identical on both CDNs), put them in a folder next to
-        // this page and add that folder's URL (ending in "/") as the FIRST entry of CONVERTER_BASES.
-        // Licence note: ffmpeg-core is FFmpeg compiled to WebAssembly by the ffmpeg.wasm project (GPL-2.0-or-later).
-        // It is downloaded at run time as a separate file and is not bundled into this page.
         const CONVERTER_BASES = [
             'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/umd/',
             'https://unpkg.com/@ffmpeg/core@0.12.10/dist/umd/'
         ];
-        // Pinned version. Size and SHA-384 are verified before anything is executed.
         const CONVERTER_FILES = {
             js: { name: 'ffmpeg-core.js', bytes: 112059, integrity: 'sha384-sKfkiFtvUk+vexk+0EUhEh366190/4WpgUAsUvaxEfyg7+E1Zt5Y5hrsU808g8Q9' },
             wasm: { name: 'ffmpeg-core.wasm', bytes: 32232419, integrity: 'sha384-U1VDhkPYrM3wTCT4/vjSpSsKqG/UjljYrYCI4hBSJ02svbCkxuCi6U6u/peg5vpW' }
         };
-        // Converted audio longer than this (about 25 min of stereo) is encoded as 192 kbps MP3 instead of WAV to save memory.
         const MAX_WAV_BYTES = 256 * 1024 * 1024;
-        // If the browser gives no verdict within this time (e.g. iOS defers loading media until playback) the file is
-        // assumed playable; the player's error handler below still catches a real failure later.
         const NATIVE_PROBE_TIMEOUT_MS = 3000;
 
-        // Only used when the OS gives a file no (or a generic) type - Safari won't play blob URLs without a correct one.
         const AUDIO_MIME_BY_EXT = {
             mp3: 'audio/mpeg', mp2: 'audio/mpeg', mp1: 'audio/mpeg', mpa: 'audio/mpeg', mpga: 'audio/mpeg',
             wav: 'audio/wav', wave: 'audio/wav', bwf: 'audio/wav',
@@ -6788,7 +6142,6 @@
 
         let audioLoadController = null;   // AbortController of the load in progress (a newer selection aborts the older one)
         let currentAudio = null;          // { file, url, converted, recovering } - what audioPlayer is playing right now
-                                          // (recovering = an automatic conversion was already tried / is not wanted)
         let converterAssets = null;       // { workerURL, wasm } once the converter has been downloaded
         let audioStatusTimer = null;
 
@@ -6800,9 +6153,6 @@
 
         document.getElementById('audio-status-cancel').addEventListener('click', cancelAudioLoad);
 
-        // Safety net: the browser accepted the file at first but then failed (a decode error part-way through) or ended up
-        // without a usable duration. Convert it instead - once only, resuming where playback was.
-        // (Ignored while a newer selection is loading: that one replaces this audio anyway.)
         function recoverCurrentAudio() {
             const cur = currentAudio;
             if (!cur || cur.converted || cur.recovering || audioLoadController || audioPlayer.getAttribute('src') !== cur.url) return;
@@ -6828,13 +6178,9 @@
             return mime ? new Blob([file], { type: mime }) : file;
         }
 
-        // Extensions listed in the file picker's accept attribute (one source of truth for the picker and this check).
         const AUDIO_EXTENSIONS = new Set(document.getElementById('audio-file').accept
             .split(',').map((t) => t.trim()).filter((t) => t.startsWith('.')).map((t) => t.slice(1)));
 
-        // True only for files that are clearly something else (image, text, font, PDF, archive, Office document ...).
-        // A known audio extension always wins over the OS's MIME guess (e.g. Firefox types .wv as application/vnd.wv.csp+wbxml),
-        // and anything unknown is still tried: wrongly refusing a real audio file is worse than one wasted attempt.
         function looksNonAudio(file) {
             if (AUDIO_EXTENSIONS.has(audioFileExt(file.name))) return false;
             const t = (file.type || '').toLowerCase();
@@ -6875,7 +6221,6 @@
             noteEl.hidden = !note;
             document.getElementById('audio-status-bar').classList.toggle('indeterminate', !known);
             document.getElementById('audio-status-fill').style.width = known ? pct : '';
-            // Only appear if loading takes a moment, so quick loads don't flash a popup.
             if (!panel.classList.contains('active') && !audioStatusTimer) {
                 audioStatusTimer = setTimeout(() => { audioStatusTimer = null; panel.classList.add('active'); }, 250);
             }
@@ -6893,11 +6238,6 @@
             hideAudioStatus();
         }
 
-        // Asks the browser to load the URL in a detached <audio>. Resolves with
-        //   'ok'          - first audio frame decoded and the duration is known
-        //   'badduration' - plays, but the duration is unknown/infinite (seeking would not work)
-        //   'error'       - the browser cannot decode it
-        //   'timeout'     - no verdict (e.g. iOS defers loading until playback) - treated as playable
         function probeNativeAudio(url, timeoutMs) {
             return new Promise((resolve) => {
                 const probe = new Audio();
@@ -6920,10 +6260,8 @@
             });
         }
 
-        // Downloads one converter file, reporting progress, and verifies its size and SHA-384 hash.
         async function fetchConverterFile(base, file, signal, onProgress) {
             const url = base + file.name;
-            // Plain-http pages have no crypto.subtle: let fetch() itself enforce the hash there (no progress then).
             const canHash = !!(window.crypto && crypto.subtle);
             const resp = await fetch(url, { signal, mode: 'cors', credentials: 'omit', integrity: canHash ? '' : file.integrity });
             if (!resp.ok) throw new Error('HTTP ' + resp.status + ' for ' + url);
@@ -6948,7 +6286,6 @@
             return blob;
         }
 
-        // Downloads the converter once per page session; falls back to the next CDN if one fails.
         async function ensureConverterAssets(signal, onProgress) {
             if (converterAssets) return converterAssets;
             let lastError = null;
@@ -6956,8 +6293,6 @@
                 try {
                     const js = await fetchConverterFile(base, CONVERTER_FILES.js, signal);
                     const wasm = await fetchConverterFile(base, CONVERTER_FILES.wasm, signal, onProgress);
-                    // The worker script is the verified ffmpeg-core.js followed by our driver, as ONE blob: a worker created
-                    // from a file:// page can't importScripts() another blob URL (opaque origin), so nothing is imported.
                     converterAssets = {
                         workerURL: URL.createObjectURL(new Blob([js, '\n;(' + converterWorkerMain.toString() + ')();'], { type: 'text/javascript' })),
                         wasm: new Blob([wasm], { type: 'application/wasm' })
@@ -6972,9 +6307,6 @@
             throw Object.assign(new Error('The audio converter could not be downloaded'), { code: 'download', cause: lastError });
         }
 
-        // Runs inside a Web Worker, appended to ffmpeg-core.js (it is stringified, so it must not use anything from this
-        // page). Receives { wasm (ArrayBuffer), file, ext, maxWavBytes } and answers with stage / progress / done / error
-        // messages (or 'need-bytes', see below).
         function converterWorkerMain() {
             'use strict';
             const log = [];
@@ -6995,7 +6327,6 @@
                 const FS = core.FS;
                 const remember = (line) => { log.push(line); if (log.length > 30) log.shift(); };
 
-                // Let ffmpeg read the file straight from disk (WORKERFS) instead of copying it into memory.
                 const inName = 'in.' + ext;
                 let inPath;
                 try {
@@ -7004,7 +6335,6 @@
                     FS.mount(FS.filesystems.WORKERFS, { blobs: [{ name: inName, data: file }] }, '/src');
                     inPath = '/src/' + inName;
                 } catch (e) {
-                    // Safari/WebKit on file:// pages don't let workers read Blobs/Files: ask the page to read the bytes for us.
                     if (file.size > 700 * 1024 * 1024) throw fail('too-large', 'The file is too large to convert in the browser');
                     const bytes = await new Promise((resolve) => {
                         self.onmessage = ({ data }) => resolve(data.bytes);
@@ -7014,16 +6344,14 @@
                     inPath = '/' + inName;
                 }
 
-                // Probe: is there an audio stream, and how big would the converted file be?
                 self.postMessage({ type: 'stage', stage: 'probe' });
                 const probeOut = [];
                 core.setLogger(({ type, message }) => (type === 'stdout' ? probeOut : log).push(message));
                 core.ffprobe('-v', 'error', '-select_streams', 'a:0',
                     '-show_entries', 'stream=codec_name,sample_rate,channels:format=duration', '-of', 'json', inPath);
                 core.reset();
-                // (ffprobe's return value is always -1 in this build, so success == it printed valid JSON.)
                 let info = null;
-                try { info = JSON.parse(probeOut.join('\n')); } catch (e) { /* not a media file */ }
+                try { info = JSON.parse(probeOut.join('\n')); } catch (e) {  }
                 if (!info) throw fail('unrecognized', 'Unrecognized file format');
                 const stream = info.streams && info.streams[0];
                 if (!stream) throw fail('no-audio', 'No audio stream found');
@@ -7059,7 +6387,6 @@
 
         async function runConverter(file, assets, signal, onStatus) {
             const aborted = () => new DOMException('Aborted', 'AbortError');
-            // Workers only ever get ArrayBuffers from us: in Safari on file:// pages they can't read Blobs.
             const wasm = await assets.wasm.arrayBuffer();
             if (signal.aborted) throw aborted();
             return new Promise((resolve, reject) => {
@@ -7092,7 +6419,6 @@
             });
         }
 
-        // Converts any audio/video file to something every browser can play; returns { url, converted: true }.
         async function convertAudioForPlayback(file, signal) {
             const name = file.name;
             const live = (fn) => (...a) => { if (!signal.aborted) fn(...a); };    // ignore callbacks of a cancelled load
@@ -7118,7 +6444,6 @@
             return { url, converted: true };
         }
 
-        // Loads any audio file into the player. The previous audio stays untouched until the new one is ready.
         async function loadAudioFile(file, options = {}) {
             if (audioLoadController) audioLoadController.abort();
             const controller = new AbortController();
@@ -7241,7 +6566,6 @@
             }
         });
 
-        // Preview: both layers play at the same time, each one lights the line (and words) it is on.
         function animatePreviewFrame() {
             if (!state.isPreviewMode) return;
             if (state.lyrics.length > 0) {
@@ -7299,7 +6623,6 @@
             if (!audioPlayer.paused) {
                 timeDisplay.textContent = formatTimeDisplay(audioPlayer.currentTime);
                 if (!state.isPreviewMode && state.lyrics.length) {
-                    // while syncing one layer, the other one follows the song
                     updatePlayhead(audioPlayer.currentTime, { follow: 'inactive' });
                 }
                 requestAnimationFrame(updateTimer);
@@ -7325,8 +6648,6 @@
             railPreviewBtn.setAttribute('aria-pressed', 'false');
         }
 
-        // A line of text as words. A "·" inside a word marks a syllable break (beau·ti·ful); each syllable becomes its
-        // own timed unit, flagged `join` so it is written without a space in front of it.
         function parseWords(text) {
             const out = [];
             text.replace(/-/g, '- ').split(/\s+/).filter(w => w).forEach(token => {
@@ -7339,7 +6660,6 @@
             return out;
         }
 
-        // The text of a list of words / syllables: a space between words, none inside a word
         function unitsToText(words) {
             let out = '';
             words.forEach((w, i) => {
@@ -7350,7 +6670,6 @@
             return out;
         }
 
-        // Same, with "·" between the syllables (what the edit dialog shows)
         function unitsToDisplayText(words) {
             let out = '';
             words.forEach((w, i) => {
@@ -7385,7 +6704,6 @@
             const file = input.files[0];
             if (!file) return;
 
-            // 1. Force Stop Preview if active
             if (state.isPreviewMode) {
                 togglePreviewMode();
             }
@@ -7403,7 +6721,6 @@
 
                     document.getElementById(state.mode === 'line' ? 'mode-line' : (state.syllables ? 'mode-syllable' : 'mode-word')).checked = true;
 
-                    // ENABLE TABS
                     setWorkflowDisabled(false);
 
                     toggleSettings(false);
@@ -7431,7 +6748,6 @@
                 expandTextarea.value = rawLyricsInput.value;
                 expandTextarea.placeholder = "Line 1...\nLine 2...";
 
-                // Symbol Button
                 const btnSymbol = document.createElement('button');
                 btnSymbol.className = 'btn btn-secondary btn-note';
                 btnSymbol.textContent = "♩";
@@ -7456,7 +6772,6 @@
                 expandActions.appendChild(btnSave);
             }
             else if (type === 'lead' || type === 'bg' || type === 'v2') {
-                // Paste several lines at once onto a layer
                 expandTitle.textContent = type === 'bg' ? "Add background lines" : type === 'v2' ? "Add singer 2 lines" : "Add lead lines";
                 expandTextarea.value = '';
                 expandTextarea.placeholder = "One line per row...";
@@ -7489,7 +6804,6 @@
                     const reader = new FileReader();
                     reader.onload = (ev) => {
                         expandTextarea.value = ev.target.result;
-                        // Highlight that content was loaded
                         expandTextarea.style.borderColor = 'var(--accent)';
                         setTimeout(() => expandTextarea.style.borderColor = '', 500);
                     };
@@ -7497,14 +6811,12 @@
                 };
                 expandActions.appendChild(fileInput);
 
-                // Button 1: Open File
                 const btnOpen = document.createElement('button');
                 btnOpen.className = 'btn btn-outline';
                 btnOpen.append(iconEl('folder'), document.createTextNode(" Open file"));
                 btnOpen.title = "Load from .lrc file";
                 btnOpen.onclick = () => fileInput.click();
 
-                // Button 2: Import Text (Parse whatever is in the box)
                 const btnImport = document.createElement('button');
                 btnImport.className = 'btn';
                 btnImport.textContent = "Import text";
@@ -7520,7 +6832,6 @@
 
         function closeExpandModal() { expandModal.classList.remove('active'); }
 
-        // Copy/Load Buttons in Sidebar
         function copyLRC() {
             copyText(exportOutput.value).then(
                 () => notify("Copied to clipboard"),
@@ -7541,9 +6852,7 @@
             const lines = lrcText.split(/\r?\n/);
             const newLyrics = [];
 
-            // Regex Definitions
             const standardTimeRegex = /\[(\d{1,2}):(\d{2}(?:\.\d+)?)\](.*)/;
-            // [mm:ss.xx]  then optionally {agent:v1} / {bg} tags (any order) or a "v1:" label, then <mm:ss.xx>word<mm:ss.xx>syl ...
             const proLineRegex = /^\[(\d{1,2}):(\d{2}(?:\.\d+)?)\]\s*((?:\{[^{}]*\}\s*)*)(?:(v\d+|[A-Za-z]\w*):\s*)?(<\d{1,2}:\d{2}(?:\.\d+)?>.*)$/;
             const bgTagRegex = /\[bg:(.*?)\]/;
             const advancedWordDataRegex = /^<(.+:.+:.+)>/;
@@ -7593,7 +6902,6 @@
                         const agent = inlineAgent || proMatch[4];
 
                         if (inlineBg) {
-                            // a background line: the singer it backs is the one named in its tag, else the line above
                             const entry = { text: unitsToText(words), time: lineTime, words: words, isBg: true, singer: 'v1' };
                             const host = agent ? singerOf(agent) : lastMainSinger;
                             if (host) entry.backs = host;
@@ -7656,7 +6964,6 @@
                                 textContent = textContent.slice(m[0].length);
                             }
                             textContent = textContent.trim();
-                            // a speaker tag on a line without word timings: [00:10.00]v2:text (Gramophone style)
                             const speakerTag = textContent.match(/^(v\d+):\s*/i);
                             if (speakerTag && !isBgLine) {
                                 agent = agent || speakerTag[1];
@@ -7678,7 +6985,6 @@
                             }
                             newLyrics.push(entry);
                         } else if (!mainContent.startsWith('[') && !mainContent.startsWith('<')) {
-                            // Plain text fallback
                             newLyrics.push({
                                 text: mainContent,
                                 time: null,
@@ -7712,7 +7018,6 @@
             state.syllables = state.lyrics.some(l => l.words.some(w => w.join));
             resetLayers(state.v2Track || state.lyrics.some(l => l.isBg));
 
-            // Apply Detected Settings
             if (detectedFormat === 'pro') {
                 setLRCFormat('pro');
             } else {
@@ -7829,7 +7134,6 @@
             const tsGroup = document.createElement('div');
             tsGroup.className = 'timestamp-group';
 
-            // Calc time values
             let tMin = "", tSec = "", tMs = "";
             if (item.time !== null) {
                 tMin = Math.floor(item.time / 60).toString().padStart(2, '0');
@@ -7838,7 +7142,6 @@
                 tMs = Math.round((rem - Math.floor(rem)) * 100).toString().padStart(2, '0');
             }
 
-            // Create Inputs Helper
             const createTsInput = (val, max, type) => {
                 const inp = document.createElement('input');
                 inp.className = 'ts-digit';
@@ -7846,13 +7149,11 @@
                 inp.placeholder = "00";
                 inp.setAttribute('aria-label', type === 'min' ? 'Minutes' : (type === 'sec' ? 'Seconds' : 'Hundredths'));
 
-                // Save on change
                 inp.onchange = (e) => {
                     let val = parseInt(e.target.value) || 0;
                     if (val < 0) val = 0;
                     if (type !== 'min' && val > max) val = max; // clamp seconds/ms
 
-                    // Re-calculate total time
                     const currentMin = parseInt(tsGroup.children[0].value) || 0;
                     const currentSec = parseInt(tsGroup.children[2].value) || 0;
                     const currentMs = parseInt(tsGroup.children[4].value) || 0;
@@ -7860,12 +7161,10 @@
                     const newTotal = (currentMin * 60) + currentSec + (currentMs / 100);
                     item.time = newTotal;
 
-                    // Update visual padding
                     e.target.value = val.toString().padStart(2, '0');
                     generateLRC();
                 };
 
-                // Prevent editing in preview
                 if (state.isPreviewMode) inp.readOnly = true;
 
                 return inp;
@@ -7889,7 +7188,6 @@
             if (state.mode === 'line') {
                 content.innerText = item.text;
             } else {
-                // The syllables of one word sit in a group that wraps as a whole; words are separated by a space
                 wordGroups(item.words).forEach(group => {
                     let host = content;
                     if (group.to > group.from) {
@@ -7916,7 +7214,6 @@
                                 seekSlider.value = word.start; // Move the visual slider thumb
                                 updateRangeFill(seekSlider);   // Update the color fill
 
-                                // Update the time display immediately if paused
                                 if (audioPlayer.paused) {
                                     timeDisplay.textContent = formatTimeDisplay(word.start);
                                 }
@@ -7924,7 +7221,6 @@
 
                             focusLine(index, wIdx);
                         };
-                        // double-click (double-tap) a word to split it into syllables by hand
                         span.ondblclick = (e) => {
                             e.stopPropagation();
                             if (state.syllables && !state.isPreviewMode && !state.isEditMode) openSplitDialog(index, wIdx);
@@ -7990,7 +7286,6 @@
             return state.singerFilter !== 'all' ? state.singerFilter : 'v1';
         }
 
-        // Adds a line at the end of a layer (the + buttons)
         function addLineToLayer(layer) {
             setActiveLayer(layer);
             const wasEmpty = countLayer(layer) === 0;
@@ -8007,7 +7302,6 @@
             setTimeout(() => { body.scrollTop = body.scrollHeight; }, 50);
         }
 
-        // Adds several lines at once (one per row of the text) to the end of a layer
         function addLinesToLayer(layer, text) {
             const lines = text.split('\n').map(l => l.trim()).filter(l => l);
             if (!lines.length) return;
@@ -8047,7 +7341,6 @@
         }
 
         // --- SYNC LOGIC (TAP & HOLD) ---
-        // Attaching Listeners
         const syncBtnDesktop = document.getElementById('main-sync-btn');
         const syncBtnMobile = document.getElementById('main-sync-btn-mobile');
 
@@ -8062,12 +7355,9 @@
         });
 
         function updateAutoModeLabel() {
-            // Only run this logic if we are actually in Auto mode
             if (state.syncInputMode !== 'auto') return;
             const currentLine = state.lyrics[state.currentIndex];
             if (!currentLine) return;
-            // Logic: If it's the last word of the line, Auto mode behaves like HOLD.
-            // Otherwise, it behaves like TAP.
             setSyncLabel(state.currentWordIndex === currentLine.words.length - 1 ? "HOLD" : "TAP");
         }
 
@@ -8084,7 +7374,6 @@
 
             if (holdActive) return;
 
-            // Visuals: Button press
             const btns = [syncBtnDesktop, syncBtnMobile];
             btns.forEach(b => b.classList.add('holding'));
 
@@ -8100,13 +7389,11 @@
                 // --- WORD MODE LOGIC ---
 
                 if (state.syncInputMode === 'tap') {
-                    // Standard Tap
                     syncWordTap(state.currentIndex, state.currentWordIndex, time);
                     scrollToActive();
                     updateVisuals();
 
                 } else if (state.syncInputMode === 'hold') {
-                    // Standard Hold
                     startHoldAction(time);
 
                 } else if (state.syncInputMode === 'auto') {
@@ -8115,10 +7402,8 @@
                     const isLastWord = state.currentWordIndex === currentLine.words.length - 1;
 
                     if (isLastWord) {
-                        // Last word -> Behaves like Hold
                         startHoldAction(time);
                     } else {
-                        // Not last word -> Behaves like Tap
                         syncWordTap(state.currentIndex, state.currentWordIndex, time);
                         scrollToActive();
                         updateVisuals();
@@ -8127,11 +7412,9 @@
             }
         }
 
-        // Helper to centralize Hold starting logic (used by Hold and Auto)
         function startHoldAction(time) {
             holdActive = true;
 
-            // Activate Dock Glow
             controlDock.classList.add('active-hold-glow');
 
             syncWordStart(state.currentIndex, state.currentWordIndex, time);
@@ -8140,20 +7423,17 @@
         }
 
         function handleSyncUp(e) {
-            // Visuals: Button release
             const btns = [syncBtnDesktop, syncBtnMobile];
             btns.forEach(b => b.classList.remove('holding'));
 
             if (!holdActive) return;
             holdActive = false;
 
-            // Task 3: Deactivate Dock Glow
             controlDock.classList.remove('active-hold-glow');
 
             const offset = parseInt(offsetInput.value) || 0;
             const time = Math.max(0, audioPlayer.currentTime + (offset / 1000));
 
-            // Logic for ending a Hold action
             if (state.mode === 'word') {
                 syncWordEnd(state.currentIndex, state.currentWordIndex, time);
                 advanceWordCursor();
@@ -8167,7 +7447,6 @@
 
             state.lyrics[idx].time = time;
 
-            // Update the 3 inputs
             const row = document.getElementById(`line-${idx}`);
             if (row) {
                 const group = row.querySelector('.timestamp-group');
@@ -8186,7 +7465,6 @@
             generateLRC();
         }
 
-       // Classic Tap: Sets start, auto sets prev end, advances
         function syncWordTap(lIdx, wIdx, time) {
             const line = state.lyrics[lIdx];
             if (!line) return;
@@ -8199,7 +7477,6 @@
                 line.words[wIdx - 1].end = time;
             }
             else if (lIdx > 0) {
-                // Fix: Find the actual valid previous line based on View Context
                 const prevIdx = getPrevValidLineIndex(lIdx - 1);
                 if (prevIdx !== -1) {
                     const prev = state.lyrics[prevIdx];
@@ -8214,18 +7491,15 @@
                 }
             } // <-- CLOSING BRACKET MOVED HERE
 
-            // Auto-close very last word of song if in Tap mode
             if (state.syncInputMode === 'tap' && getNextValidLineIndex(lIdx + 1) >= state.lyrics.length && wIdx === line.words.length - 1) {
                 if (audioPlayer.duration) word.end = audioPlayer.duration;
             }
 
-            // THESE NOW RUN FOR EVERY WORD
             if (wIdx === 0) syncLine(lIdx, time);
             advanceWordCursor();
             generateLRC();
         }
 
-        // Hold Mode Start: Just set start
         function syncWordStart(lIdx, wIdx, time) {
             const line = state.lyrics[lIdx];
             if (!line) return;
@@ -8240,7 +7514,6 @@
             generateLRC(); // Save partial state
         }
 
-        // Hold Mode End: Just set end
         function syncWordEnd(lIdx, wIdx, time) {
             const line = state.lyrics[lIdx];
             if (!line) return;
@@ -8249,7 +7522,6 @@
             generateLRC();
         }
 
-
         function advanceWordCursor() {
             const line = state.lyrics[state.currentIndex];
             if (!line) return;
@@ -8257,7 +7529,6 @@
             if (state.currentWordIndex < line.words.length - 1) {
                 state.currentWordIndex++;
             } else {
-                // End of line, find next VALID line based on View Mode
                 const nextLineIdx = getNextValidLineIndex(state.currentIndex + 1);
                 state.currentIndex = nextLineIdx;
                 state.currentWordIndex = 0;
@@ -8300,12 +7571,10 @@
             const autoBtn = document.getElementById('opt-sync-auto');
             const tapBtn = document.getElementById('opt-tap');
 
-            // 1. Reset visual disabled state first
             holdBtn.classList.remove('disabled-mode');
             autoBtn.classList.remove('disabled-mode');
             tapBtn.classList.remove('disabled-mode');
 
-            // 2. Logic Restrictions
             if (state.lrcFormat === 'pro') {
                 tapBtn.classList.add('disabled-mode');
 
@@ -8314,7 +7583,6 @@
                 }
             }
             else if (state.mode === 'line') {
-                // Line Mode: Only Tap is allowed
                 holdBtn.classList.add('disabled-mode');
                 autoBtn.classList.add('disabled-mode');
             }
@@ -8322,12 +7590,9 @@
 
         function closeSyncSettings() { syncSettingsModal.classList.remove('active'); }
 
-        // Update Sync Mode Setter
         function setSyncInputMode(mode) {
-            // Prevent setting restricted modes if line mode
             if ((mode === 'hold' || mode === 'auto') && state.mode === 'line') return;
 
-            // For Pro Mode: Prevent 'tap', but allow 'hold' and 'auto'
             if (state.lrcFormat === 'pro' && mode === 'tap') return;
 
             state.syncInputMode = mode;
@@ -8349,7 +7614,6 @@
             document.getElementById('opt-custom').classList.toggle('active', mode === 'custom');
             document.getElementById('opt-auto').classList.toggle('active', mode === 'auto');
 
-            // Hide/Show Speed options
             const speedCont = document.getElementById('glow-speed-container');
             if (mode === 'auto') speedCont.classList.add('disabled');
             else speedCont.classList.remove('disabled');
@@ -8372,7 +7636,6 @@
                 }));
             }
 
-            // Cursor row of each layer (the inactive layer's cursor is drawn dimmer by the CSS)
             document.querySelectorAll('.lyric-line.is-cursor').forEach(el => el.classList.remove('is-cursor'));
             if (!state.isPreviewMode) {
                 LAYERS.forEach(layer => {
@@ -8386,7 +7649,6 @@
                 return;
             }
 
-            // Highlight Active Word
             if (state.mode === 'word' && !state.isPreviewMode) {
                 const currentSpan = document.getElementById(`word-${state.currentIndex}-${state.currentWordIndex}`);
                 if (currentSpan) currentSpan.classList.add('active-word');
@@ -8417,22 +7679,17 @@
             wordContextUI.classList.add('visible');
             const currentWord = currentLine.words[state.currentWordIndex] || null;
 
-            // Determine UI Layout based on Mode
             if (state.syncInputMode === 'hold') {
 
                 wordContextUI.classList.add('mode-hold');
 
-                // LEFT SIDE: Current Word (Highlighted via CSS)
                 ctxPrev.textContent = currentWord ? currentWord.text : "End";
 
-                // RIGHT SIDE: Next Word
                 let nextWordText = "End of line";
 
-                // Check next word in current line
                 if (state.currentWordIndex < currentLine.words.length - 1) {
                     nextWordText = currentLine.words[state.currentWordIndex + 1].text;
                 }
-                // Or check first word of the next line of this layer
                 else {
                     const nextLineIdx = getNextValidLineIndex(state.currentIndex + 1);
                     if (nextLineIdx < state.lyrics.length) {
@@ -8448,10 +7705,8 @@
                 ctxNext.textContent = nextWordText;
 
             } else {
-                // STANDARD TAP / AUTO LAYOUT (Default behavior)
                 wordContextUI.classList.remove('mode-hold');
 
-                // LEFT SIDE: Previous Word
                 let prevWordText = "...";
                 if (state.currentWordIndex > 0) prevWordText = currentLine.words[state.currentWordIndex - 1].text;
                 else {
@@ -8463,7 +7718,6 @@
                 }
                 ctxPrev.textContent = prevWordText;
 
-                // RIGHT SIDE: Current Word (Target)
                 ctxNext.textContent = currentWord ? currentWord.text : "End";
             }
         }
@@ -8478,31 +7732,18 @@
         }
         function formatTimeLRC(s) { return formatTimeDisplay(s); }
 
-        // Where a line is placed in the export. Pro background lines carry no line stamp, so they are placed by
-        // the first timed word, which is what actually gets printed for them.
-        // Lines in export order. Lead lines keep their order; background lines are merged in by start time,
-        // so each one sits next to (and may overlap) the lead lines it is sung with.
-        // A line without a time is not synced yet and is skipped, on either layer.
         // ---- Export -------------------------------------------------------------------------------------------------
-        // Both formats follow what Metrolist and Gramophone read:
-        //  * a background line takes the singer of the line right above it in the file (Gramophone: v1: / v2: / v3:,
-        //    Metrolist: the last non-background agent) - so each background line is written straight after the line
-        //    it backs, and the apps sort everything by time themselves. Advanced background lines also carry that
-        //    singer in their own {agent:} tag.
-        //  * no field is ever empty: every word has a start and an end, and every Pro line ends with an end stamp.
 
         function agentOf(l) { return l.singer === 'v2' ? 'v2' : (l.singer === 'v3' ? 'v3' : 'v1'); }
         function agentLabel(agent) { return agent === 'v3' ? state.thirdSingerLabel : agent; }
         const isNum = (v) => typeof v === 'number' && isFinite(v);
         const round3 = (v) => Math.round(v * 1000) / 1000;
 
-        // When a background line starts: its first timed word (the Pro format has no line stamp for it)
         function bgStartTime(l) {
             const w = (l.words || []).find(x => isNum(x.start));
             return w ? Math.min(w.start, isNum(l.time) ? l.time : w.start) : l.time;
         }
 
-        // Where a word that has no end of its own stops: at the next line of the layer, but never later than a few seconds
         function fallbackEnd(l, start) {
             const layer = layerOf(l);
             let next = Infinity;
@@ -8515,8 +7756,6 @@
             return end > start + 0.05 ? end : start + 0.5;
         }
 
-        // The words of a line as they are written to the file, all with a start and an end, in order. Words that were
-        // never timed are spread between their timed neighbours; a line that was only timed as a whole becomes one word.
         function exportUnits(l) {
             const words = (l.words || []).filter(w => w && w.text);
             const lineStart = lineStartTime(l);
@@ -8548,9 +7787,6 @@
             return u;
         }
 
-        // Lines in the order they are written: by start time, each background line right after the line it backs.
-        // A line without a time is not synced yet and is skipped, on every layer.
-        // Returns [{ l, agent, bg }] - for a background line `agent` is the singer it backs.
         function exportOrder() {
             const synced = (l) => isNum(l.time);
             const mains = state.lyrics.map((l, i) => ({ l, i })).filter(x => !x.l.isBg && synced(x.l))
@@ -8560,8 +7796,6 @@
                 .sort((a, b) => a.t - b.t || a.i - b.i);
             const lineEnd = (l) => getLineEndTime(state.lyrics.indexOf(l));
 
-            // the line a background line backs: the one it overlaps most (the chosen singer's lines only, if one was chosen),
-            // else the nearest one, preferring a line that has already started
             const hostOf = (bg) => {
                 const wanted = ['v1', 'v2', 'v3'].includes(bg.l.backs) ? bg.l.backs : null;
                 let pool = wanted ? mains.filter(m => agentOf(m.l) === wanted) : mains;
@@ -8599,8 +7833,6 @@
             let out = "";
 
             const items = exportOrder();
-            // Gramophone finds the singer a background line backs by looking back to the previous line break, so a file that
-            // opens with a singer 2 / 3 line and its background line needs one blank line in front of it
             if (state.lrcFormat === 'pro' && items.length > 1 && !items[0].bg && items[0].agent !== 'v1' && items[1].bg) out = "\n";
 
             items.forEach(item => {
@@ -8610,8 +7842,6 @@
 
                 if (state.lrcFormat === 'pro') {
                     // --- PRO FORMAT ---
-                    // [mm:ss.xxx]v1:<mm:ss.xxx>word <mm:ss.xxx>word<end>      background: [bg:<mm:ss.xxx>word<end>]
-                    // Syllables of one word follow each other without a space: <t>beau<t>ti<t>ful <t>day<end>
                     let content = "";
                     units.forEach((u, idx) => {
                         const next = units[idx + 1];
@@ -8626,8 +7856,6 @@
                 }
                 else {
                     // --- ADVANCED FORMAT (Metrolist) ---
-                    // [mm:ss.xx]{agent:v1}line text           background: [mm:ss.xx]{agent:v1}{bg}line text
-                    // <word:start:end|word:start:end>        word timings in seconds, on the line below
                     const clean = (t) => t.replace(/\|/g, '/');
                     const text = units[0].whole ? clean(units[0].text) : clean(unitsToText(units));
                     const tag = item.bg ? (label ? `{agent:${label}}` : '') + "{bg}" : `{agent:${label}}`;
@@ -8727,7 +7955,6 @@
             const prevIdx = getPrevValidLineIndex(state.currentIndex - 1);
             if (prevIdx !== -1) {
                 state.currentIndex = prevIdx;
-                // Reset word index to end of previous line for continuity
                 if (state.lyrics[state.currentIndex]) {
                     state.currentWordIndex = state.lyrics[state.currentIndex].words.length - 1;
                 }
@@ -8762,7 +7989,6 @@
             // --- Navigation: WORDS (A/D) ---
             if (code === keyMap.prevWord) {
                 e.preventDefault();
-                // Move word back
                 if (state.currentWordIndex > 0) {
                     state.currentWordIndex--;
                 } else if (state.currentIndex > 0) {
@@ -8781,7 +8007,6 @@
                 e.preventDefault();
                 const line = state.lyrics[state.currentIndex];
                 if (!line) return;
-                // Move word forward
                 if (state.currentWordIndex < line.words.length - 1) {
                     state.currentWordIndex++;
                 } else {
@@ -8800,13 +8025,11 @@
         document.addEventListener('keyup', (e) => {
             if (isTypingTarget(e.target)) return;
 
-            // Release Enter
             if (e.code === 'Enter') {
                 e.preventDefault();
                 handleSyncUp(e);
             }
 
-            // Release Shift -> Revert to previous mode
             if (e.code === 'ShiftLeft') {
                 setSyncInputMode(preShiftSyncMode);
                 updateSyncUI();
@@ -8826,7 +8049,6 @@
             if (b && e.detail > 0) b.blur();         // mouse click, not a keyboard-triggered one
         });
 
-        // Init
         updateRangeFill(seekSlider);
         updateSyncUI(); // Set initial labels
 
@@ -8837,7 +8059,6 @@
         let touchStartY = 0;
         let touchEndY = 0;
 
-        // 1. Swipe Up on Dock -> Open Settings
         dockEl.addEventListener('touchstart', (e) => {
             touchStartY = e.changedTouches[0].screenY;
         }, { passive: true });
@@ -8852,28 +8073,23 @@
             const threshold = 50; // Minimum pixels to count as a swipe
 
             if (direction === 'up') {
-                // Swipe Up (positive distance) on Dock
                 if (swipeDistance > threshold) {
                     toggleTools(true);
                 }
             }
         }
 
-        // LRC Format Logic
         function setLRCFormat(fmt) {
             state.lrcFormat = fmt;
 
-            // Sync UI (Sidebar)
             document.getElementById('fmt-adv-sidebar').checked = (fmt === 'advanced');
             document.getElementById('fmt-pro-sidebar').checked = (fmt === 'pro');
 
-            // Update internal logic variables/UI states
             const tapBtn = document.getElementById('opt-tap');
             const holdBtn = document.getElementById('opt-hold');
             const autoBtn = document.getElementById('opt-sync-auto');
 
             if (fmt === 'pro') {
-                // Pro Constraints
                 if (state.mode !== 'word') {
                     state.mode = 'word';
                     document.getElementById('mode-word').checked = true;
@@ -8883,7 +8099,6 @@
                 state.syncInputMode = 'auto';
                 setGlowMode('auto');
 
-                // Update Sync Settings Modal visuals if it exists
                 if (tapBtn) {
                     tapBtn.classList.remove('active');
                     holdBtn.classList.remove('active');
@@ -8892,7 +8107,6 @@
                     holdBtn.classList.add('disabled-mode');
                 }
             } else {
-                // Advanced Restore
                 if (tapBtn) {
                     tapBtn.classList.remove('disabled-mode');
                     holdBtn.classList.remove('disabled-mode');
@@ -8932,7 +8146,6 @@
             });
         }
 
-        // Which singer a background line backs: 'auto' picks the line it overlaps most
         function setEditBacks(value) {
             editLineBacks = ['v1', 'v2', 'v3'].includes(value) ? value : 'auto';
             ['auto', 'v1', 'v2', 'v3'].forEach(v => {
@@ -8947,13 +8160,11 @@
             const modal = document.getElementById('single-line-edit-modal');
             const textArea = document.getElementById('single-line-text');
 
-            // 1. Setup Text (syllable breaks show as ·)
             const dotted = state.mode !== 'line' && (state.syllables || line.words.some(w => w.join));
             textArea.value = dotted ? unitsToDisplayText(line.words) : line.text;
             editBaselineText = textArea.value.trim();
             document.getElementById('edit-dots-hint').hidden = !(state.syllables && state.mode !== 'line');
 
-            // 2. Setup Time
             let startTime = line.time;
             if (startTime === null && line.words && line.words.length > 0) {
                 const firstSynced = line.words.find(w => w.start !== null);
@@ -8970,7 +8181,6 @@
                 document.getElementById('edit-line-ms').value = "";
             }
 
-            // 3. Setup layer, singer and (for background lines) who they back
             setEditLayer(line.isBg ? 'bg' : (line.singer === 'v2' ? 'v2' : 'lead'));
             setEditSinger(line.singer);
             setEditBacks(line.backs || 'auto');
@@ -9001,13 +8211,11 @@
 
             if (newText && raw !== editBaselineText) {
                 if (norm(newText) !== norm(lineObj.text)) {
-                    // the words changed: they have to be timed again
                     lineObj.text = newText;
                     lineObj.words = parseWords(raw);
                     LAYERS.forEach(l => { if (layerCursors[l].line === lineObj) layerCursors[l].word = 0; });
                     if (state.syllables) queueSplit(lineObj);                 // the words you did not split by hand get split
                 } else {
-                    // only the syllable breaks changed: the timing stays
                     restructureFromDotted(lineObj, raw);
                 }
             }
@@ -9017,7 +8225,6 @@
                 lineObj.words[0].start = newTime;
             }
 
-            // Layer, singer and who a background line backs
             if (editLineLayer === 'bg') {
                 if (editLineBacks === 'auto') delete lineObj.backs; else lineObj.backs = editLineBacks;
             }
@@ -9048,18 +8255,15 @@
             closeSingleLineEditModal();
         }
 
-        // Calculate End Time for a line
         function getLineEndTime(index) {
             const line = state.lyrics[index];
             if (!line) return 0;
 
-            // 1. If last word has an explicit end time (Pro Mode), use it
             if (line.words && line.words.length > 0) {
                 const lastWord = line.words[line.words.length - 1];
                 if (lastWord.end !== null) return lastWord.end;
             }
 
-            // 2. Fallback: Estimate based on start of the NEXT line of the SAME type AND Singer
             for (let i = index + 1; i < state.lyrics.length; i++) {
                 const next = state.lyrics[i];
                 const sameBg = !!next.isBg === !!line.isBg;
@@ -9070,11 +8274,9 @@
                 }
             }
 
-            // 3. Last Resort: Arbitrary duration (3 seconds)
             return (line.time || 0) + 3.0;
         }
 
-        // Helper: Applies glow to words within a specific line
         function animateWordGlow(lineIdx, curTime) {
             const line = state.lyrics[lineIdx];
             if (!line || !line.words) return;
@@ -9086,10 +8288,8 @@
                 const wordSpan = document.getElementById(`word-${lineIdx}-${w}`);
                 if (!wordSpan) continue;
 
-                // Logic: Glow if time has passed word start
                 if (word.start <= curTime) {
                     if (!wordSpan.classList.contains('preview-glow')) {
-                        // Apply transition logic
                         if (state.glowMode === 'auto' && word.end !== null) {
                             const dur = Math.max(0.1, word.end - word.start);
                             wordSpan.style.transition = `color ${dur}s linear, text-shadow ${dur}s linear, transform 0.2s ease`;
@@ -9099,14 +8299,12 @@
                         wordSpan.classList.add('preview-glow');
                     }
                 } else {
-                    // Future words in active line (handle seeking backwards)
                     wordSpan.classList.remove('preview-glow');
                     wordSpan.style.transition = "";
                 }
             }
         }
 
-        // Helper: Specific cleanup for a single line
         function cleanupLineGlow(lineIdx) {
             const line = state.lyrics[lineIdx];
             if (!line || !line.words) return;
@@ -9119,16 +8317,12 @@
             }
         }
 
-        // Parses a string like "<01:22.333>Word <01:24.444>Word-" into word objects
-        // Parses a string like "<01:22.333>Word <01:24.444>Word-" into word objects. A piece that is not followed
-        // by a space is a syllable of the word that follows (<t>beau<t>ti<t>ful ), flagged `join`.
         function parseProWords(rawContent) {
             const tagRegex = /<(\d{1,2}):(\d{2}(?:\.\d+)?)>/g;
             const words = [];
             let match;
             const timestamps = [];
 
-            // 1. Find all timestamps and their positions
             while ((match = tagRegex.exec(rawContent)) !== null) {
                 const t = (parseInt(match[1]) * 60) + parseFloat(match[2]);
                 timestamps.push({ time: t, index: match.index, length: match[0].length });
@@ -9145,22 +8339,18 @@
                 words.push(unit);
             };
 
-            // 2. Extract text between timestamps
             for (let i = 0; i < timestamps.length - 1; i++) {
                 const current = timestamps[i];
                 const next = timestamps[i + 1];
                 push(rawContent.substring(current.index + current.length, next.index), current.time, next.time);
             }
 
-            // 3. Handle tail text (after last timestamp)
             const lastTag = timestamps[timestamps.length - 1];
             if (lastTag) push(rawContent.substring(lastTag.index + lastTag.length), lastTag.time, null);
 
             return words;
         }
 
-        // Sets `join` on the words of a line by looking at where the spaces are in the line text
-        // (the Advanced format has no syllable flag: Metrolist aligns the words with the line text the same way)
         function alignJoinsToText(line) {
             const text = line.text;
             const flags = [];
@@ -9177,7 +8367,6 @@
         // --- Sidebar Tabs Logic ---
         const phoneLayout = window.matchMedia('(max-width: 900px)');
 
-        // Rail buttons: open the panel on that tab. Pressing the tab that is open closes the panel again.
         function railTab(tabName) {
             const showing = document.getElementById('tab-' + tabName).classList.contains('active');
             if (sidebar.classList.contains('active') && showing && !phoneLayout.matches) {
@@ -9189,18 +8378,15 @@
         }
 
         function switchTab(tabName) {
-            // Update Buttons
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             const tabBtn = document.getElementById(`tab-btn-${tabName}`);
             if (tabBtn) tabBtn.classList.add('active');
 
-            // Update Content
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.getElementById(`tab-${tabName}`).classList.add('active');
             syncRailState();
         }
 
-        // aria-pressed: the tab whose panel is open
         function syncRailState() {
             const open = sidebar.classList.contains('active');
             document.querySelectorAll('.rail .tab-btn').forEach(btn =>
@@ -9214,9 +8400,7 @@
             const reader = new FileReader();
             reader.onload = (e) => {
                 const text = e.target.result;
-                // Put text in box
                 document.getElementById('export-output').value = text;
-                // Parse it immediately
                 parseAndLoadLRC(text);
             };
             reader.readAsText(file);
@@ -9259,7 +8443,6 @@
             renderEditor();
         });
 
-
         function openExportModal() {
             generateLRC();
             const previewArea = document.getElementById('export-modal-preview');
@@ -9300,7 +8483,6 @@
         }
 
         function updateSyncUI() {
-            // Updates the main button text based on the current Sync Mode
             setSyncLabel(state.syncInputMode === 'hold' ? "HOLD" : "TAP");
         }
 
@@ -9309,7 +8491,6 @@
             const modal = document.getElementById('keybind-modal');
             modal.classList.add('active');
 
-            // Add temporary listener
             document.addEventListener('keydown', handleRebindInput);
         }
 
@@ -9317,13 +8498,11 @@
             e.preventDefault();
             e.stopPropagation();
 
-            // Ignore Escape (used to cancel)
             if (e.code === 'Escape') {
                 closeKeybindModal();
                 return;
             }
 
-            // Save new key
             keyMap[rebindingAction] = e.code;
             updateKeybindUI();
             closeKeybindModal();
@@ -9340,8 +8519,6 @@
             updateKeybindUI();
         }
 
-        // Moves the current line to the other layer
-        // Moves the current line to the background layer, or back to the lead layer
         function toggleBgVocal() {
             const line = state.lyrics[state.currentIndex];
             if (!line) return;
@@ -9371,7 +8548,6 @@
             }
         }
 
-        // 1 / 2 / 3: the line becomes singer 1 / 2 / 3. Singer 2 goes to its own track when that track is switched on.
         function hotkeySetLineType(type) {
             const line = state.lyrics[state.currentIndex];
             if (!line) return;
@@ -9403,7 +8579,6 @@
         function arrangeLines() {
             if (state.lyrics.length < 2) return;
 
-            // Sort lyrics based on time (both layers; each layer keeps its own order).
             state.lyrics.sort((a, b) => {
                 const ta = lineStartTime(a);
                 const tb = lineStartTime(b);
@@ -9411,7 +8586,6 @@
                 if (ta === null) return 1;
                 if (tb === null) return -1;
 
-                // If timestamps are essentially equal, prioritize Normal lines over BG lines
                 if (Math.abs(ta - tb) < 0.001) {
                     if (!a.isBg && b.isBg) return -1; // Normal goes first (top)
                     if (a.isBg && !b.isBg) return 1;  // BG goes second (bottom)

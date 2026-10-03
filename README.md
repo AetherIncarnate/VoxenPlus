@@ -17,7 +17,7 @@ No download or installation is required.
 ---
 
 <p align="center">
-  <img src="https://i.ibb.co/rgycjB9/IMG-2133.jpg" alt="VoxenPlus screenshot" width="800">
+  <img src="https://i.postimg.cc/ZRVVQXxR/Untitled-design.png" alt="VoxenPlus screenshot">
 </p>
 
 ---

@@ -1,14 +1,24 @@
 <!DOCTYPE html>
+<!--
+    VoxenPlus - a synced lyrics editor for LRC files (Pro and Advanced), line, word and syllable timing,
+    background vocals and up to three singers, in one HTML file.
+
+    VoxenPlus is a fork of Voxen by Raqhael-ux (this fork is based on Voxen v9.2b).
+        Voxen:      https://github.com/Raqhael-ux/Voxen-LRC-Editor
+        VoxenPlus:  https://github.com/AetherIncarnate/VoxenPlus/tree/main
+-->
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#0e1012">
-    <title>Voxen</title>
+    <title>VoxenPlus</title>
+    <meta name="application-name" content="VoxenPlus">
+    <meta name="description" content="VoxenPlus is a synced lyrics (LRC) editor with line, word and syllable timing, background vocals and up to three singers. A fork of Voxen by Raqhael-ux.">
     <style id="css-modern">
     /* =====================================================================
-       Voxen styles - purple theme
+       VoxenPlus styles - purple theme
        1  Tokens            7  Dock (player + tap button)
        2  Base              8  Dialogs, sheets, toasts
        3  App shell         9  Audio loading panel
@@ -4000,10 +4010,187 @@
         0%, 100% { scale: 1; }
         50% { scale: 1.07; }
     }
+
+    /* =====================================================================
+       VoxenPlus additions (shared by both skins): the third singer and the about card
+       ===================================================================== */
+    /* Singer 3 reads from the middle of its lane, as singer 3 lines always did in the lead lane */
+    .lane-v3 .lyric-line .line-text {
+        justify-content: center;
+        text-align: center;
+    }
+
+    /* four lanes side by side: each keeps room to read (a narrow window scrolls sideways instead of squeezing them) and
+       adapts to its own width, so it also works when the menu panel is open next to the lanes */
+    @media (min-width: 901px) {
+        .app-container.has-v3.layers-split .lanes {
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        .app-container.has-v3.layers-split .lane {
+            min-width: 190px;
+        }
+    }
+
+    .app-container.has-v3.layers-split .lane {
+        container-type: inline-size;
+        container-name: lane;
+    }
+
+    /* a lane that is not wide: the head keeps to one line, ... */
+    @container lane (max-width: 310px) {
+        .lane-head .lane-meta,
+        .lane-head .lane-tag {
+            display: none;
+        }
+
+        .lane-head .lane-title {
+            flex: none;
+            white-space: nowrap;
+        }
+
+        .lane-head .lane-filter {
+            flex: 0 1 104px;
+            min-width: 0;
+        }
+
+        .lane-head .lane-filter select {
+            width: 100%;
+            padding-right: 22px;
+            padding-left: 10px;
+            text-overflow: ellipsis;
+        }
+    }
+
+    /* ... and the time of a line sits above its words instead of beside them */
+    @container lane (max-width: 280px) {
+        .app-container .lyric-line,
+        .app-container.is-editing .lyric-line,
+        .app-container.is-editing.syl-on .lyric-line {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 2px;
+            padding: 6px 8px 8px;
+        }
+
+        .app-container .lyric-line .line-meta {
+            height: 28px;
+        }
+
+        /* the buttons of a line (edit mode, or the pointer over the row) fit in the row of its time */
+        .app-container .lyric-line .line-actions {
+            top: 3px;
+            right: 5px;
+            gap: 0;
+            padding: 1px;
+        }
+
+        .app-container .lyric-line .action-btn {
+            width: 26px;
+            height: 26px;
+        }
+    }
+
+    /* fingers need bigger buttons: they go under the words instead */
+    @container lane (max-width: 280px) {
+        @media (pointer: coarse) {
+            .app-container .lyric-line .action-btn {
+                width: 40px;
+                height: 40px;
+            }
+
+            .app-container.is-editing .lyric-line .line-actions {
+                position: static;
+                align-self: flex-end;
+                margin: 2px 0 0;
+            }
+        }
+    }
+
+    /* the layer buttons of the edit dialog: four of them fit side by side on a phone */
+    @media (max-width: 520px) {
+        .seg-layer .seg-btn {
+            flex: 1 1 auto;
+            padding-left: 10px;
+            padding-right: 10px;
+            white-space: nowrap;
+        }
+    }
+
+    /* phone: the layer bar with four layers, and the layer being timed gets the most room */
+    @media (max-width: 900px) {
+        .app-container.has-v3 .layerbar .seg-btn {
+            flex: 1 1 auto;
+            gap: 4px;
+            padding: 0 6px;
+            font-size: 12.5px;
+            white-space: nowrap;
+        }
+
+        .app-container.has-v3.layers-split:not(.is-preview) .lane.is-active {
+            flex-grow: 2.2;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .app-container.has-v3 .layerbar .seg-count {
+            display: none;
+        }
+    }
+
+    /* About, in the Media tab */
+    .about-card .about-line {
+        margin: 0 0 12px;
+        color: var(--text-2);
+        font-size: 13px;
+        line-height: 1.55;
+    }
+
+    .about-card .about-line b {
+        color: var(--text);
+        font-weight: 700;
+    }
+
+    .about-card .about-line a {
+        color: var(--accent-text);
+        text-underline-offset: 2px;
+    }
+
+    a.about-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+    /* VoxenPlus (modern skin) ------------------------------------------------------------------ */
+    .wm-plus {
+        color: var(--accent-text);
+    }
+
+    @media (max-width: 900px) {
+        /* the third singer is offered after the second one, so one + button is on screen at a time */
+        #add-v3-btn {
+            width: 42px;
+            height: 42px;
+            padding: 0;
+            border-radius: 50%;
+        }
+
+        #add-v3-btn .btn-text {
+            display: none;
+        }
+
+        .app-container.layers-split.is-preview .lane-v3 {
+            flex: 2 1 0;
+        }
+    }
     </style>
     <style id="css-legacy" media="not all">
     /* =====================================================================
-       Voxen styles
+       VoxenPlus styles (the legacy interface)
        1  Tokens            6  Layers and lyric rows
        2  Base              7  Dock (player + tap button)
        3  App layout        8  Modals, sheets, toasts
@@ -7411,6 +7598,178 @@
         0%, 100% { scale: 1; }
         50% { scale: 1.07; }
     }
+
+    /* =====================================================================
+       VoxenPlus additions (shared by both skins): the third singer and the about card
+       ===================================================================== */
+    /* Singer 3 reads from the middle of its lane, as singer 3 lines always did in the lead lane */
+    .lane-v3 .lyric-line .line-text {
+        justify-content: center;
+        text-align: center;
+    }
+
+    /* four lanes side by side: each keeps room to read (a narrow window scrolls sideways instead of squeezing them) and
+       adapts to its own width, so it also works when the menu panel is open next to the lanes */
+    @media (min-width: 901px) {
+        .app-container.has-v3.layers-split .lanes {
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        .app-container.has-v3.layers-split .lane {
+            min-width: 190px;
+        }
+    }
+
+    .app-container.has-v3.layers-split .lane {
+        container-type: inline-size;
+        container-name: lane;
+    }
+
+    /* a lane that is not wide: the head keeps to one line, ... */
+    @container lane (max-width: 310px) {
+        .lane-head .lane-meta,
+        .lane-head .lane-tag {
+            display: none;
+        }
+
+        .lane-head .lane-title {
+            flex: none;
+            white-space: nowrap;
+        }
+
+        .lane-head .lane-filter {
+            flex: 0 1 104px;
+            min-width: 0;
+        }
+
+        .lane-head .lane-filter select {
+            width: 100%;
+            padding-right: 22px;
+            padding-left: 10px;
+            text-overflow: ellipsis;
+        }
+    }
+
+    /* ... and the time of a line sits above its words instead of beside them */
+    @container lane (max-width: 280px) {
+        .app-container .lyric-line,
+        .app-container.is-editing .lyric-line,
+        .app-container.is-editing.syl-on .lyric-line {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 2px;
+            padding: 6px 8px 8px;
+        }
+
+        .app-container .lyric-line .line-meta {
+            height: 28px;
+        }
+
+        /* the buttons of a line (edit mode, or the pointer over the row) fit in the row of its time */
+        .app-container .lyric-line .line-actions {
+            top: 3px;
+            right: 5px;
+            gap: 0;
+            padding: 1px;
+        }
+
+        .app-container .lyric-line .action-btn {
+            width: 26px;
+            height: 26px;
+        }
+    }
+
+    /* fingers need bigger buttons: they go under the words instead */
+    @container lane (max-width: 280px) {
+        @media (pointer: coarse) {
+            .app-container .lyric-line .action-btn {
+                width: 40px;
+                height: 40px;
+            }
+
+            .app-container.is-editing .lyric-line .line-actions {
+                position: static;
+                align-self: flex-end;
+                margin: 2px 0 0;
+            }
+        }
+    }
+
+    /* the layer buttons of the edit dialog: four of them fit side by side on a phone */
+    @media (max-width: 520px) {
+        .seg-layer .seg-btn {
+            flex: 1 1 auto;
+            padding-left: 10px;
+            padding-right: 10px;
+            white-space: nowrap;
+        }
+    }
+
+    /* phone: the layer bar with four layers, and the layer being timed gets the most room */
+    @media (max-width: 900px) {
+        .app-container.has-v3 .layerbar .seg-btn {
+            flex: 1 1 auto;
+            gap: 4px;
+            padding: 0 6px;
+            font-size: 12.5px;
+            white-space: nowrap;
+        }
+
+        .app-container.has-v3.layers-split:not(.is-preview) .lane.is-active {
+            flex-grow: 2.2;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .app-container.has-v3 .layerbar .seg-count {
+            display: none;
+        }
+    }
+
+    /* About, in the Media tab */
+    .about-card .about-line {
+        margin: 0 0 12px;
+        color: var(--text-2);
+        font-size: 13px;
+        line-height: 1.55;
+    }
+
+    .about-card .about-line b {
+        color: var(--text);
+        font-weight: 700;
+    }
+
+    .about-card .about-line a {
+        color: var(--accent-text);
+        text-underline-offset: 2px;
+    }
+
+    a.about-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+    /* VoxenPlus (legacy skin): the third singer follows the rules of the second one ---------------------- */
+    @media (max-width: 900px) {
+        #add-v3-btn {
+            width: 40px;
+            height: 38px;
+            padding: 0;
+            background: var(--field);
+        }
+
+        #add-v3-btn .btn-text {
+            display: none;
+        }
+
+        .app-container.layers-split.is-preview .lane-v3 {
+            flex: 2 1 0;
+        }
+    }
     </style>
     <script>
         /* Picks the interface (modern / legacy) and the preview animation before anything is drawn.
@@ -7477,6 +7836,7 @@
             <symbol id="i-redo" viewBox="0 0 24 24"><path d="m15 14 5-5-5-5" /><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13" /></symbol>
             <symbol id="i-eraser" viewBox="0 0 24 24"><path d="m7 21-4.3-4.3a1.6 1.6 0 0 1 0-2.3L14 3.1a1.6 1.6 0 0 1 2.3 0l5.6 5.6a1.6 1.6 0 0 1 0 2.3L11 21" /><path d="M7 21h13.5" /><path d="m9.5 9.7 7.4 7.4" /></symbol>
             <symbol id="i-convert" viewBox="0 0 24 24"><path d="M4 8h14l-3.6-3.6" /><path d="M20 16H6l3.6 3.6" /></symbol>
+            <symbol id="i-external" viewBox="0 0 24 24"><path d="M7 17 17 7" /><path d="M8 7h9v9" /></symbol>
         </defs>
     </svg>
     <div class="app-container is-empty" id="app-container" data-singer="all">
@@ -7484,7 +7844,7 @@
         <!-- ============ Top bar ============ -->
         <header class="topbar">
             <div class="topbar-left">
-                <div class="wordmark">VOXEN</div>
+                <div class="wordmark" title="VoxenPlus, a fork of Voxen by Raqhael-ux" aria-label="VoxenPlus">VOXEN<span class="wm-plus">PLUS</span></div>
                 <div id="mobile-mode-indicator" class="mode-indicator" title="Sync mode">Tap</div>
                 <div class="top-left-controls">
                     <button class="tb-btn tb-menu" type="button" onclick="toggleSettings(true)">
@@ -7577,7 +7937,7 @@
 
             <div class="sidebar-panel">
                 <div class="sidebar-head">
-                    <div class="brand">Voxen</div>
+                    <div class="brand">VoxenPlus</div>
                     <button class="icon-btn" type="button" onclick="toggleSettings(false)" aria-label="Close menu">
                         <svg class="ic"><use href="#i-x" /></svg>
                     </button>
@@ -7622,6 +7982,16 @@
                                 </button>
                             </div>
                         </div>
+
+                        <div class="field about-card" id="about-card" data-v7>
+                            <span class="field-label">About</span>
+                            <p class="about-line"><b>VoxenPlus</b> is a fork of
+                                <a href="https://github.com/Raqhael-ux/Voxen-LRC-Editor" target="_blank" rel="noopener">Voxen</a> by
+                                <a href="https://github.com/Raqhael-ux" target="_blank" rel="noopener">Raqhael-ux</a>, based on Voxen v9.2b.</p>
+                            <a class="btn btn-secondary btn-auto about-btn" href="https://github.com/AetherIncarnate/VoxenPlus/tree/main" target="_blank" rel="noopener">
+                                <svg class="ic" aria-hidden="true"><use href="#i-external" /></svg> VoxenPlus on GitHub
+                            </a>
+                        </div>
                     </div>
 
                     <div id="tab-session" class="tab-content">
@@ -7636,6 +8006,13 @@
                             <textarea id="raw-v2-lyrics" style="min-height: 84px;"
                                 placeholder="A second singer (agent v2). One line per row"></textarea>
                             <p class="hint">Singer 2 gets its own track on the right, timed on its own, so it can overlap singer 1.</p>
+                        </div>
+
+                        <div class="field" data-v7>
+                            <label class="field-label" for="raw-v3-lyrics">Singer 3 lyrics <span class="optional">optional</span></label>
+                            <textarea id="raw-v3-lyrics" style="min-height: 84px;"
+                                placeholder="A third singer (agent v3). One line per row"></textarea>
+                            <p class="hint">Singer 3 gets its own track too, timed on its own, so it can overlap singers 1 and 2.</p>
                         </div>
 
                         <div class="field">
@@ -7678,6 +8055,7 @@
                                     onchange="setThirdSingerLabel('v1000')">
                                 <label for="lbl-v1000">v1000</label>
                             </div>
+                            <p class="hint" data-v7>Singer 3 is written to the file under this name.</p>
                         </div>
 
                         <div class="field">
@@ -7830,11 +8208,18 @@
                         aria-pressed="false">Background <span class="seg-count" id="count-bg">0</span></button>
                     <button type="button" class="seg-btn" id="layer-btn-v2" onclick="setActiveLayer('v2')"
                         aria-pressed="false" hidden>Singer 2 <span class="seg-count" id="count-v2">0</span></button>
+                    <button type="button" class="seg-btn" id="layer-btn-v3" onclick="setActiveLayer('v3')"
+                        aria-pressed="false" hidden>Singer 3 <span class="seg-count" id="count-v3">0</span></button>
                 </div>
                 <button type="button" class="tb-btn add-track" id="add-v2-btn" onclick="setV2Track(true)"
                     title="Give singer 2 (agent v2) its own track on the right" aria-label="Add a track for singer 2">
                     <svg class="ic" aria-hidden="true"><use href="#i-plus" /></svg>
                     <span class="btn-text">Singer 2</span>
+                </button>
+                <button type="button" class="tb-btn add-track" id="add-v3-btn" onclick="setV3Track(true)"
+                    title="Give singer 3 (agent v3) its own track" aria-label="Add a track for singer 3" hidden data-v7>
+                    <svg class="ic" aria-hidden="true"><use href="#i-plus" /></svg>
+                    <span class="btn-text">Singer 3</span>
                 </button>
                 <span class="layerbar-hint">Taps go to the selected layer. <kbd data-keyhint="switchLayer">B</kbd> switches.</span>
                 <span class="grow"></span>
@@ -7858,9 +8243,9 @@
                     <svg class="ic" aria-hidden="true"><use href="#i-x" /></svg>
                 </button>
                 <div class="welcome-container" id="welcome">
-                    <h1 class="welcome-title">Voxen</h1>
+                    <h1 class="welcome-title">Voxen<span class="wm-plus">Plus</span></h1>
                     <p class="welcome-sub">Time lyrics to a song, line by line, word by word or syllable by syllable. Background
-                        vocals and a second singer sit on their own layers, so they can overlap the lead lyrics.</p>
+                        vocals and up to three singers each get their own layer, so they can overlap the lead lyrics.</p>
                     <div class="welcome-actions">
                         <button class="welcome-btn primary" type="button" id="welcome-song-btn"
                             onclick="document.getElementById('audio-file').click()">
@@ -7881,7 +8266,8 @@
                         </button>
                     </div>
                     <p class="welcome-foot"><span id="welcome-hint">Load an audio file to enable LRC features.</span><br>
-                        <a href="https://github.com/Raqhael-ux/Voxen-LRC-Editor" target="_blank" rel="noopener">GitHub</a> &middot; v9.2b</p>
+                        <a href="https://github.com/AetherIncarnate/VoxenPlus/tree/main" target="_blank" rel="noopener">GitHub</a> &middot; VoxenPlus<span data-v7><br>
+                        A fork of <a href="https://github.com/Raqhael-ux/Voxen-LRC-Editor" target="_blank" rel="noopener">Voxen</a> v9.2b by <a href="https://github.com/Raqhael-ux" target="_blank" rel="noopener">Raqhael-ux</a></span></p>
                 </div>
 
                 <div class="lanes" id="lyrics-container">
@@ -7940,6 +8326,25 @@
                             </button>
                         </div>
                         <div class="lane-body" id="lane-v2-body"></div>
+                    </section>
+
+                    <section class="lane lane-v3" id="lane-v3" data-layer="v3" hidden>
+                        <div class="lane-head" onclick="setActiveLayer('v3')">
+                            <span class="lane-dot"></span>
+                            <span class="lane-title">Singer 3</span>
+                            <span class="lane-tag" id="lane-v3-tag" title="The name singer 3 has in the file (Output tab)">v1000</span>
+                            <span class="lane-meta" id="lane-v3-meta"></span>
+                            <span class="grow"></span>
+                            <button class="icon-btn" type="button" title="Add a singer 3 line" aria-label="Add a singer 3 line"
+                                onclick="event.stopPropagation(); addLineToLayer('v3')">
+                                <svg class="ic" aria-hidden="true"><use href="#i-plus" /></svg>
+                            </button>
+                            <button class="icon-btn" type="button" title="Take singer 3 off its own track (the lines stay in the lead lane)"
+                                aria-label="Remove the singer 3 track" onclick="event.stopPropagation(); setV3Track(false)">
+                                <svg class="ic" aria-hidden="true"><use href="#i-x" /></svg>
+                            </button>
+                        </div>
+                        <div class="lane-body" id="lane-v3-body"></div>
                     </section>
                 </div>
 
@@ -8242,9 +8647,10 @@
 
             <div class="field">
                 <span class="field-label">Layer</span>
-                <div class="seg seg-full" role="group" aria-label="Layer">
+                <div class="seg seg-full seg-layer" role="group" aria-label="Layer">
                     <button type="button" class="seg-btn" id="edit-layer-lead" onclick="setEditLayer('lead')">Lead</button>
                     <button type="button" class="seg-btn" id="edit-layer-v2" onclick="setEditLayer('v2')">Singer 2</button>
+                    <button type="button" class="seg-btn" id="edit-layer-v3" onclick="setEditLayer('v3')" data-v7>Singer 3</button>
                     <button type="button" class="seg-btn" id="edit-layer-bg" onclick="setEditLayer('bg')">Background</button>
                 </div>
             </div>
@@ -8564,35 +8970,41 @@
             activeLayer: 'lead',      // the layer that receives sync taps
             split: false,             // show every layer side by side
             v2Track: false,           // singer 2 on its own track (optional)
+            v3Track: false,           // singer 3 on its own track (optional)
             syllables: false          // syllable sync (beta)
         };
 
         // --- Layers ---
-        // Lyrics live on up to three layers. Each layer has its own sync cursor and its own lane, so a layer can be
+        // Lyrics live on up to four layers. Each layer has its own sync cursor and its own lane, so a layer can be
         // timed on its own while the others play, and lines of different layers may overlap in time.
-        //   lead  singer 1 (agent v1, left) and singer 3 (the group, centred)
+        //   lead  singer 1 (agent v1, left) and, without a track of its own, singer 3 (centred)
         //   bg    background vocals
         //   v2    singer 2 (agent v2, right) - optional; without this track, singer 2 lines stay in the lead lane
+        //   v3    singer 3 (agent v3, centred) - optional; without this track, singer 3 lines stay in the lead lane
         // A line says where it lives with its `isBg` flag and its `singer`, so the lines stay one flat list and
         // .vxn files and LRC import / export work the same either way. A cursor remembers the line object, which
         // keeps it correct when lines are inserted, deleted or sorted. state.currentIndex / state.currentWordIndex
         // always mean "the cursor of the active layer", which is what the sync code below works with.
-        const LAYERS = ['lead', 'bg', 'v2'];
-        const LAYER_NAMES = { lead: 'Lead', bg: 'Background', v2: 'Singer 2' };
+        const LAYERS = ['lead', 'bg', 'v2', 'v3'];
+        const LAYER_NAMES = { lead: 'Lead', bg: 'Background', v2: 'Singer 2', v3: 'Singer 3' };
         const layerCursors = {
             lead: { line: null, word: 0, end: false },
             bg: { line: null, word: 0, end: false },
-            v2: { line: null, word: 0, end: false }
+            v2: { line: null, word: 0, end: false },
+            v3: { line: null, word: 0, end: false }
         };
 
         function layerOf(line) {
             if (!line) return 'lead';
             if (line.isBg) return 'bg';
-            return state.v2Track && line.singer === 'v2' ? 'v2' : 'lead';
+            if (state.v2Track && line.singer === 'v2') return 'v2';
+            return state.v3Track && line.singer === 'v3' ? 'v3' : 'lead';
         }
 
-        // The layers that can be used right now (the singer 2 track is optional)
-        function enabledLayers() { return state.v2Track ? LAYERS : ['lead', 'bg']; }
+        // The layers that can be used right now (the singer 2 and singer 3 tracks are optional)
+        function enabledLayers() {
+            return LAYERS.filter(l => l === 'lead' || l === 'bg' || (l === 'v2' ? state.v2Track : state.v3Track));
+        }
 
         function countLayer(layer) {
             let n = 0;
@@ -8673,7 +9085,7 @@
             const select = document.getElementById('singer-filter');
             const options = [['all', 'All singers'], ['v1', 'Singer 1 (left)']];
             if (!state.v2Track) options.push(['v2', 'Singer 2 (right)']);
-            options.push(['v3', 'Singer 3 (center)']);
+            if (!state.v3Track) options.push(['v3', 'Singer 3 (center)']);
             select.replaceChildren(...options.map(([value, label]) => {
                 const o = document.createElement('option');
                 o.value = value;
@@ -8684,7 +9096,7 @@
         }
 
         // A fresh set of lyrics: both cursors back to the start, lead layer active, no singer filter.
-        // (state.v2Track is set by the caller before this runs.)
+        // (state.v2Track and state.v3Track are set by the caller before this runs.)
         function resetLayers(showBoth) {
             resetCursors();
             state.activeLayer = 'lead';
@@ -8696,11 +9108,13 @@
         }
 
         function applyLayerClasses() {
-            const multi = state.v2Track || state.lyrics.some(l => l.isBg);
+            const multi = state.v2Track || state.v3Track || state.lyrics.some(l => l.isBg);
             // the preview always shows every layer that is in use, so you see them play together
             appContainer.classList.toggle('layers-split', state.split || (state.isPreviewMode && multi));
             appContainer.classList.toggle('has-v2', state.v2Track);
+            appContainer.classList.toggle('has-v3', state.v3Track);
             document.getElementById('lane-v2').hidden = !state.v2Track;
+            document.getElementById('lane-v3').hidden = !state.v3Track;
             LAYERS.forEach(layer => {
                 document.getElementById('lane-' + layer).classList.toggle('is-active', layer === state.activeLayer);
             });
@@ -8716,9 +9130,12 @@
                 b.setAttribute('aria-pressed', layer === state.activeLayer);
             });
             document.getElementById('layer-btn-v2').hidden = !state.v2Track;
+            document.getElementById('layer-btn-v3').hidden = !state.v3Track;
             document.getElementById('add-v2-btn').hidden = state.v2Track;
+            // a third singer is offered once the second one has a track (the + of a lane and the edit dialog always work)
+            document.getElementById('add-v3-btn').hidden = state.v3Track || !state.v2Track;
             document.getElementById('split-btn').setAttribute('aria-pressed', state.split);
-            document.querySelector('#split-btn .btn-text').textContent = state.v2Track ? 'Show all' : 'Show both';
+            document.querySelector('#split-btn .btn-text').textContent = (state.v2Track || state.v3Track) ? 'Show all' : 'Show both';
             document.getElementById('ctx-layer').textContent = LAYER_NAMES[state.activeLayer];
             applyLayerClasses();
         }
@@ -8734,7 +9151,7 @@
             scrollToActive();
         }
 
-        // B: Lead -> Background -> Singer 2 -> Lead ...
+        // B: Lead -> Background -> Singer 2 -> Singer 3 -> Lead ... (the tracks that are on)
         function toggleActiveLayer() {
             const list = enabledLayers();
             setActiveLayer(list[(list.indexOf(state.activeLayer) + 1) % list.length]);
@@ -8745,25 +9162,29 @@
             updateLayerUI();
         }
 
-        // Turns the Singer 2 track on or off. Singer 2 lines are never lost: without the track they simply stay in
-        // the lead lane (right-aligned, as singer 2 lines always were).
-        function setV2Track(on) {
+        // Turns the Singer 2 or the Singer 3 track on or off. Their lines are never lost: without the track they simply
+        // stay in the lead lane (singer 2 right-aligned, singer 3 centred, as they always were).
+        function setSingerTrack(layer, on) {
             on = !!on;
-            if (state.v2Track === on || holdActive) return;
-            state.v2Track = on;
-            if (on && state.singerFilter === 'v2') state.singerFilter = 'all';
-            if (!on && state.activeLayer === 'v2') state.activeLayer = 'lead';
+            const key = layer === 'v3' ? 'v3Track' : 'v2Track';
+            const name = layer === 'v3' ? 'Singer 3' : 'Singer 2';
+            if (state[key] === on || holdActive) return;
+            state[key] = on;
+            if (on && state.singerFilter === layer) state.singerFilter = 'all';
+            if (!on && state.activeLayer === layer) state.activeLayer = 'lead';
             appContainer.dataset.singer = state.singerFilter;
             updateSingerFilterOptions();
             reseatCursors();
             if (on) {
                 state.split = true;
-                setActiveLayer('v2');
+                setActiveLayer(layer);
             }
             renderEditor();
             generateLRC();
-            notify(on ? 'Singer 2 now has its own track, on the right' : 'Singer 2 lines are back in the lead lane');
+            notify(on ? name + ' now has its own track' + (layer === 'v3' ? '' : ', on the right') : name + ' lines are back in the lead lane');
         }
+        function setV2Track(on) { setSingerTrack('v2', on); }
+        function setV3Track(on) { setSingerTrack('v3', on); }
 
         // Put the cursor of the line's layer on that line (and make the layer active)
         function focusLine(index, wordIdx) {
@@ -8783,7 +9204,7 @@
         }
 
         function setSingerFilter(value) {
-            state.singerFilter = ['v1', 'v2', 'v3'].includes(value) && !(value === 'v2' && state.v2Track) ? value : 'all';
+            state.singerFilter = ['v1', 'v2', 'v3'].includes(value) && !(value === 'v2' && state.v2Track) && !(value === 'v3' && state.v3Track) ? value : 'all';
             appContainer.dataset.singer = state.singerFilter;
             const select = document.getElementById('singer-filter');
             if (select.value !== state.singerFilter) select.value = state.singerFilter;
@@ -8814,17 +9235,22 @@
             });
         }
 
-        // Moves a line to a layer ('lead' | 'bg' | 'v2'). `singer` ('v1' | 'v3') only matters for the lead layer.
+        // Moves a line to a layer ('lead' | 'bg' | 'v2' | 'v3'). `singer` ('v1' | 'v3') only matters for the lead layer.
         // Returns true if the layer changed.
         function moveLineToLayer(line, layer, singer) {
             const index = state.lyrics.indexOf(line);
             if (index === -1) return false;
+            // a singer that has a track of its own does not live in the lead lane any more
+            if (layer === 'lead' && singer === 'v2' && state.v2Track) layer = 'v2';
+            if (layer === 'lead' && singer === 'v3' && state.v3Track) layer = 'v3';
             if (layer === 'v2' && !state.v2Track) setV2Track(true);
+            if (layer === 'v3' && !state.v3Track) setV3Track(true);
             const before = layerOf(line);
             const after = layer;
             let newSinger = line.singer || 'v1';
             if (layer === 'v2') newSinger = 'v2';
-            else if (layer === 'lead') newSinger = singer || (newSinger === 'v2' && state.v2Track ? 'v1' : newSinger);
+            else if (layer === 'v3') newSinger = 'v3';
+            else if (layer === 'lead') newSinger = singer || ((newSinger === 'v2' && state.v2Track) || (newSinger === 'v3' && state.v3Track) ? 'v1' : newSinger);
             if (before === after) {
                 if (layer === 'lead') line.singer = newSinger;
                 return false;
@@ -8850,8 +9276,8 @@
         }
 
         // --- Playhead: the line each layer is on right now ---
-        const playhead = { lead: { playing: new Set(), focus: -1 }, bg: { playing: new Set(), focus: -1 } };
-        const userScrolledAt = { lead: -1e9, bg: -1e9, v2: -1e9 };
+        const playhead = { lead: { playing: new Set(), focus: -1 }, bg: { playing: new Set(), focus: -1 }, v2: { playing: new Set(), focus: -1 }, v3: { playing: new Set(), focus: -1 } };
+        const userScrolledAt = { lead: -1e9, bg: -1e9, v2: -1e9, v3: -1e9 };
         let lastPlayheadTime = -1;
 
         function computePlayhead(layer, t) {
@@ -10619,7 +11045,7 @@
 
         function newLineItem(layer, singer, text) {
             const bg = layer === 'bg';
-            const s = bg ? 'v1' : layer === 'v2' ? 'v2' : (singer || 'v1');
+            const s = bg ? 'v1' : layer === 'v2' ? 'v2' : layer === 'v3' ? 'v3' : (singer || 'v1');
             const label = bg ? 'New Background Line' : (s === 'v3' ? 'New Singer 3 Line' : s === 'v2' ? 'New Singer 2 Line' : 'New Line');
             const t = text || label;
             const item = { text: t.replace(/·/g, ''), time: null, words: parseWords(t), isBg: bg, singer: s };      // a · in the text marks a syllable
@@ -10760,12 +11186,15 @@
             state.syllables = false;
             const lead = toLines(rawText).map(t => newLineItem('lead', 'v1', t));
             const v2 = toLines(document.getElementById('raw-v2-lyrics').value).map(t => newLineItem('v2', 'v2', t));
+            const v3Box = document.getElementById('raw-v3-lyrics');
+            const v3 = toLines(v3Box ? v3Box.value : '').map(t => newLineItem('v3', 'v3', t));
             const bg = toLines(document.getElementById('raw-bg-lyrics').value).map(t => newLineItem('bg', 'v1', t));
             state.syllables = wasSyllables;
-            state.lyrics = lead.concat(v2, bg);
+            state.lyrics = lead.concat(v2, v3, bg);
             state.v2Track = v2.length > 0;
+            state.v3Track = v3.length > 0;
 
-            resetLayers(bg.length > 0 || v2.length > 0);
+            resetLayers(bg.length > 0 || v2.length > 0 || v3.length > 0);
             renderEditor();
             updateWordContextUI();
             syncSyllableUI();
@@ -10803,7 +11232,29 @@
 
         function setThirdSingerLabel(label) {
             state.thirdSingerLabel = label;
+            updateThirdSingerTag();
             generateLRC();
+        }
+
+        // The lane of singer 3 shows the name it has in the file (v3, or v1000)
+        function updateThirdSingerTag() {
+            const tag = document.getElementById('lane-v3-tag');
+            if (tag) tag.textContent = state.thirdSingerLabel;
+        }
+
+        // The name singer 3 has in the file (v3 or v1000): the state, the setting in the Output tab and the tag of the lane
+        function showThirdSingerLabel(label) {
+            if (label !== 'v3' && label !== 'v1000') return;
+            state.thirdSingerLabel = label;
+            const radio = document.getElementById('lbl-' + label);
+            if (radio) radio.checked = true;
+            updateThirdSingerTag();
+        }
+
+        // A file that calls its third singer v3 (or v1000) is written back under that name
+        function keepThirdSingerLabel(text) {
+            showThirdSingerLabel(/\{agent:v1000\}|(^|\n)\s*\[[^\]]*\]\s*v1000:/.test(text) ? 'v1000'
+                : (/\{agent:v3\}|(^|\n)\s*\[[^\]]*\]\s*v3:/.test(text) ? 'v3' : null));
         }
 
         function togglePreviewMode() {
@@ -11136,7 +11587,7 @@
                 } catch (err) {
                     if (signal.aborted || (err && err.name === 'AbortError')) throw err;
                     lastError = err;
-                    console.warn('[Voxen] Converter download failed from ' + base, err);
+                    console.warn('[VoxenPlus] Converter download failed from ' + base, err);
                 }
             }
             throw Object.assign(new Error('The audio converter could not be downloaded'), { code: 'download', cause: lastError });
@@ -11316,7 +11767,7 @@
                         ready = await convertAudioForPlayback(file, signal);
                     } catch (err) {
                         if (signal.aborted || !nativeFallback || (err && err.name === 'AbortError')) throw err;
-                        console.warn('[Voxen] Conversion failed, using the original file as-is.', err);
+                        console.warn('[VoxenPlus] Conversion failed, using the original file as-is.', err);
                         ready = nativeFallback;
                         ready.degraded = true;    // keep it as-is: no further automatic conversion attempts
                     }
@@ -11358,7 +11809,7 @@
         }
 
         function reportAudioLoadError(file, err) {
-            console.error('[Voxen] Could not load audio:', err, (err && err.log) || '');
+            console.error('[VoxenPlus] Could not load audio:', err, (err && err.log) || '');
             const name = file.name || 'this file';
             const fallbackTip = 'You can also convert the file to MP3, WAV, FLAC or M4A and try again.';
             let msg;
@@ -11540,6 +11991,8 @@
                 timestamp: Date.now(),
                 mode: state.mode,
                 v2Track: state.v2Track,
+                v3Track: state.v3Track,
+                thirdSingerLabel: state.thirdSingerLabel,
                 syllables: state.syllables,
                 lyrics: state.lyrics,
                 currentIndex: state.currentIndex
@@ -11568,8 +12021,10 @@
                     state.lyrics = data.lyrics.map(normalizeLine);
                     state.mode = data.mode === 'line' ? 'line' : 'word';
                     state.v2Track = typeof data.v2Track === 'boolean' ? data.v2Track : state.lyrics.some(l => !l.isBg && l.singer === 'v2');
+                    state.v3Track = typeof data.v3Track === 'boolean' ? data.v3Track : state.lyrics.some(l => !l.isBg && l.singer === 'v3');
+                    showThirdSingerLabel(data.thirdSingerLabel);
                     state.syllables = state.mode === 'word' && (data.syllables === true || state.lyrics.some(l => l.words.some(w => w.join)));
-                    resetLayers(state.v2Track || state.lyrics.some(l => l.isBg));
+                    resetLayers(state.v2Track || state.v3Track || state.lyrics.some(l => l.isBg));
 
                     document.getElementById(state.mode === 'line' ? 'mode-line' : (state.syllables ? 'mode-syllable' : 'mode-word')).checked = true;
 
@@ -11625,9 +12080,9 @@
                 expandActions.appendChild(btnSymbol);
                 expandActions.appendChild(btnSave);
             }
-            else if (type === 'lead' || type === 'bg' || type === 'v2') {
+            else if (type === 'lead' || type === 'bg' || type === 'v2' || type === 'v3') {
                 // Paste several lines at once onto a layer
-                expandTitle.textContent = type === 'bg' ? "Add background lines" : type === 'v2' ? "Add singer 2 lines" : "Add lead lines";
+                expandTitle.textContent = type === 'bg' ? "Add background lines" : type === 'v2' ? "Add singer 2 lines" : type === 'v3' ? "Add singer 3 lines" : "Add lead lines";
                 expandTextarea.value = '';
                 expandTextarea.placeholder = "One line per row...";
 
@@ -11887,8 +12342,10 @@
 
             state.lyrics = newLyrics.map(normalizeLine);
             state.v2Track = state.lyrics.some(l => !l.isBg && l.singer === 'v2');
+            state.v3Track = state.lyrics.some(l => !l.isBg && l.singer === 'v3');
+            keepThirdSingerLabel(lrcText);
             state.syllables = state.lyrics.some(l => l.words.some(w => w.join));
-            resetLayers(state.v2Track || state.lyrics.some(l => l.isBg));
+            resetLayers(state.v2Track || state.v3Track || state.lyrics.some(l => l.isBg));
 
             // Apply Detected Settings
             if (detectedFormat === 'pro') {
@@ -11907,16 +12364,20 @@
             syncSyllableUI();
 
             const textsOf = (fn) => state.lyrics.filter(fn).map(l => l.text).join('\n');
-            rawLyricsInput.value = textsOf(l => !l.isBg && !(state.v2Track && l.singer === 'v2'));
+            rawLyricsInput.value = textsOf(l => !l.isBg && !(state.v2Track && l.singer === 'v2') && !(state.v3Track && l.singer === 'v3'));
             document.getElementById('raw-v2-lyrics').value = state.v2Track ? textsOf(l => !l.isBg && l.singer === 'v2') : '';
+            const v3Raw = document.getElementById('raw-v3-lyrics');
+            if (v3Raw) v3Raw.value = state.v3Track ? textsOf(l => !l.isBg && l.singer === 'v3') : '';
             document.getElementById('raw-bg-lyrics').value = textsOf(l => l.isBg);
             exportOutput.value = lrcText;
 
             const bgCount = state.lyrics.filter(l => l.isBg).length;
             const v2Count = state.v2Track ? state.lyrics.filter(l => !l.isBg && l.singer === 'v2').length : 0;
-            const leadCount = state.lyrics.length - bgCount - v2Count;
+            const v3Count = state.v3Track ? state.lyrics.filter(l => !l.isBg && l.singer === 'v3').length : 0;
+            const leadCount = state.lyrics.length - bgCount - v2Count - v3Count;
             notify(`Imported ${leadCount} lead line${leadCount === 1 ? '' : 's'}` +
                 (v2Count ? `, ${v2Count} singer 2 line${v2Count === 1 ? '' : 's'}` : '') +
+                (v3Count ? `, ${v3Count} singer 3 line${v3Count === 1 ? '' : 's'}` : '') +
                 (bgCount ? ` and ${bgCount} background line${bgCount === 1 ? '' : 's'}` : ''));
         }
 
@@ -11962,7 +12423,7 @@
             const box = document.createElement('div');
             box.className = 'lane-empty';
             const text = document.createElement('p');
-            text.textContent = layer === 'bg' ? 'No background lines yet.' : layer === 'v2' ? 'No singer 2 lines yet.' : 'No lead lines.';
+            text.textContent = layer === 'bg' ? 'No background lines yet.' : layer === 'v2' ? 'No singer 2 lines yet.' : layer === 'v3' ? 'No singer 3 lines yet.' : 'No lead lines.';
             const actions = document.createElement('div');
             actions.className = 'lane-empty-actions';
             const add = document.createElement('button');
@@ -11979,7 +12440,8 @@
             box.append(text, actions);
             const hints = {
                 bg: 'Background lines are timed separately and can overlap the lead lyrics.',
-                v2: 'Singer 2 lines are timed separately and sit on the right, so they can overlap the lead lines.'
+                v2: 'Singer 2 lines are timed separately and sit on the right, so they can overlap the lead lines.',
+                v3: 'Singer 3 lines are timed separately and sit in the center, so they can overlap the other singers.'
             };
             if (hints[layer]) {
                 const hint = document.createElement('p');
@@ -12202,7 +12664,7 @@
                 c.word = 0;
             }
             renderEditor();
-            notify('Added ' + lines.length + ' ' + (layer === 'bg' ? 'background' : layer === 'v2' ? 'singer 2' : 'lead') + ' line' + (lines.length === 1 ? '' : 's'));
+            notify('Added ' + lines.length + ' ' + (layer === 'bg' ? 'background' : layer === 'v2' ? 'singer 2' : layer === 'v3' ? 'singer 3' : 'lead') + ' line' + (lines.length === 1 ? '' : 's'));
         }
 
         function addLineAtTop() {
@@ -13109,8 +13571,16 @@
 
         function setEditLayer(layer) {
             editLineLayer = layer;
-            ['lead', 'v2', 'bg'].forEach(l => document.getElementById('edit-layer-' + l).classList.toggle('is-on', l === layer));
-            document.getElementById('edit-singer-row').hidden = layer !== 'lead';
+            ['lead', 'v2', 'v3', 'bg'].forEach(l => {
+                const b = document.getElementById('edit-layer-' + l);
+                if (b) b.classList.toggle('is-on', l === layer);
+            });
+            // singer 3 has a layer of its own when its track is on: "3 - center" is only for the lead lane without it,
+            // and with the track on a lead line is always singer 1, so there is nothing left to choose
+            const centre = document.getElementById('edit-singer-v3');
+            if (centre) centre.hidden = state.v3Track;
+            if (layer === 'lead' && state.v3Track && editLineSinger === 'v3') setEditSinger('v1');
+            document.getElementById('edit-singer-row').hidden = layer !== 'lead' || state.v3Track;
             document.getElementById('edit-backs-row').hidden = layer !== 'bg';
         }
 
@@ -13160,7 +13630,7 @@
             }
 
             // 3. Setup layer, singer and (for background lines) who they back
-            setEditLayer(line.isBg ? 'bg' : (line.singer === 'v2' ? 'v2' : 'lead'));
+            setEditLayer(line.isBg ? 'bg' : (line.singer === 'v2' ? 'v2' : (line.singer === 'v3' && state.v3Track ? 'v3' : 'lead')));
             setEditSinger(line.singer);
             setEditBacks(line.backs || 'auto');
 
@@ -13460,10 +13930,12 @@
             const count = (fn) => items.filter(fn).length;
             const bg = count(i => i.bg);
             const v2 = count(i => !i.bg && i.agent === 'v2');
-            const lead = items.length - bg - v2;
+            const v3 = state.v3Track ? count(i => !i.bg && i.agent === 'v3') : 0;
+            const lead = items.length - bg - v2 - v3;
             const syl = items.reduce((n, i) => n + (i.l.words || []).filter(w => w.join).length, 0);
             const parts = [`${lead} lead line${lead === 1 ? '' : 's'}`];
             if (v2) parts.push(`${v2} singer 2 line${v2 === 1 ? '' : 's'}`);
+            if (v3) parts.push(`${v3} singer 3 line${v3 === 1 ? '' : 's'}`);
             parts.push(`${bg} background line${bg === 1 ? '' : 's'}`);
             document.getElementById('export-summary').textContent =
                 parts.join(', ') + '. Background lines follow the line they back; only synced lines are exported.' +
@@ -13561,12 +14033,12 @@
             }
         }
 
-        // 1 / 2 / 3: the line becomes singer 1 / 2 / 3. Singer 2 goes to its own track when that track is switched on.
+        // 1 / 2 / 3: the line becomes singer 1 / 2 / 3. Singers 2 and 3 go to their own track when that track is switched on.
         function hotkeySetLineType(type) {
             const line = state.lyrics[state.currentIndex];
             if (!line) return;
 
-            const moved = moveLineToLayer(line, type === 'v2' && state.v2Track ? 'v2' : 'lead', type);
+            const moved = moveLineToLayer(line, type === 'v2' && state.v2Track ? 'v2' : (type === 'v3' && state.v3Track ? 'v3' : 'lead'), type);
 
             renderEditor();
             updateVisuals();
@@ -13579,9 +14051,12 @@
             askConfirm("Reset the project?", "This clears all lyrics, on every layer. Your audio stays loaded.", "Reset", () => {
                 state.lyrics = [];
                 state.v2Track = false;
+                state.v3Track = false;
                 resetLayers(false);
                 document.getElementById('raw-lyrics').value = "";
                 document.getElementById('raw-v2-lyrics').value = "";
+                const v3Raw = document.getElementById('raw-v3-lyrics');
+                if (v3Raw) v3Raw.value = "";
                 document.getElementById('raw-bg-lyrics').value = "";
                 document.getElementById('export-output').value = "";
 
@@ -13620,7 +14095,7 @@
     </script>
     <script id="voxen-tools">
 /* =====================================================================================================================
-   Voxen tools: history (undo / redo), clear timestamps, Pro <-> Advanced converter, keys for every device,
+   VoxenPlus tools: history (undo / redo), clear timestamps, Pro <-> Advanced converter, keys for every device,
    preview animations and the interface switch (modern / legacy).
    This block sits on top of the editor script above and only talks to it through its functions and `state`.
    ===================================================================================================================== */
@@ -13731,11 +14206,11 @@
             });
             const lyrics = JSON.stringify(state.lyrics);
             return {
-                label: label || '', lyrics, mode: state.mode, v2: !!state.v2Track, syl: !!state.syllables,
+                label: label || '', lyrics, mode: state.mode, v2: !!state.v2Track, v3: !!state.v3Track, syl: !!state.syllables,
                 layer: state.activeLayer, cursors, size: lyrics.length
             };
         }
-        const sameDoc = (a, b) => a.lyrics === b.lyrics && a.mode === b.mode && a.v2 === b.v2 && a.syl === b.syl;
+        const sameDoc = (a, b) => a.lyrics === b.lyrics && a.mode === b.mode && a.v2 === b.v2 && a.v3 === b.v3 && a.syl === b.syl;
 
         function push(s, soon) {
             const top = undoStack[undoStack.length - 1];
@@ -13797,10 +14272,13 @@
                 state.lyrics = JSON.parse(s.lyrics);
                 state.mode = s.mode;
                 state.v2Track = s.v2;
+                state.v3Track = s.v3;
                 state.syllables = s.syl;
                 state.activeLayer = enabledLayers().includes(s.layer) ? s.layer : 'lead';
                 if (state.v2Track && state.singerFilter === 'v2') state.singerFilter = 'all';
+                if (state.v3Track && state.singerFilter === 'v3') state.singerFilter = 'all';
                 updateSingerFilterOptions();
+                updateThirdSingerTag();
                 LAYERS.forEach((layer, k) => {
                     const c = layerCursors[layer];
                     const at = s.cursors[k];
@@ -13917,6 +14395,7 @@
     Undo.wrap('runSyllableSplit', 'Split all lines');
     Undo.wrap('setSyllableMode', 'Syllable mode');
     Undo.wrap('setV2Track', 'Singer 2 track');
+    Undo.wrap('setV3Track', 'Singer 3 track');
     // confirmed actions (delete a line, reset the project, ...) are named after their question
     Undo.wrap('runConfirm', () => {
         const title = (($('confirm-title') || {}).textContent || '').replace(/\?\s*$/, '').trim();
@@ -13991,7 +14470,7 @@
     // a conversion gives exactly what opening the file and exporting it in the other format would give - without
     // touching the session.
     function withDoc(over, fn) {
-        const keep = { lyrics: state.lyrics, lrcFormat: state.lrcFormat, thirdSingerLabel: state.thirdSingerLabel, v2Track: state.v2Track };
+        const keep = { lyrics: state.lyrics, lrcFormat: state.lrcFormat, thirdSingerLabel: state.thirdSingerLabel, v2Track: state.v2Track, v3Track: state.v3Track };
         try {
             Object.assign(state, over);
             return fn();
@@ -14032,15 +14511,16 @@
         // keep the name the file uses for a third singer (v3 or v1000)
         const label = /\{agent:v1000\}|(^|\n)\s*\[[^\]]*\]\s*v1000:/.test(text) ? 'v1000'
             : (/\{agent:v3\}|(^|\n)\s*\[[^\]]*\]\s*v3:/.test(text) ? 'v3' : state.thirdSingerLabel);
-        const stats = { lead: 0, v2: 0, bg: 0, units: 0, joins: 0, whole: 0, gaps: 0, untimed: a.untimed };
+        const stats = { lead: 0, v2: 0, v3: 0, bg: 0, units: 0, joins: 0, whole: 0, gaps: 0, untimed: a.untimed };
         let out = '';
         withDoc({
             lyrics: a.lyrics, lrcFormat: target, thirdSingerLabel: label,
-            v2Track: a.lyrics.some((l) => !l.isBg && l.singer === 'v2')
+            v2Track: a.lyrics.some((l) => !l.isBg && l.singer === 'v2'),
+            v3Track: a.lyrics.some((l) => !l.isBg && l.singer === 'v3')
         }, () => {
             out = buildLRCText();
             exportOrder().forEach((item) => {
-                if (item.bg) stats.bg++; else if (item.l.singer === 'v2') stats.v2++; else stats.lead++;
+                if (item.bg) stats.bg++; else if (item.l.singer === 'v2') stats.v2++; else if (item.l.singer === 'v3') stats.v3++; else stats.lead++;
                 const units = exportUnits(item.l);
                 if (units[0] && units[0].whole) { stats.whole++; return; }
                 stats.units += units.length;
@@ -14060,6 +14540,7 @@
         const from = r.kind === 'lines' ? 'Line times' : FORMAT_NAME[r.kind];
         const parts = [plural(s.lead, 'lead line')];
         if (s.v2) parts.push(plural(s.v2, 'singer 2 line'));
+        if (s.v3) parts.push(plural(s.v3, 'singer 3 line'));
         if (s.bg) parts.push(plural(s.bg, 'background line'));
         let msg = from + ' \u2192 ' + FORMAT_NAME[r.target] + '. ' + parts.join(', ') + (s.units ? ', ' + plural(s.units, 'timed word') +
             (s.joins ? ' (' + plural(s.joins, 'syllable') + ' joined)' : '') : '') + '.';
@@ -14758,6 +15239,17 @@
     initConvert();
     Undo.refresh();
     syncToggles();
+
+    // =================================================================================================================
+    // 7. VoxenPlus
+    // =================================================================================================================
+    // VoxenPlus is a fork of Voxen by Raqhael-ux. The editor, the .vxn project format and the LRC formats are Voxen's.
+    window.VOXENPLUS = Object.freeze({
+        name: 'VoxenPlus',
+        url: 'https://github.com/AetherIncarnate/VoxenPlus/tree/main',
+        forkOf: Object.freeze({ name: 'Voxen', author: 'Raqhael-ux', url: 'https://github.com/Raqhael-ux/Voxen-LRC-Editor' })
+    });
+    try { console.info('VoxenPlus - a fork of Voxen by Raqhael-ux (https://github.com/Raqhael-ux/Voxen-LRC-Editor). https://github.com/AetherIncarnate/VoxenPlus/tree/main'); } catch (e) { /* no console */ }
 })();
     </script>
     <script id="voxen-fallbacks">

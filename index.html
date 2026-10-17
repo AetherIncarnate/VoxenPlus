@@ -4187,6 +4187,290 @@
             flex: 2 1 0;
         }
     }
+
+    /* =====================================================================
+       VoxenPlus fixes (shared by both skins)
+       ===================================================================== */
+
+    /* The hidden radios of a segmented control (Line / Word / Syllable, Pro / Advanced, v3 / v1000 ...) live inside it. They used to be
+       positioned against the menu panel, outside the part that scrolls, so a tap on "Syllable" focused a radio that sat far below the
+       screen and the browser scrolled the whole app up to show it. */
+    .mode-toggle {
+        position: relative;
+    }
+
+    /* The app is exactly one screen tall; nothing in it may scroll the shell. (overflow: clip cannot be scrolled, not even by a focus;
+       the script in the page covers a browser that does not know it.) */
+    .app-container {
+        overflow: hidden;
+        overflow: clip;
+    }
+
+    /* The welcome screen is centred while it fits, and starts at the top (and scrolls) when it does not, instead of being cut off.
+       Two springs do the centring (the margins of its own lines stay as they were, so it sits exactly where it did). */
+    .welcome-container {
+        justify-content: flex-start;
+        overflow-y: auto;
+    }
+
+    .welcome-container::before,
+    .welcome-container::after {
+        content: "";
+        flex: 1 1 0;
+    }
+
+    /* A toast does not swallow taps meant for what is under it (the layer buttons, for one); its own button still works */
+    .toast {
+        pointer-events: none;
+    }
+
+    .toast .toast-act {
+        pointer-events: auto;
+    }
+
+    /* The syllable status in the layer bar shrinks instead of pushing the Show-all button out of the bar, and the hint makes room for it */
+    .syl-chip {
+        flex: 0 1 auto;
+        min-width: 0;
+    }
+
+    .syl-chip > #syl-status-text {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .app-container.syl-busy .layerbar-hint {
+        display: none;
+    }
+
+    /* Splitting a word by hand: a narrow letter (i, l, t) used to let the hit area of the next gap cover the centre of the one before it */
+    .sp-l {
+        min-width: 6px;
+        text-align: center;
+    }
+
+    @media (max-width: 900px) {
+        .sp-l {
+            min-width: 8px;
+        }
+
+        /* On a phone the status is a pill under the layer bar (it does not move anything) and has its Cancel button again */
+        .layerbar {
+            position: relative;
+        }
+
+        .syl-chip {
+            position: absolute;
+            top: calc(100% - 2px);
+            right: 12px;
+            left: 12px;
+            z-index: 30;
+            justify-content: center;
+            padding: 5px 8px 5px 14px;
+            border: 1px solid var(--line-strong);
+            border-radius: 999px;
+            background: var(--raised);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+            pointer-events: none;
+        }
+
+        .syl-chip button {
+            display: inline-flex;
+            align-items: center;
+            pointer-events: auto;
+        }
+    }
+
+    /* A phone on its side (small phones only: wider ones get the desktop dock): the three stacked rows of the dock left the lyrics
+       about 70 px, and four stacked layers cannot fit in what is left. So the dock is one row, and one layer shows at a time
+       (the layer bar switches between them). */
+    @media (max-width: 900px) and (max-height: 520px) {
+        .control-dock {
+            padding: 4px 12px calc(6px + env(safe-area-inset-bottom));
+        }
+
+        .dock-inner {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            grid-template-areas: "seek seek" "row ctl";
+            column-gap: 14px;
+            row-gap: 0;
+            align-items: center;
+        }
+
+        .dock-seek {
+            grid-area: seek;
+            height: 16px;
+        }
+
+        .dock-row {
+            grid-area: row;
+        }
+
+        .mobile-dock-controls {
+            grid-area: ctl;
+            grid-template-columns: 44px 40px minmax(0, 1fr) 40px 44px;
+            gap: 6px;
+            margin-top: 0;
+        }
+
+        .mobile-dock-controls .tb-btn {
+            width: 44px;
+            height: 44px;
+        }
+
+        .mobile-dock-controls .md-hist {
+            width: 40px;
+            height: 40px;
+        }
+
+        .sync-btn {
+            height: 44px;
+        }
+
+        .ctl-btn {
+            min-width: 40px;
+            height: 40px;
+        }
+
+        .play-btn {
+            width: 44px;
+            height: 44px;
+        }
+
+        .player-controls {
+            gap: 6px;
+        }
+
+        .layerbar {
+            padding-top: 4px;
+            padding-bottom: 2px;
+        }
+
+        .app-container.layers-split:not(.is-preview) .lane:not(.is-active) {
+            display: none;
+        }
+
+        .app-container.layers-split:not(.is-preview) .lane.is-active {
+            width: 100%;
+            max-width: none;
+            border-right: 0;
+            border-left: 0;
+        }
+
+        #split-btn {
+            display: none;
+        }
+    }
+
+    /* viewport-fit=cover draws under the notch, the rounded corners and the status bar (a phone on its side, a home-screen app): keep the
+       app, its sheets, dialogs and toasts inside the safe area. Where there is none (a computer, a phone upright in the browser) all of
+       these are 0 and nothing changes. */
+    .app-container {
+        padding-top: env(safe-area-inset-top);
+        padding-right: env(safe-area-inset-right);
+        padding-left: env(safe-area-inset-left);
+    }
+
+    .toasts {
+        top: calc(var(--topbar-h) + 12px + env(safe-area-inset-top));
+        right: max(16px, env(safe-area-inset-right));
+    }
+
+    .modal-overlay {
+        padding-right: max(16px, env(safe-area-inset-right));
+        padding-left: max(16px, env(safe-area-inset-left));
+    }
+
+    @media (max-width: 900px) {
+        .toasts {
+            right: max(12px, env(safe-area-inset-right));
+            left: max(12px, env(safe-area-inset-left));
+        }
+
+        .modal-overlay {
+            padding-right: env(safe-area-inset-right);
+            padding-left: env(safe-area-inset-left);
+        }
+
+        .sidebar {
+            right: env(safe-area-inset-right);
+            left: env(safe-area-inset-left);
+            width: auto;
+        }
+
+        .tools-sidebar {
+            right: env(safe-area-inset-right);
+            left: env(safe-area-inset-left);
+        }
+    }
+
+    /* A phone held upright stacks the layers, so the bar that names the next word floated over the buttons in the header of the last one
+       (its Split button sat on "+", and a tap meant for "+" split a word). The bar now keeps to the left and stops short of those buttons
+       (the layer it names is the one that is open, so that label goes). */
+    @media (max-width: 900px) and (min-height: 521px) {
+        #word-context-ui {
+            left: 12px;
+            max-width: calc(100% - 126px);
+            transform: translate(0, 6px);
+        }
+
+        #word-context-ui.visible {
+            transform: none;
+        }
+
+        #word-context-ui .ctx-layer {
+            display: none;
+        }
+    }
+
+    /* The Test format (experimental) ------------------------------------------------------------------------------- */
+    .cv-chip[data-kind="test"] {
+        border-color: var(--accent-line);
+        background: var(--accent-soft);
+        color: var(--accent-text);
+    }
+
+    /* the three song-detail fields are fields of the panel itself (its gap spaces them); [hidden] still wins */
+    #test-details {
+        display: contents;
+    }
+
+    /* the line that opens a song part says so, above its text (never in the preview) */
+    .part-chip {
+        margin: 0 0 1px;
+        font-size: 10.5px;
+        font-weight: 700;
+        line-height: 1.5;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .lyric-line.is-v2 .part-chip {
+        text-align: right;
+    }
+
+    .lyric-line.is-v3 .part-chip {
+        text-align: center;
+    }
+
+    .app-container.is-preview .part-chip {
+        display: none;
+    }
+
+    /* the four layer buttons of the edit dialog were 6-11 px wider than the dialog on a 320 px phone */
+    @media (max-width: 360px) {
+        .seg-layer .seg-btn {
+            padding-left: 5px;
+            padding-right: 5px;
+            font-size: 12.5px;
+        }
+    }
     </style>
     <style id="css-legacy" media="not all">
     /* =====================================================================
@@ -7770,6 +8054,302 @@
             flex: 2 1 0;
         }
     }
+
+    /* =====================================================================
+       VoxenPlus fixes (shared by both skins)
+       ===================================================================== */
+
+    /* The hidden radios of a segmented control (Line / Word / Syllable, Pro / Advanced, v3 / v1000 ...) live inside it. They used to be
+       positioned against the menu panel, outside the part that scrolls, so a tap on "Syllable" focused a radio that sat far below the
+       screen and the browser scrolled the whole app up to show it. */
+    .mode-toggle {
+        position: relative;
+    }
+
+    /* The app is exactly one screen tall; nothing in it may scroll the shell. (overflow: clip cannot be scrolled, not even by a focus;
+       the script in the page covers a browser that does not know it.) */
+    .app-container {
+        overflow: hidden;
+        overflow: clip;
+    }
+
+    /* The welcome screen is centred while it fits, and starts at the top (and scrolls) when it does not, instead of being cut off.
+       Two springs do the centring (the margins of its own lines stay as they were, so it sits exactly where it did). */
+    .welcome-container {
+        justify-content: flex-start;
+        overflow-y: auto;
+    }
+
+    .welcome-container::before,
+    .welcome-container::after {
+        content: "";
+        flex: 1 1 0;
+    }
+
+    /* A toast does not swallow taps meant for what is under it (the layer buttons, for one); its own button still works */
+    .toast {
+        pointer-events: none;
+    }
+
+    .toast .toast-act {
+        pointer-events: auto;
+    }
+
+    /* The syllable status in the layer bar shrinks instead of pushing the Show-all button out of the bar, and the hint makes room for it */
+    .syl-chip {
+        flex: 0 1 auto;
+        min-width: 0;
+    }
+
+    .syl-chip > #syl-status-text {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .app-container.syl-busy .layerbar-hint {
+        display: none;
+    }
+
+    /* Splitting a word by hand: a narrow letter (i, l, t) used to let the hit area of the next gap cover the centre of the one before it */
+    .sp-l {
+        min-width: 6px;
+        text-align: center;
+    }
+
+    @media (max-width: 900px) {
+        .sp-l {
+            min-width: 8px;
+        }
+
+        /* On a phone the status is a pill under the layer bar (it does not move anything) and has its Cancel button again */
+        .layerbar {
+            position: relative;
+        }
+
+        .syl-chip {
+            position: absolute;
+            top: calc(100% - 2px);
+            right: 12px;
+            left: 12px;
+            z-index: 30;
+            justify-content: center;
+            padding: 5px 8px 5px 14px;
+            border: 1px solid var(--line-strong);
+            border-radius: 999px;
+            background: var(--raised);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+            pointer-events: none;
+        }
+
+        .syl-chip button {
+            display: inline-flex;
+            align-items: center;
+            pointer-events: auto;
+        }
+    }
+
+    /* A phone on its side (small phones only: wider ones get the desktop dock): the three stacked rows of the dock left the lyrics
+       about 70 px, and four stacked layers cannot fit in what is left. So the dock is one row, and one layer shows at a time
+       (the layer bar switches between them). */
+    @media (max-width: 900px) and (max-height: 520px) {
+        .control-dock {
+            padding: 4px 12px calc(6px + env(safe-area-inset-bottom));
+        }
+
+        .dock-inner {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            grid-template-areas: "seek seek" "row ctl";
+            column-gap: 14px;
+            row-gap: 0;
+            align-items: center;
+        }
+
+        .dock-seek {
+            grid-area: seek;
+            height: 16px;
+        }
+
+        .dock-row {
+            grid-area: row;
+        }
+
+        .mobile-dock-controls {
+            grid-area: ctl;
+            grid-template-columns: 44px 40px minmax(0, 1fr) 40px 44px;
+            gap: 6px;
+            margin-top: 0;
+        }
+
+        .mobile-dock-controls .tb-btn {
+            width: 44px;
+            height: 44px;
+        }
+
+        .mobile-dock-controls .md-hist {
+            width: 40px;
+            height: 40px;
+        }
+
+        .sync-btn {
+            height: 44px;
+        }
+
+        .ctl-btn {
+            min-width: 40px;
+            height: 40px;
+        }
+
+        .play-btn {
+            width: 44px;
+            height: 44px;
+        }
+
+        .player-controls {
+            gap: 6px;
+        }
+
+        .layerbar {
+            padding-top: 4px;
+            padding-bottom: 2px;
+        }
+
+        .app-container.layers-split:not(.is-preview) .lane:not(.is-active) {
+            display: none;
+        }
+
+        .app-container.layers-split:not(.is-preview) .lane.is-active {
+            width: 100%;
+            max-width: none;
+            border-right: 0;
+            border-left: 0;
+        }
+
+        #split-btn {
+            display: none;
+        }
+    }
+
+    /* viewport-fit=cover draws under the notch, the rounded corners and the status bar (a phone on its side, a home-screen app): keep the
+       app, its sheets, dialogs and toasts inside the safe area. Where there is none (a computer, a phone upright in the browser) all of
+       these are 0 and nothing changes. */
+    .app-container {
+        padding-top: env(safe-area-inset-top);
+        padding-right: env(safe-area-inset-right);
+        padding-left: env(safe-area-inset-left);
+    }
+
+    .toasts {
+        top: calc(var(--topbar-h) + 12px + env(safe-area-inset-top));
+        right: max(16px, env(safe-area-inset-right));
+    }
+
+    .modal-overlay {
+        padding-right: max(16px, env(safe-area-inset-right));
+        padding-left: max(16px, env(safe-area-inset-left));
+    }
+
+    @media (max-width: 900px) {
+        .toasts {
+            right: max(12px, env(safe-area-inset-right));
+            left: max(12px, env(safe-area-inset-left));
+        }
+
+        .modal-overlay {
+            padding-right: env(safe-area-inset-right);
+            padding-left: env(safe-area-inset-left);
+        }
+
+        .sidebar {
+            right: env(safe-area-inset-right);
+            left: env(safe-area-inset-left);
+            width: auto;
+        }
+
+        .tools-sidebar {
+            right: env(safe-area-inset-right);
+            left: env(safe-area-inset-left);
+        }
+    }
+
+    /* A phone held upright stacks the layers, so the bar that names the next word floated over the buttons in the header of the last one
+       (its Split button sat on "+", and a tap meant for "+" split a word). The bar now keeps to the left and stops short of those buttons
+       (the layer it names is the one that is open, so that label goes). */
+    @media (max-width: 900px) and (min-height: 521px) {
+        #word-context-ui {
+            left: 12px;
+            max-width: calc(100% - 126px);
+            transform: translate(0, 6px);
+        }
+
+        #word-context-ui.visible {
+            transform: none;
+        }
+
+        #word-context-ui .ctx-layer {
+            display: none;
+        }
+    }
+
+    /* =====================================================================
+       VoxenPlus fixes, legacy interface only
+       ===================================================================== */
+
+    /* Stacked layers on a phone: a lane that is short used to let its own content spill over the next lane (the scroll room under the
+       lines is padding, and padding cannot shrink). Each lane now clips its own content. */
+    @media (max-width: 900px) {
+        .lane {
+            overflow: hidden;
+        }
+    }
+
+    /* The Test format (experimental) ------------------------------------------------------------------------------- */
+    .cv-chip[data-kind="test"] {
+        border-color: var(--accent-line);
+        background: var(--accent-soft);
+        color: var(--accent-text);
+    }
+
+    /* the three song-detail fields are fields of the panel itself (its gap spaces them); [hidden] still wins */
+    #test-details {
+        display: contents;
+    }
+
+    /* the line that opens a song part says so, above its text (never in the preview) */
+    .part-chip {
+        margin: 0 0 1px;
+        font-size: 10.5px;
+        font-weight: 700;
+        line-height: 1.5;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .lyric-line.is-v2 .part-chip {
+        text-align: right;
+    }
+
+    .lyric-line.is-v3 .part-chip {
+        text-align: center;
+    }
+
+    .app-container.is-preview .part-chip {
+        display: none;
+    }
+
+    /* the four layer buttons of the edit dialog were 6-11 px wider than the dialog on a 320 px phone */
+    @media (max-width: 360px) {
+        .seg-layer .seg-btn {
+            padding-left: 5px;
+            padding-right: 5px;
+            font-size: 12.5px;
+        }
+    }
     </style>
     <script>
         /* Picks the interface (modern / legacy) and the preview animation before anything is drawn.
@@ -7897,7 +8477,7 @@
                         </button>
                     </div>
                     <button id="btn-convert" class="tb-btn tb-new" type="button" onclick="openConvertModal()"
-                        title="Convert between Pro and Advanced" aria-label="Convert" data-v6>
+                        title="Convert between Pro, Advanced and Test" aria-label="Convert" data-v6>
                         <svg class="ic" aria-hidden="true"><use href="#i-convert" /></svg>
                         <span class="btn-text">Convert</span>
                     </button>
@@ -8005,14 +8585,14 @@
                             <label class="field-label" for="raw-v2-lyrics">Singer 2 lyrics <span class="optional">optional</span></label>
                             <textarea id="raw-v2-lyrics" style="min-height: 84px;"
                                 placeholder="A second singer (agent v2). One line per row"></textarea>
-                            <p class="hint">Singer 2 gets its own track on the right, timed on its own, so it can overlap singer 1.</p>
+                            <p class="hint">Singer 2 gets its own layer, timed on its own, so it can overlap singer 1.</p>
                         </div>
 
                         <div class="field" data-v7>
                             <label class="field-label" for="raw-v3-lyrics">Singer 3 lyrics <span class="optional">optional</span></label>
                             <textarea id="raw-v3-lyrics" style="min-height: 84px;"
                                 placeholder="A third singer (agent v3). One line per row"></textarea>
-                            <p class="hint">Singer 3 gets its own track too, timed on its own, so it can overlap singers 1 and 2.</p>
+                            <p class="hint">Singer 3 gets its own layer too, timed on its own, so it can overlap singers 1 and 2.</p>
                         </div>
 
                         <div class="field">
@@ -8067,6 +8647,27 @@
                                 <input type="radio" id="fmt-pro-sidebar" name="lrc-fmt" value="pro" checked
                                     onchange="setLRCFormat('pro')">
                                 <label for="fmt-pro-sidebar">Pro</label>
+                                <input type="radio" id="fmt-test-sidebar" name="lrc-fmt" value="test"
+                                    onchange="setLRCFormat('test')" data-v9>
+                                <label for="fmt-test-sidebar" data-v9>Test</label>
+                            </div>
+                            <p class="hint" id="fmt-test-hint" hidden data-v9>Experimental. One line per phrase, with its background vocals inside it,
+                                plus the song details and song parts.</p>
+                        </div>
+
+                        <div id="test-details" hidden data-v9>
+                            <div class="field">
+                                <label class="field-label" for="test-title">Title</label>
+                                <input type="text" id="test-title" autocomplete="off" spellcheck="false" oninput="testMetaInput()">
+                            </div>
+                            <div class="field">
+                                <label class="field-label" for="test-artist">Artist</label>
+                                <input type="text" id="test-artist" autocomplete="off" spellcheck="false" oninput="testMetaInput()">
+                            </div>
+                            <div class="field">
+                                <label class="field-label" for="test-writers">Songwriters</label>
+                                <input type="text" id="test-writers" autocomplete="off" spellcheck="false" oninput="testMetaInput()">
+                                <p class="hint">These go in the [song] section. Separate several names with commas. Without a title, the name of the audio file is used.</p>
                             </div>
                         </div>
 
@@ -8080,8 +8681,8 @@
 
                         <div class="field" data-v6>
                             <span class="field-label">Convert</span>
-                            <button class="btn btn-secondary" type="button" onclick="openConvertModal()">Pro &#8644; Advanced&hellip;</button>
-                            <p class="hint">Turn a Pro file into an Advanced one, or the other way round, without touching this session.</p>
+                            <button class="btn btn-secondary" type="button" onclick="openConvertModal()">Pro &#8644; Advanced &#8644; Test&hellip;</button>
+                            <p class="hint">Turn a Pro, Advanced or Test file into one of the others, without touching this session.</p>
                         </div>
 
                         <hr class="divider">
@@ -8098,12 +8699,12 @@
 
                         <div class="field">
                             <span class="field-label">Files</span>
-                            <input type="file" id="lrc-file-input" accept=".lrc,.txt" hidden onchange="handleLRCFile(this)">
+                            <input type="file" id="lrc-file-input" accept=".lrc,.txt,.test" hidden onchange="handleLRCFile(this)">
                             <div class="row-3">
                                 <button class="btn btn-secondary" type="button"
                                     onclick="document.getElementById('lrc-file-input').click()">Open</button>
                                 <button class="btn btn-secondary" type="button" onclick="loadLRCFromSidebar()">Load text</button>
-                                <button class="btn" type="button" onclick="downloadLRC()">Save .lrc</button>
+                                <button class="btn" type="button" id="save-lrc-btn" onclick="downloadLRC()">Save .lrc</button>
                             </div>
                         </div>
                     </div>
@@ -8212,12 +8813,12 @@
                         aria-pressed="false" hidden>Singer 3 <span class="seg-count" id="count-v3">0</span></button>
                 </div>
                 <button type="button" class="tb-btn add-track" id="add-v2-btn" onclick="setV2Track(true)"
-                    title="Give singer 2 (agent v2) its own track on the right" aria-label="Add a track for singer 2">
+                    title="Give singer 2 (agent v2) its own layer" aria-label="Add a layer for singer 2">
                     <svg class="ic" aria-hidden="true"><use href="#i-plus" /></svg>
                     <span class="btn-text">Singer 2</span>
                 </button>
                 <button type="button" class="tb-btn add-track" id="add-v3-btn" onclick="setV3Track(true)"
-                    title="Give singer 3 (agent v3) its own track" aria-label="Add a track for singer 3" hidden data-v7>
+                    title="Give singer 3 (agent v3) its own layer" aria-label="Add a layer for singer 3" hidden data-v7>
                     <svg class="ic" aria-hidden="true"><use href="#i-plus" /></svg>
                     <span class="btn-text">Singer 3</span>
                 </button>
@@ -8313,15 +8914,15 @@
                         <div class="lane-head" onclick="setActiveLayer('v2')">
                             <span class="lane-dot"></span>
                             <span class="lane-title">Singer 2</span>
-                            <span class="lane-tag" title="Agent v2, shown on the right">v2</span>
+                            <span class="lane-tag" title="The name singer 2 has in the file (agent v2)">v2</span>
                             <span class="lane-meta" id="lane-v2-meta"></span>
                             <span class="grow"></span>
                             <button class="icon-btn" type="button" title="Add a singer 2 line" aria-label="Add a singer 2 line"
                                 onclick="event.stopPropagation(); addLineToLayer('v2')">
                                 <svg class="ic" aria-hidden="true"><use href="#i-plus" /></svg>
                             </button>
-                            <button class="icon-btn" type="button" title="Take singer 2 off its own track (the lines stay in the lead lane)"
-                                aria-label="Remove the singer 2 track" onclick="event.stopPropagation(); setV2Track(false)">
+                            <button class="icon-btn" type="button" title="Take singer 2 off its own layer (the lines stay in the lead layer)"
+                                aria-label="Remove the singer 2 layer" onclick="event.stopPropagation(); setV2Track(false)">
                                 <svg class="ic" aria-hidden="true"><use href="#i-x" /></svg>
                             </button>
                         </div>
@@ -8339,8 +8940,8 @@
                                 onclick="event.stopPropagation(); addLineToLayer('v3')">
                                 <svg class="ic" aria-hidden="true"><use href="#i-plus" /></svg>
                             </button>
-                            <button class="icon-btn" type="button" title="Take singer 3 off its own track (the lines stay in the lead lane)"
-                                aria-label="Remove the singer 3 track" onclick="event.stopPropagation(); setV3Track(false)">
+                            <button class="icon-btn" type="button" title="Take singer 3 off its own layer (the lines stay in the lead layer)"
+                                aria-label="Remove the singer 3 layer" onclick="event.stopPropagation(); setV3Track(false)">
                                 <svg class="ic" aria-hidden="true"><use href="#i-x" /></svg>
                             </button>
                         </div>
@@ -8602,7 +9203,7 @@
     <div class="modal-overlay" id="offset-modal">
         <div class="base-modal offset-modal" role="dialog" aria-label="Shift all timestamps">
             <h2 class="modal-title">Shift all timestamps</h2>
-            <p class="hint">Move every synced line, on both layers, later (positive) or earlier (negative).</p>
+            <p class="hint">Move every synced line, on every layer, later (positive) or earlier (negative).</p>
             <div class="offset-grid">
                 <div class="offset-col"><label for="off-min">Min</label><input type="number" id="off-min" value="0" placeholder="0"></div>
                 <div class="offset-col"><label for="off-sec">Sec</label><input type="number" id="off-sec" value="0" placeholder="0"></div>
@@ -8675,6 +9276,18 @@
                     Auto picks the line it overlaps most.</p>
             </div>
 
+            <div class="field" id="edit-part-row" data-v9>
+                <label class="field-label" for="edit-line-part">Song part <span class="optional">optional</span></label>
+                <input type="text" id="edit-line-part" list="part-names" maxlength="40" autocomplete="off" placeholder="Verse, Chorus, Bridge ...">
+                <datalist id="part-names">
+                    <option value="Intro"></option><option value="Verse"></option><option value="Pre-Chorus"></option><option value="Chorus"></option>
+                    <option value="Post-Chorus"></option><option value="Bridge"></option><option value="Interlude"></option><option value="Instrumental"></option>
+                    <option value="Outro"></option>
+                </datalist>
+                <p class="hint">Starts a new part at this line, and the part runs until the next one. The Test format writes it as a [part:] marker.
+                    Leave it empty to stay in the part above.</p>
+            </div>
+
             <div class="modal-actions" style="justify-content:flex-start;">
                 <button class="btn btn-outline btn-danger btn-auto" type="button" style="margin-right:0;"
                     onclick="deleteLineFromModal()">
@@ -8701,6 +9314,8 @@
                     <label for="fmt-pro-export">Pro</label>
                     <input type="radio" id="fmt-adv-export" name="lrc-fmt-export" value="advanced" onchange="exportSetFormat('advanced')">
                     <label for="fmt-adv-export">Advanced</label>
+                    <input type="radio" id="fmt-test-export" name="lrc-fmt-export" value="test" onchange="exportSetFormat('test')">
+                    <label for="fmt-test-export">Test</label>
                 </div>
             </div>
             <div class="field">
@@ -8713,7 +9328,7 @@
             </button>
             <div class="export-grid">
                 <button class="btn" type="button" onclick="downloadLRC()">
-                    <svg class="ic" aria-hidden="true"><use href="#i-download" /></svg> .lrc
+                    <svg class="ic" aria-hidden="true"><use href="#i-download" /></svg> <span id="export-ext-label">.lrc</span>
                 </button>
                 <button class="btn btn-secondary" type="button" onclick="saveProject()">
                     <svg class="ic" aria-hidden="true"><use href="#i-save" /></svg> .vxn project
@@ -8892,8 +9507,8 @@
 
     <div class="modal-overlay" id="convert-modal" data-v6>
         <div class="base-modal convert-modal" role="dialog" aria-label="Convert lyrics format">
-            <h2 class="modal-title">Convert Pro &#8644; Advanced</h2>
-            <p class="hint">Paste or open an LRC file in one format and get it in the other. Your session is not touched
+            <h2 class="modal-title">Convert lyrics</h2>
+            <p class="hint">Paste or open a lyrics file in the Pro, Advanced or Test format and get it in another one. Your session is not touched
                 unless you press Open in editor.</p>
 
             <div class="field">
@@ -8903,7 +9518,7 @@
                 </div>
                 <textarea id="convert-input" class="mono cv-text" spellcheck="false" autocomplete="off" autocapitalize="off"
                     placeholder="[00:12.500]v1:&lt;00:12.500&gt;Hello &lt;00:13.100&gt;world&lt;00:13.800&gt;"></textarea>
-                <input type="file" id="convert-file" accept=".lrc,.txt,text/plain" hidden>
+                <input type="file" id="convert-file" accept=".lrc,.txt,.test,text/plain" hidden>
                 <div class="row-3 cv-tools">
                     <button class="btn btn-secondary" type="button" onclick="document.getElementById('convert-file').click()">Open file</button>
                     <button class="btn btn-secondary" type="button" onclick="convertUseSession()">Use session</button>
@@ -8918,6 +9533,8 @@
                     <label for="cv-to-pro">Pro</label>
                     <input type="radio" id="cv-to-advanced" name="cv-to" value="advanced" onchange="convertSetTarget('advanced')" checked>
                     <label for="cv-to-advanced">Advanced</label>
+                    <input type="radio" id="cv-to-test" name="cv-to" value="test" onchange="convertSetTarget('test')">
+                    <label for="cv-to-test">Test</label>
                 </div>
             </div>
 
@@ -9181,7 +9798,7 @@
             }
             renderEditor();
             generateLRC();
-            notify(on ? name + ' now has its own track' + (layer === 'v3' ? '' : ', on the right') : name + ' lines are back in the lead lane');
+            notify(on ? name + ' now has its own layer' : name + ' lines are back in the lead layer');
         }
         function setV2Track(on) { setSingerTrack('v2', on); }
         function setV3Track(on) { setSingerTrack('v3', on); }
@@ -10591,6 +11208,7 @@
             }
             const run = document.getElementById('syl-run');
             if (run) run.disabled = !!text;
+            appContainer.classList.toggle('syl-busy', !!text);
         }
 
         // The language of the lyrics: the one chosen in the panel, else guessed from the whole song (not from the few lines
@@ -11040,6 +11658,7 @@
                 singer: l.singer || 'v1'
             });
             if (['v1', 'v2', 'v3'].includes(l.backs)) out.backs = l.backs; else delete out.backs;
+            if (typeof l.part === 'string' && l.part.trim()) out.part = l.part.trim(); else delete out.part;      // the song part this line opens
             return out;
         }
 
@@ -11253,8 +11872,8 @@
 
         // A file that calls its third singer v3 (or v1000) is written back under that name
         function keepThirdSingerLabel(text) {
-            showThirdSingerLabel(/\{agent:v1000\}|(^|\n)\s*\[[^\]]*\]\s*v1000:/.test(text) ? 'v1000'
-                : (/\{agent:v3\}|(^|\n)\s*\[[^\]]*\]\s*v3:/.test(text) ? 'v3' : null));
+            showThirdSingerLabel(/\{agent:v1000\}|(^|\n)\s*\[[^\]]*\]\s*v1000:|\|v1000\]/.test(text) ? 'v1000'
+                : (/\{agent:v3\}|(^|\n)\s*\[[^\]]*\]\s*v3:|\|v3\]/.test(text) ? 'v3' : null));
         }
 
         function togglePreviewMode() {
@@ -11993,6 +12612,7 @@
                 v2Track: state.v2Track,
                 v3Track: state.v3Track,
                 thirdSingerLabel: state.thirdSingerLabel,
+                testMeta: state.testMeta,
                 syllables: state.syllables,
                 lyrics: state.lyrics,
                 currentIndex: state.currentIndex
@@ -12023,6 +12643,7 @@
                     state.v2Track = typeof data.v2Track === 'boolean' ? data.v2Track : state.lyrics.some(l => !l.isBg && l.singer === 'v2');
                     state.v3Track = typeof data.v3Track === 'boolean' ? data.v3Track : state.lyrics.some(l => !l.isBg && l.singer === 'v3');
                     showThirdSingerLabel(data.thirdSingerLabel);
+                    if (window.VoxTest) VoxTest.load(data.testMeta);
                     state.syllables = state.mode === 'word' && (data.syllables === true || state.lyrics.some(l => l.words.some(w => w.join)));
                     resetLayers(state.v2Track || state.v3Track || state.lyrics.some(l => l.isBg));
 
@@ -12105,7 +12726,7 @@
                 // --- FILE INPUT HANDLER ---
                 const fileInput = document.createElement('input');
                 fileInput.type = 'file';
-                fileInput.accept = '.lrc,.txt';
+                fileInput.accept = '.lrc,.txt,.test';
                 fileInput.style.display = 'none';
                 fileInput.onchange = (e) => {
                     const file = e.target.files[0];
@@ -12159,6 +12780,11 @@
 
         // Reading half of the import: text -> lines. It does not touch the editor (the converter uses it as well).
         function parseLRCText(lrcText) {
+            // the experimental Test format, and any file that came with &lt; and &gt; for the <time> tags
+            if (window.VoxTest) {
+                lrcText = VoxTest.decode(lrcText);
+                if (VoxTest.detect(lrcText)) return VoxTest.parse(lrcText);
+            }
             const lines = lrcText.split(/\r?\n/);
             const newLyrics = [];
 
@@ -12351,7 +12977,8 @@
             if (detectedFormat === 'pro') {
                 setLRCFormat('pro');
             } else {
-                setLRCFormat('advanced');
+                if (parsed.meta && window.VoxTest) VoxTest.use(parsed.meta);          // the song details of a Test file
+                setLRCFormat(detectedFormat === 'test' ? 'test' : 'advanced');
                 state.mode = hasWordData ? 'word' : 'line';
                 document.getElementById(hasWordData ? 'mode-word' : 'mode-line').checked = true;
             }
@@ -12369,7 +12996,7 @@
             const v3Raw = document.getElementById('raw-v3-lyrics');
             if (v3Raw) v3Raw.value = state.v3Track ? textsOf(l => !l.isBg && l.singer === 'v3') : '';
             document.getElementById('raw-bg-lyrics').value = textsOf(l => l.isBg);
-            exportOutput.value = lrcText;
+            if (detectedFormat !== 'test') exportOutput.value = lrcText;          // a Test file shows as it is written back (setLRCFormat did that)
 
             const bgCount = state.lyrics.filter(l => l.isBg).length;
             const v2Count = state.v2Track ? state.lyrics.filter(l => !l.isBg && l.singer === 'v2').length : 0;
@@ -12584,6 +13211,13 @@
                 }
             };
 
+            if (item.part && layer !== 'bg') {
+                const chip = document.createElement('div');
+                chip.className = 'part-chip';
+                chip.textContent = item.part;
+                chip.title = 'A new song part starts at this line';
+                contentWrapper.appendChild(chip);
+            }
             contentWrapper.appendChild(content);
             row.appendChild(contentWrapper);
 
@@ -13239,10 +13873,11 @@
             return out;
         }
 
-        function generateLRC() { exportOutput.value = buildLRCText(); }
+        function generateLRC() { exportOutput.value = buildLRCText(); if (window.VoxTest) VoxTest.refresh(); }
 
         function buildLRCText() {
             let out = "";
+            if (state.lrcFormat === 'test' && window.VoxTest) return VoxTest.build();      // the experimental Test format
 
             const items = exportOrder();
             // Gramophone finds the singer a background line backs by looking back to the previous line break, so a file that
@@ -13293,7 +13928,7 @@
             const blob = new Blob([exportOutput.value], { type: 'text/plain' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `${currentFileName}.lrc`;
+            a.download = `${currentFileName}${state.lrcFormat === 'test' && window.VoxTest ? VoxTest.ext : '.lrc'}`;
             document.body.appendChild(a); a.click(); document.body.removeChild(a);
         }
 
@@ -13517,6 +14152,8 @@
             // Sync UI (Sidebar)
             document.getElementById('fmt-adv-sidebar').checked = (fmt === 'advanced');
             document.getElementById('fmt-pro-sidebar').checked = (fmt === 'pro');
+            const testRadio = document.getElementById('fmt-test-sidebar');
+            if (testRadio) testRadio.checked = (fmt === 'test');
 
             // Update internal logic variables/UI states
             const tapBtn = document.getElementById('opt-tap');
@@ -13551,6 +14188,7 @@
             }
 
             generateLRC();
+            if (window.VoxTest) VoxTest.sync();
         }
 
         function formatTimePro(s) {
@@ -13582,6 +14220,8 @@
             if (layer === 'lead' && state.v3Track && editLineSinger === 'v3') setEditSinger('v1');
             document.getElementById('edit-singer-row').hidden = layer !== 'lead' || state.v3Track;
             document.getElementById('edit-backs-row').hidden = layer !== 'bg';
+            const partRow = document.getElementById('edit-part-row');
+            if (partRow) partRow.hidden = layer === 'bg';                  // a background line sits inside its line: it opens no part
         }
 
         function setEditSinger(singer) {
@@ -13633,6 +14273,8 @@
             setEditLayer(line.isBg ? 'bg' : (line.singer === 'v2' ? 'v2' : (line.singer === 'v3' && state.v3Track ? 'v3' : 'lead')));
             setEditSinger(line.singer);
             setEditBacks(line.backs || 'auto');
+            const partField = document.getElementById('edit-line-part');
+            if (partField) partField.value = line.part || '';
 
             modal.classList.add('active');
         }
@@ -13674,6 +14316,12 @@
             lineObj.time = newTime;
             if (lineObj.words.length > 0 && newTime !== null) {
                 lineObj.words[0].start = newTime;
+            }
+
+            const partField = document.getElementById('edit-line-part');
+            if (partField) {
+                const name = editLineLayer === 'bg' ? '' : partField.value.replace(/\s+/g, ' ').trim();
+                if (name) lineObj.part = name; else delete lineObj.part;
             }
 
             // Layer, singer and who a background line backs
@@ -14394,8 +15042,8 @@
     Undo.wrap('mergeAllSyllables', 'Merge syllables');
     Undo.wrap('runSyllableSplit', 'Split all lines');
     Undo.wrap('setSyllableMode', 'Syllable mode');
-    Undo.wrap('setV2Track', 'Singer 2 track');
-    Undo.wrap('setV3Track', 'Singer 3 track');
+    Undo.wrap('setV2Track', 'Singer 2 layer');
+    Undo.wrap('setV3Track', 'Singer 3 layer');
     // confirmed actions (delete a line, reset the project, ...) are named after their question
     Undo.wrap('runConfirm', () => {
         const title = (($('confirm-title') || {}).textContent || '').replace(/\?\s*$/, '').trim();
@@ -14470,7 +15118,7 @@
     // a conversion gives exactly what opening the file and exporting it in the other format would give - without
     // touching the session.
     function withDoc(over, fn) {
-        const keep = { lyrics: state.lyrics, lrcFormat: state.lrcFormat, thirdSingerLabel: state.thirdSingerLabel, v2Track: state.v2Track, v3Track: state.v3Track };
+        const keep = { lyrics: state.lyrics, lrcFormat: state.lrcFormat, thirdSingerLabel: state.thirdSingerLabel, v2Track: state.v2Track, v3Track: state.v3Track, testMeta: state.testMeta };
         try {
             Object.assign(state, over);
             return fn();
@@ -14479,7 +15127,7 @@
         }
     }
 
-    const FORMAT_NAME = { pro: 'Pro', advanced: 'Advanced' };
+    const FORMAT_NAME = { pro: 'Pro', advanced: 'Advanced', test: 'Test' };
 
     function analyseLRC(text) {
         const parsed = parseLRCText(text);
@@ -14498,23 +15146,42 @@
         });
         const timed = lyrics.filter((l) => isNum(l.time)).length;
         let kind = 'none';
-        if (timed) kind = parsed.format === 'pro' ? 'pro' : (parsed.hasWordData ? 'advanced' : 'lines');
-        return { lyrics, kind, timed, untimed: lyrics.length - timed };
+        if (timed) kind = parsed.format === 'test' ? 'test' : (parsed.format === 'pro' ? 'pro' : (parsed.hasWordData ? 'advanced' : 'lines'));
+        return {
+            lyrics, kind, timed, untimed: lyrics.length - timed,
+            meta: parsed.meta || null,                                  // the song details a Test file carries
+            parts: lyrics.filter((l) => l.part).length,
+            tags: VoxTest.format.idTags(text)                           // [ti:] and [ar:] of an ordinary LRC file
+        };
     }
 
     // text -> { text, kind, target, stats } | { error }
-    function convertLRC(text, target) {
+    function convertLRC(text, target, opts) {
+        opts = opts || {};
         if (!String(text || '').trim()) return { error: '' };
         const a = analyseLRC(text);
         if (!a.lyrics.length) return { error: 'No valid LRC timestamps found.' };
         if (!a.timed) return { error: 'None of the lines has a timestamp, so there is nothing to convert.' };
         // keep the name the file uses for a third singer (v3 or v1000)
-        const label = /\{agent:v1000\}|(^|\n)\s*\[[^\]]*\]\s*v1000:/.test(text) ? 'v1000'
-            : (/\{agent:v3\}|(^|\n)\s*\[[^\]]*\]\s*v3:/.test(text) ? 'v3' : state.thirdSingerLabel);
-        const stats = { lead: 0, v2: 0, v3: 0, bg: 0, units: 0, joins: 0, whole: 0, gaps: 0, untimed: a.untimed };
+        const label = /\{agent:v1000\}|(^|\n)\s*\[[^\]]*\]\s*v1000:|\|v1000\]/.test(text) ? 'v1000'
+            : (/\{agent:v3\}|(^|\n)\s*\[[^\]]*\]\s*v3:|\|v3\]/.test(text) ? 'v3' : state.thirdSingerLabel);
+        // the song details of a Test file: a Test file's own; for a Pro / Advanced file what the file says ([ti:] [ar:]),
+        // else what "Use session" brought, else the name of the file (the title)
+        let meta;
+        if (a.kind === 'test' && a.meta) meta = Object.assign({}, a.meta, { exact: true });
+        else {
+            meta = VoxTest.format.blankMeta();
+            meta.exact = true;
+            if (opts.meta) { meta.title = opts.meta.title || ''; meta.artist = opts.meta.artist || ''; meta.songwriters = opts.meta.songwriters || ''; }
+            else { meta.title = a.tags.title || opts.name || ''; meta.artist = a.tags.artist || ''; }
+        }
+        const stats = {
+            lead: 0, v2: 0, v3: 0, bg: 0, units: 0, joins: 0, whole: 0, gaps: 0, untimed: a.untimed, parts: a.parts,
+            details: !!(a.kind === 'test' && a.meta && (a.meta.title || a.meta.artist || a.meta.songwriters))
+        };
         let out = '';
         withDoc({
-            lyrics: a.lyrics, lrcFormat: target, thirdSingerLabel: label,
+            lyrics: a.lyrics, lrcFormat: target, thirdSingerLabel: label, testMeta: meta,
             v2Track: a.lyrics.some((l) => !l.isBg && l.singer === 'v2'),
             v3Track: a.lyrics.some((l) => !l.isBg && l.singer === 'v3')
         }, () => {
@@ -14545,20 +15212,22 @@
         let msg = from + ' \u2192 ' + FORMAT_NAME[r.target] + '. ' + parts.join(', ') + (s.units ? ', ' + plural(s.units, 'timed word') +
             (s.joins ? ' (' + plural(s.joins, 'syllable') + ' joined)' : '') : '') + '.';
         if (r.kind === r.target) msg += ' It was already in this format, so this is a tidied copy.';
-        if (s.whole) msg += ' ' + plural(s.whole, 'line has', 'lines have') + ' no word times, so ' + (s.whole === 1 ? 'it is' : 'each is') + ' written as one block.';
+        if (s.whole) msg += ' ' + plural(s.whole, 'line has', 'lines have') + ' no word times, so ' + (s.whole === 1 ? 'it is' : 'each is') + (r.target === 'test' ? ' written as a plain line.' : ' written as one block.');
+        const lost = [s.parts ? plural(s.parts, 'song part') : '', s.details ? 'the song details' : ''].filter(Boolean).join(' and ');
+        if (r.kind === 'test' && r.target !== 'test' && lost) msg += ' ' + FORMAT_NAME[r.target] + ' has no place for ' + lost + ', so they are left out.';
         if (r.target === 'pro' && s.gaps) msg += ' Pro keeps one stamp per word, so ' + plural(s.gaps, 'pause') + ' between words ' + (s.gaps === 1 ? 'is' : 'are') + ' closed.';
         if (s.untimed) msg += ' ' + plural(s.untimed, 'line has', 'lines have') + ' no timestamp and ' + (s.untimed === 1 ? 'was' : 'were') + ' left out.';
         return msg;
     }
 
     // ---- the dialog ----------------------------------------------------------------------------------------------
-    const cv = { target: 'advanced', picked: false, name: '', last: null, timer: 0 };
+    const cv = { target: 'advanced', picked: false, name: '', last: null, timer: 0, meta: null };      // meta: the song details that go with the text in the box ("Use session")
 
     function cvEls() {
         return {
             modal: $('convert-modal'), input: $('convert-input'), output: $('convert-output'), chip: $('convert-detected'),
             summary: $('convert-summary'), open: $('convert-open-btn'), copy: $('convert-copy-btn'), save: $('convert-save-btn'),
-            toPro: $('cv-to-pro'), toAdv: $('cv-to-advanced')
+            toPro: $('cv-to-pro'), toAdv: $('cv-to-advanced'), toTest: $('cv-to-test')
         };
     }
 
@@ -14567,18 +15236,20 @@
         if (!e.modal) return;
         const text = e.input.value;
         let r;
-        try { r = convertLRC(text, cv.target); } catch (err) { console.error(err); r = { error: 'This text could not be read.' }; }
+        try { r = convertLRC(text, cv.target, { name: cv.name, meta: cv.meta }); } catch (err) { console.error(err); r = { error: 'This text could not be read.' }; }
         cv.last = r;
         const ok = r.error === undefined;
         // the other format is the default target, until you pick one yourself
         if (ok && !cv.picked) {
-            const want = r.kind === 'pro' ? 'advanced' : 'pro';
+            const want = r.kind === 'pro' || r.kind === 'test' ? 'advanced' : 'pro';
             if (want !== cv.target) { cv.target = want; return cvRun(); }
         }
         e.toPro.checked = cv.target === 'pro';
         e.toAdv.checked = cv.target === 'advanced';
+        if (e.toTest) e.toTest.checked = cv.target === 'test';
+        e.save.textContent = cv.target === 'test' ? 'Save ' + VoxTest.ext : 'Save .lrc';
         e.output.value = ok ? r.text : '';
-        e.summary.textContent = text.trim() ? describeConversion(r) : 'Paste or open an LRC file in the Pro or the Advanced format.';
+        e.summary.textContent = text.trim() ? describeConversion(r) : 'Paste or open a lyrics file in the Pro, Advanced or Test format.';
         e.summary.classList.toggle('is-error', !ok && !!text.trim());
         e.chip.textContent = !text.trim() ? 'Nothing yet' : ok ? (r.kind === 'lines' ? 'Line times only' : FORMAT_NAME[r.kind] + ' format') : 'Not recognised';
         e.chip.dataset.kind = ok ? r.kind : 'none';
@@ -14593,7 +15264,7 @@
         const e = cvEls();
         toggleTools(false);
         e.modal.classList.add('active');
-        if (typeof text === 'string') { e.input.value = text; cv.picked = false; }
+        if (typeof text === 'string') { e.input.value = text; cv.picked = false; cv.meta = null; }
         cvRun();
         setTimeout(() => e.input.focus(), 0);
     };
@@ -14603,12 +15274,13 @@
         const a = document.activeElement;
         if (a && m.contains(a)) a.blur();             // a hidden text box must not keep the keys (Ctrl+Z right after Open in editor)
     };
-    window.convertSetTarget = function (t) { cv.target = t === 'pro' ? 'pro' : 'advanced'; cv.picked = true; cvRun(); };
+    window.convertSetTarget = function (t) { cv.target = t === 'pro' || t === 'test' ? t : 'advanced'; cv.picked = true; cvRun(); };
     window.convertClear = function () {
         const e = cvEls();
         e.input.value = '';
         cv.picked = false;
         cv.name = '';
+        cv.meta = null;
         cvRun();
         e.input.focus();
     };
@@ -14619,6 +15291,7 @@
         e.input.value = text;
         cv.picked = false;
         cv.name = '';
+        cv.meta = VoxTest.sessionMeta();                  // a Pro / Advanced session has no song details in its text: they come along
         cvRun();
     };
     function cvReadFile(file) {
@@ -14626,7 +15299,8 @@
         const reader = new FileReader();
         reader.onload = () => {
             cvEls().input.value = String(reader.result || '');
-            cv.name = file.name.replace(/(\.(lrc|txt))+$/i, '');
+            cv.name = file.name.replace(/(\.(lrc|txt|test|mlx))+$/i, '');
+            cv.meta = null;
             cv.picked = false;
             cvRun();
         };
@@ -14643,7 +15317,7 @@
         const blob = new Blob([e.output.value], { type: 'text/plain' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = (cv.name || currentFileName || 'lyrics') + '-' + cv.target + '.lrc';
+        a.download = (cv.name || currentFileName || 'lyrics') + (cv.target === 'test' ? VoxTest.ext : '-' + cv.target + '.lrc');
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -14666,7 +15340,7 @@
     function initConvert() {
         const e = cvEls();
         if (!e.modal) return;
-        e.input.addEventListener('input', cvSoon);
+        e.input.addEventListener('input', () => { cv.meta = null; cvSoon(); });
         $('convert-file').addEventListener('change', (ev) => { cvReadFile(ev.target.files[0]); ev.target.value = ''; });
         ['dragover', 'drop'].forEach((type) => e.input.addEventListener(type, (ev) => {
             ev.preventDefault();
@@ -14675,6 +15349,7 @@
     }
 
     window.VoxConvert = { convert: convertLRC, analyse: analyseLRC, describe: describeConversion };
+    // (the Test format is VoxTest, window.VoxTest)
 
     // =================================================================================================================
     // 3. Keys and touch, for computers, iPads and phones
@@ -15221,9 +15896,16 @@
     const origExport = window.openExportModal;
     window.openExportModal = function () {
         const r = origExport.apply(this, arguments);
-        const pro = $('fmt-pro-export'), adv = $('fmt-adv-export');
+        const pro = $('fmt-pro-export'), adv = $('fmt-adv-export'), tst = $('fmt-test-export');
         if (pro) pro.checked = state.lrcFormat === 'pro';
         if (adv) adv.checked = state.lrcFormat === 'advanced';
+        if (tst) tst.checked = state.lrcFormat === 'test';
+        const ext = $('export-ext-label');
+        if (ext) ext.textContent = state.lrcFormat === 'test' ? VoxTest.ext : '.lrc';
+        if (state.lrcFormat === 'test') {
+            const sum = $('export-summary');
+            if (sum) sum.textContent = sum.textContent.replace('Background lines follow the line they back', 'Background lines are written inside the line they back');
+        }
         return r;
     };
     // the settings dialog shows which interface and which preview animation are on
@@ -15239,6 +15921,387 @@
     initConvert();
     Undo.refresh();
     syncToggles();
+
+    // =================================================================================================================
+    // 6b. The Test format (experimental)
+    // =================================================================================================================
+    // A third way to write the lyrics, next to Pro and Advanced: one text file with four sections.
+    //
+    //   [meta]        mlx_version=1.0, lyric_source=..., last_fetched=...
+    //   [song]        title=..., artist=..., songwriters=...
+    //   [agents]      v1=person, v2=person ...
+    //   [lyrics]
+    //   [part:00:20.210~01:03.461]Chorus
+    //   [00:41.614~00:43.565|v1]<00:41.614>I'm <00:41.941>still <00:42.275>figh<00:43.000>ting <00:43.350> [bg:<00:42.755>(Metro!)<00:43.565>]
+    //
+    // A lyric line is [start~end|agent] and then its words. Every <time> is where the text after it starts and where the text
+    // before it ends; the syllables of one word follow each other without a space (figh<t>ting); two tags with nothing between
+    // them are a pause; the last tag is the end of the line. The background vocals of a line sit inside it, as [bg:...] with
+    // their own times and the text in brackets. A [part:start~end]Name marker opens a song part (Verse, Chorus ...): it runs from
+    // the start of its first line to the end of its last. A line with no <time> tags is a line that was only timed as a whole.
+    //
+    // Reading gives the same lines the Pro / Advanced readers give (so the editor, the converter and the exporters take them as
+    // they are); writing is built on exportOrder() / exportUnits(), the same two functions the Pro and Advanced files are built on.
+    const VoxTestFormat = (function () {
+        const VERSION = '1.0';
+        const T = '(\\d{1,3}):(\\d{2}(?:\\.\\d+)?)';
+        const reHead = new RegExp('^\\[' + T + '(?:~' + T + ')?(?:\\|([^\\]]*))?\\]');
+        const rePart = new RegExp('^\\[part:\\s*' + T + '(?:~' + T + ')?\\]\\s*(.*)$', 'i');
+        const reSection = /^\[([A-Za-z_][\w-]*)\]$/;
+        const reTag = /<\d{1,2}:\d{2}(?:\.\d+)?>/;
+
+        const sec = (m, i) => parseInt(m[i], 10) * 60 + parseFloat(m[i + 1]);
+        const ms = (s) => Math.round(s * 1000);
+        const stamp = (s) => formatTimePro(s);
+        const oneLine = (v) => String(v == null ? '' : v).replace(/[\r\n]+/g, ' ').trim();
+
+        // what a Test file says about the song, besides the lyrics (the Output tab edits title, artist and songwriters;
+        // the rest comes from a file that is opened and goes back out with it)
+        function blankMeta() {
+            return { title: '', artist: '', songwriters: '', source: '', fetched: '', agents: {}, extra: { meta: [], song: [] }, exact: false };
+        }
+
+        function fromJSON(d) {
+            const m = blankMeta();
+            if (!d || typeof d !== 'object') return m;
+            ['title', 'artist', 'songwriters', 'source', 'fetched'].forEach((k) => { if (typeof d[k] === 'string') m[k] = d[k]; });
+            if (d.agents && typeof d.agents === 'object') Object.keys(d.agents).forEach((k) => { if (typeof d.agents[k] === 'string') m.agents[k] = d.agents[k]; });
+            if (d.extra && typeof d.extra === 'object') {
+                ['meta', 'song'].forEach((s) => {
+                    if (Array.isArray(d.extra[s])) m.extra[s] = d.extra[s].filter((p) => Array.isArray(p) && typeof p[0] === 'string').map((p) => [p[0], oneLine(p[1])]);
+                });
+            }
+            return m;
+        }
+
+        // A file copied out of a web page or a chat arrives with &lt; and &gt; for every <time> tag; those are put back.
+        function decode(raw) {
+            let t = String(raw == null ? '' : raw);
+            if (t.charCodeAt(0) === 0xFEFF) t = t.slice(1);
+            if (/&lt;\s*\d{1,3}:\d{2}/i.test(t) || /\[bg:\s*&lt;/i.test(t)) {
+                t = t.replace(/&lt;/gi, '<').replace(/&gt;/gi, '>').replace(/&quot;/gi, '"').replace(/&#0*39;|&apos;/gi, "'").replace(/&amp;/gi, '&');
+            }
+            return t;
+        }
+
+        // A line [start~end|agent], or the sections of the format. A lone "[Lyrics]" line in some other file is not enough.
+        function detect(raw) {
+            const t = decode(raw);
+            return /^\s*\[\d{1,3}:\d{2}(?:\.\d+)?~\d{1,3}:\d{2}(?:\.\d+)?(?:\|[^\]\r\n]*)?\]/m.test(t)
+                || (/^\s*\[meta\]\s*$/im.test(t) && /^\s*mlx_version\s*=/im.test(t))
+                || (/^\s*\[lyrics\]\s*$/im.test(t) && /^\s*\[(?:meta|song|agents)\]\s*$/im.test(t));
+        }
+
+        // [ti:...] and [ar:...] of an ordinary LRC file
+        function idTags(text) {
+            const out = { title: '', artist: '' };
+            String(text || '').split(/\r?\n/).forEach((l) => {
+                const m = l.trim().match(/^\[(ti|ar):([^\]]*)\]$/i);
+                if (m) out[m[1].toLowerCase() === 'ti' ? 'title' : 'artist'] = m[2].trim();
+            });
+            return out;
+        }
+
+        // "(Metro!)" is the text of a background segment; the editor keeps it without the brackets that go round the whole of it
+        function wrapped(s) {
+            if (s.length < 2 || s[0] !== '(' || s[s.length - 1] !== ')') return false;
+            let d = 0;
+            for (let i = 0; i < s.length; i++) {
+                if (s[i] === '(') d++;
+                else if (s[i] === ')') { d--; if (d === 0 && i < s.length - 1) return false; }
+            }
+            return d === 0;
+        }
+
+        // no stray bracket anywhere: every ( is closed and no ) comes first
+        function balanced(s) {
+            let d = 0;
+            for (let i = 0; i < s.length; i++) {
+                if (s[i] === '(') d++;
+                else if (s[i] === ')' && --d < 0) return false;
+            }
+            return d === 0;
+        }
+
+        // The brackets round the whole segment come off. "(hey) (oh)" is two bracketed words, not one bracketed text: it stays.
+        // A text with a stray bracket ("ah)" was written as "(ah))") gets its pair taken off too, so writing it again gives the same file.
+        function unwrap(words) {
+            if (!words.length) return words;
+            const t = unitsToText(words);
+            if (t.length < 2 || t[0] !== '(' || t[t.length - 1] !== ')') return words;
+            if (!wrapped(t) && balanced(t)) return words;
+            const out = words.map((w) => Object.assign({}, w));
+            out[0].text = out[0].text.slice(1);
+            out[out.length - 1].text = out[out.length - 1].text.slice(0, -1);
+            return out.filter((w) => w.text);
+        }
+
+        function setKey(meta, section, key, val) {
+            const k = key.toLowerCase();
+            if (section === 'meta') {
+                if (k === 'lyric_source') meta.source = val;
+                else if (k === 'last_fetched') meta.fetched = val;
+                else if (k !== 'mlx_version') meta.extra.meta.push([key, val]);
+            } else if (section === 'song') {
+                if (k === 'title' || k === 'artist' || k === 'songwriters') meta[k] = val;
+                else meta.extra.song.push([key, val]);
+            } else if (section === 'agents') {
+                meta.agents[key] = val;
+            }
+        }
+
+        // text -> { lyrics, format: 'test', hasWordData, meta, parts }   (the shape parseLRCText gives, plus the song details)
+        function parse(raw) {
+            const text = decode(raw);
+            const meta = blankMeta();
+            const lyrics = [];
+            let section = '', hasWordData = false, pending = null, parts = 0;
+            const singerOf = (a) => { a = String(a || '').trim().toLowerCase(); return !a || a === 'v1' ? 'v1' : (a === 'v2' ? 'v2' : 'v3'); };
+            const wordsOf = (str) => reTag.test(str) ? { words: parseProWords(str), timed: true } : { words: parseWords(str.trim()), timed: false };
+
+            text.split(/\r?\n/).forEach((row) => {
+                const line = row.trim();
+                if (!line) return;
+                const head = line.match(reHead);
+                const part = head ? null : line.match(rePart);
+                if (!head && !part) {
+                    const sc = line.match(reSection);
+                    if (sc) { section = sc[1].toLowerCase(); return; }
+                    if (section === 'meta' || section === 'song' || section === 'agents') {
+                        const eq = line.indexOf('=');
+                        if (eq > 0) setKey(meta, section, line.slice(0, eq).trim(), line.slice(eq + 1).trim());
+                    }
+                    return;
+                }
+                if (part) { pending = part[5].trim(); parts++; return; }
+
+                const start = sec(head, 1);
+                const singer = singerOf(head[5]);
+                const bgs = [];
+                const lead = line.slice(head[0].length).replace(/\[bg:([^\]]*)\]/gi, (m, inner) => { bgs.push(inner); return ' '; }).trim();
+
+                if (lead) {
+                    const r = wordsOf(lead);
+                    if (r.words.length) {
+                        const entry = {
+                            text: r.timed ? unitsToText(r.words) : lead,
+                            time: r.timed && isNum(r.words[0].start) ? r.words[0].start : start,
+                            words: r.words, isBg: false, singer
+                        };
+                        if (pending) { entry.part = pending; pending = null; }
+                        if (r.timed) hasWordData = true;
+                        lyrics.push(entry);
+                    }
+                }
+                // a background line comes right after the line it is in, and backs that line's singer
+                bgs.forEach((inner) => {
+                    const r = wordsOf(inner);
+                    const words = unwrap(r.words);
+                    if (!words.length) return;
+                    if (r.timed) hasWordData = true;
+                    lyrics.push({
+                        text: unitsToText(words),
+                        time: r.timed && isNum(words[0].start) ? words[0].start : start,
+                        words, isBg: true, singer: 'v1', backs: singer
+                    });
+                });
+            });
+            return { lyrics, format: 'test', hasWordData, meta, parts };
+        }
+
+        // ---- writing ----------------------------------------------------------------------------------------------
+        // <t>text<t>text...<end>: a pause (a word that ends before the next one starts) gets its end tag, then the next start tag follows
+        function chunks(units, trail) {
+            let out = '';
+            units.forEach((u, i) => {
+                const next = units[i + 1];
+                out += '<' + stamp(u.start) + '>' + u.text;
+                if (next) {
+                    if (!next.join && !u.text.endsWith('-')) out += ' ';
+                    if (ms(u.end) < ms(next.start)) out += '<' + stamp(u.end) + '>';
+                } else {
+                    if (trail) out += ' ';                      // a background segment follows the line's last word
+                    out += '<' + stamp(u.end) + '>';
+                }
+            });
+            return out;
+        }
+
+        // the text of a background segment goes in brackets (a "]" would end it early)
+        function bgUnits(units) {
+            const u = units.map((x) => Object.assign({}, x, { text: x.text.replace(/\[/g, '(').replace(/\]/g, ')') }));
+            if (!wrapped(unitsToText(u))) {
+                u[0].text = '(' + u[0].text;
+                u[u.length - 1].text += ')';
+            }
+            return u;
+        }
+
+        function titleOf(meta) {
+            const t = oneLine(meta.title);
+            if (t) return t;
+            return !meta.exact && typeof currentAudio !== 'undefined' && currentAudio ? oneLine(currentFileName) : '';
+        }
+
+        function agentType(meta, label) {
+            return oneLine(meta.agents && meta.agents[label]) || (label === 'v1000' ? 'group' : 'person');
+        }
+
+        // the session (or, in the converter, the document lent to it) as a Test file; '' while nothing is synced
+        function build() {
+            const meta = Object.assign(blankMeta(), state.testMeta || {});
+            const items = exportOrder();
+            if (!items.length) return '';
+
+            // every line with the background lines it carries (exportOrder lists a background line right after the line it backs)
+            const groups = [];
+            items.forEach((it) => {
+                if (!it.bg) groups.push({ host: it, bgs: [] });
+                else if (it.agent !== null && groups.length) groups[groups.length - 1].bgs.push(it);
+                else groups.push({ host: null, bgs: [it] });
+            });
+            groups.forEach((g, n) => {
+                g.n = n;
+                let start = Infinity, end = -Infinity;
+                if (g.host) {
+                    g.units = exportUnits(g.host.l);
+                    const first = g.units[0], last = g.units[g.units.length - 1];
+                    start = Math.min(first.start, isNum(g.host.l.time) ? g.host.l.time : first.start);
+                    end = last.end;
+                    g.label = agentLabel(g.host.agent);
+                } else {
+                    g.label = agentLabel(['v1', 'v2', 'v3'].includes(g.bgs[0].l.backs) ? g.bgs[0].l.backs : 'v1');
+                }
+                g.bgUnits = g.bgs.map((b) => {
+                    const u = exportUnits(b.l);
+                    start = Math.min(start, u[0].start);
+                    end = Math.max(end, u[u.length - 1].end);
+                    return u;
+                });
+                g.start = start;
+                g.end = end;
+            });
+            groups.sort((a, b) => a.start - b.start || a.n - b.n);
+
+            const rows = [];
+            let part = null;
+            groups.forEach((g) => {
+                const name = g.host && typeof g.host.l.part === 'string' ? g.host.l.part.replace(/\s+/g, ' ').trim() : '';
+                if (name) { part = { name, start: g.start, end: g.end }; rows.push(part); }
+                else if (part) part.end = Math.max(part.end, g.end);
+
+                const segs = [];
+                if (g.host) {
+                    segs.push(g.units[0].whole ? g.units[0].text.replace(/\s+/g, ' ').trim() : chunks(g.units, g.bgUnits.length > 0));
+                }
+                g.bgUnits.forEach((u) => segs.push('[bg:' + chunks(bgUnits(u), false) + ']'));
+                rows.push('[' + stamp(g.start) + '~' + stamp(g.end) + '|' + g.label + ']' + segs.join(' '));
+            });
+
+            const used = new Set(groups.map((g) => g.label));
+            const labels = ['v1', 'v2', state.thirdSingerLabel].filter((l, i, a) => used.has(l) && a.indexOf(l) === i);
+            used.forEach((l) => { if (!labels.includes(l)) labels.push(l); });
+
+            const kv = (k, v) => k + '=' + oneLine(v);
+            const out = ['[meta]', kv('mlx_version', VERSION), kv('lyric_source', meta.source || 'VoxenPlus'), kv('last_fetched', meta.fetched)];
+            meta.extra.meta.forEach((p) => out.push(kv(p[0], p[1])));
+            out.push('[song]', kv('title', titleOf(meta)), kv('artist', meta.artist), kv('songwriters', meta.songwriters));
+            meta.extra.song.forEach((p) => out.push(kv(p[0], p[1])));
+            out.push('[agents]');
+            labels.forEach((l) => out.push(kv(l, agentType(meta, l))));
+            out.push('[lyrics]');
+            rows.forEach((r) => out.push(typeof r === 'string' ? r : '[part:' + stamp(r.start) + '~' + stamp(r.end) + ']' + r.name));
+            return out.join('\n') + '\n';
+        }
+
+        return { VERSION, blankMeta, fromJSON, decode, detect, idTags, parse, build, titleOf };
+    })();
+
+    // ---- the session: song details, the format switch, the line's part ---------------------------------------------
+    state.testMeta = VoxTestFormat.blankMeta();
+
+    const TEST_EXT = '.test';
+
+    // what the Output tab, the export dialog and the converter show for the format that is on
+    function syncTestUI() {
+        const test = state.lrcFormat === 'test';
+        [['fmt-adv-sidebar', 'advanced'], ['fmt-pro-sidebar', 'pro'], ['fmt-test-sidebar', 'test']].forEach((p) => {
+            const r = $(p[0]);
+            if (r) r.checked = state.lrcFormat === p[1];
+        });
+        const details = $('test-details'), hint = $('fmt-test-hint');
+        if (details) details.hidden = !test;
+        if (hint) hint.hidden = !test;
+        const save = $('save-lrc-btn');
+        if (save) save.textContent = test ? 'Save ' + TEST_EXT : 'Save .lrc';
+        refreshTestFields();
+    }
+
+    // the three fields follow the state (a file was opened, a project was loaded); an empty title shows the audio file name it falls back to
+    function refreshTestFields() {
+        const m = state.testMeta || VoxTestFormat.blankMeta();
+        [['test-title', m.title], ['test-artist', m.artist], ['test-writers', m.songwriters]].forEach((p) => {
+            const el = $(p[0]);
+            if (el && el.value !== p[1] && document.activeElement !== el) el.value = p[1];
+        });
+        const ti = $('test-title');
+        if (ti) {
+            const fallback = VoxTestFormat.titleOf(Object.assign({}, m, { title: '' }));
+            const ph = fallback || 'Song title';
+            if (ti.placeholder !== ph) ti.placeholder = ph;
+        }
+    }
+
+    window.testMetaInput = function () {
+        const m = state.testMeta;
+        const v = (id) => ($(id) ? $(id).value : '');
+        m.title = v('test-title');
+        m.artist = v('test-artist');
+        m.songwriters = v('test-writers');
+        m.exact = false;
+        generateLRC();
+    };
+
+    window.VoxTest = {
+        format: VoxTestFormat,
+        parse: VoxTestFormat.parse,
+        build: VoxTestFormat.build,
+        detect: VoxTestFormat.detect,
+        decode: VoxTestFormat.decode,
+        ext: TEST_EXT,
+        sync: syncTestUI,
+        refresh: refreshTestFields,
+        // song details that came with a file (or a project): the session takes them over
+        use(meta) { state.testMeta = Object.assign(VoxTestFormat.blankMeta(), meta || {}, { exact: false }); syncTestUI(); },
+        load(json) { state.testMeta = VoxTestFormat.fromJSON(json); syncTestUI(); },
+        // the details of the session as they would be written (title falls back to the audio file name)
+        sessionMeta() { return Object.assign({}, state.testMeta, { title: VoxTestFormat.titleOf(state.testMeta) }); }
+    };
+    syncTestUI();
+
+
+    // =================================================================================================================
+    // 8. The shell stays put
+    // =================================================================================================================
+    // The app is exactly one screen tall, and nothing in it is meant to scroll the page, the body or the app container. A browser does
+    // it anyway when it reveals a focused control that sticks out of the screen (iOS and Android alike), and then the whole UI slides
+    // up and stays there. The styles use overflow: clip, which cannot be scrolled; for a browser without it, this puts the shell back.
+    (function () {
+        const shell = [document.documentElement, document.body, document.getElementById('app-container')].filter(Boolean);
+        let queued = false;
+        function home() {
+            queued = false;
+            shell.forEach((el) => { if (el.scrollTop || el.scrollLeft) { el.scrollTop = 0; el.scrollLeft = 0; } });
+            if (window.scrollX || window.scrollY) window.scrollTo(0, 0);
+        }
+        function soon() { if (!queued) { queued = true; requestAnimationFrame(home); } }
+        document.addEventListener('scroll', (e) => { if (e.target === document || shell.includes(e.target)) soon(); }, true);
+        document.addEventListener('focusin', soon, true);
+        document.addEventListener('focusout', () => setTimeout(home, 80), true);
+        window.addEventListener('resize', soon);
+        window.addEventListener('orientationchange', () => setTimeout(home, 250));
+    })();
+
 
     // =================================================================================================================
     // 7. VoxenPlus
@@ -15259,6 +16322,7 @@
         window.vxIsDelete = window.vxIsDelete || function (code) { return code === keyMap.del; };
         window.VoxUndo = window.VoxUndo || { mark: function () { }, run: function (l, fn, c, a) { return fn.apply(c, a || []); }, refresh: function () { } };
         window.vxScroll = window.vxScroll || function (body, top) { body.scrollTo({ top: top, behavior: 'smooth' }); };
+        window.testMetaInput = window.testMetaInput || function () { };
     </script>
 </body>
 </html>

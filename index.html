@@ -8677,6 +8677,9 @@
                                 <button class="btn btn-secondary" type="button" onclick="openOffsetModal()">Shift all</button>
                                 <button class="btn btn-outline btn-danger" type="button" onclick="askClearTimestamps()">Clear all</button>
                             </div>
+                            <button class="btn btn-secondary" type="button" id="tidy-ends-btn" onclick="tidyWordEnds()">Tidy word ends</button>
+                            <p class="hint">Shortens the last word of a line when it runs right through the pause before the next line, as Tap mode used to
+                                record it. You can undo it.</p>
                         </div>
 
                         <div class="field" data-v6>
@@ -13099,10 +13102,10 @@
             // Calc time values
             let tMin = "", tSec = "", tMs = "";
             if (item.time !== null) {
-                tMin = Math.floor(item.time / 60).toString().padStart(2, '0');
-                const rem = item.time % 60;
-                tSec = Math.floor(rem).toString().padStart(2, '0');
-                tMs = Math.round((rem - Math.floor(rem)) * 100).toString().padStart(2, '0');
+                const c = clockParts(item.time);
+                tMin = c.m.toString().padStart(2, '0');
+                tSec = c.s.toString().padStart(2, '0');
+                tMs = c.cs.toString().padStart(2, '0');
             }
 
             // Create Inputs Helper
@@ -13120,16 +13123,17 @@
                     if (val < 0) val = 0;
                     if (type !== 'min' && val > max) val = max; // clamp seconds/ms
 
+                    // The clamped value goes into the field first: the time is worked out from what the fields show (75 typed into the
+                    // seconds used to show 59 and keep 75)
+                    e.target.value = val.toString().padStart(2, '0');
+
                     // Re-calculate total time
                     const currentMin = parseInt(tsGroup.children[0].value) || 0;
                     const currentSec = parseInt(tsGroup.children[2].value) || 0;
                     const currentMs = parseInt(tsGroup.children[4].value) || 0;
 
                     const newTotal = (currentMin * 60) + currentSec + (currentMs / 100);
-                    item.time = newTotal;
-
-                    // Update visual padding
-                    e.target.value = val.toString().padStart(2, '0');
+                    moveLineStart(item, newTotal);
                     generateLRC();
                 };
 
@@ -13335,6 +13339,7 @@
             btn.addEventListener('mouseup', (e) => handleSyncUp(e));
             btn.addEventListener('touchend', (e) => { e.preventDefault(); handleSyncUp(e); });
             btn.addEventListener('mouseleave', (e) => handleSyncUp(e)); // Safety
+            btn.addEventListener('touchcancel', () => releaseLost());     // a system gesture took the touch away: no touchend will come
         });
 
         function updateAutoModeLabel() {
@@ -13349,6 +13354,20 @@
 
         let holdActive = false;
 
+        // The time of a tap: the song position and the reaction offset
+        function syncTime() { return Math.max(0, audioPlayer.currentTime + ((parseInt(offsetInput.value) || 0) / 1000)); }
+
+        // A release that never comes - the window loses focus or goes out of sight, a touch is cancelled - must not leave the hold on: the
+        // next press would be swallowed, the word would be ended whenever the next key-up came, and every word after it would be a tap behind.
+        // The word ends now (and never later than a word of its pace would), and a Shift that was held for the hold mode lets go.
+        function releaseLost() {
+            finishHold(syncTime(), true);
+            if (shiftHeld) { shiftHeld = false; setSyncInputMode(preShiftSyncMode); updateSyncUI(); }
+        }
+        window.addEventListener('blur', releaseLost);
+        window.addEventListener('pagehide', releaseLost);
+        document.addEventListener('visibilitychange', () => { if (document.hidden) releaseLost(); });
+
         function handleSyncDown(e) {
             if (state.lyrics.length === 0 || state.isEditMode || state.isPreviewMode) return;
             if (state.currentIndex >= state.lyrics.length) {
@@ -13358,7 +13377,11 @@
                 return;
             }
 
-            if (holdActive) return;
+            if (holdActive) {
+                // a hold is still on: its release was lost. It ends here, and this press is the next one (not swallowed)
+                finishHold(syncTime(), true);
+                if (state.currentIndex >= state.lyrics.length) return;
+            }
 
             // Visuals: Button press
             const btns = [syncBtnDesktop, syncBtnMobile];
@@ -13419,23 +13442,28 @@
             // Visuals: Button release
             const btns = [syncBtnDesktop, syncBtnMobile];
             btns.forEach(b => b.classList.remove('holding'));
+            finishHold(syncTime(), false);
+        }
 
+        // Ends the hold that is on. `lost`: its release never came, so the word ends no later than a word of its pace would
+        function finishHold(time, lost) {
             if (!holdActive) return;
             holdActive = false;
+            [syncBtnDesktop, syncBtnMobile].forEach(b => b && b.classList.remove('holding'));
 
             // Task 3: Deactivate Dock Glow
             controlDock.classList.remove('active-hold-glow');
 
-            const offset = parseInt(offsetInput.value) || 0;
-            const time = Math.max(0, audioPlayer.currentTime + (offset / 1000));
-
             // Logic for ending a Hold action
-            if (state.mode === 'word') {
-                syncWordEnd(state.currentIndex, state.currentWordIndex, time);
-                advanceWordCursor();
-                scrollToActive();
-                updateVisuals();
-            }
+            if (state.mode !== 'word') return;
+            const line = state.lyrics[state.currentIndex];
+            const word = line && line.words[state.currentWordIndex];
+            if (!word) return;
+            if (lost && isNum(word.start)) time = Math.min(time, word.start + guessWordLength(timedStarts(line, state.currentWordIndex)));
+            syncWordEnd(state.currentIndex, state.currentWordIndex, time);
+            advanceWordCursor();
+            scrollToActive();
+            updateVisuals();
         }
 
         function syncLine(idx, time) {
@@ -13450,13 +13478,11 @@
                 if (group) {
                     const inputs = group.querySelectorAll('input');
 
-                    const m = Math.floor(time / 60);
-                    const s = Math.floor(time % 60);
-                    const ms = Math.round((time % 1) * 100);
+                    const c = clockParts(time);
 
-                    if (inputs[0]) inputs[0].value = m.toString().padStart(2, '0');
-                    if (inputs[1]) inputs[1].value = s.toString().padStart(2, '0');
-                    if (inputs[2]) inputs[2].value = ms.toString().padStart(2, '0');
+                    if (inputs[0]) inputs[0].value = c.m.toString().padStart(2, '0');
+                    if (inputs[1]) inputs[1].value = c.s.toString().padStart(2, '0');
+                    if (inputs[2]) inputs[2].value = c.cs.toString().padStart(2, '0');
                 }
             }
             generateLRC();
@@ -13481,18 +13507,23 @@
                     const prev = state.lyrics[prevIdx];
                     if (prev.words.length) {
                         const prevWord = prev.words[prev.words.length - 1];
+                        // The last word of the line before runs up to this tap when this line follows straight on. It does not run through a
+                        // pause (it used to be stretched over all of it): a word that nothing follows for a while has no end of its own and
+                        // gets the one a word of its pace has, from the export and the preview alike.
+                        const follows = !isNum(prevWord.start) || time - prevWord.start <= guessWordLength(timedStarts(prev));
                         if (state.syncInputMode === 'auto') {
-                            if (prevWord.end === null) prevWord.end = time;
+                            if (prevWord.end === null && follows) prevWord.end = time;
                         } else {
-                            prevWord.end = time;
+                            prevWord.end = follows ? time : null;
                         }
                     }
                 }
             } // <-- CLOSING BRACKET MOVED HERE
 
-            // Auto-close very last word of song if in Tap mode
+            // The very last word of the song in Tap mode has no end of its own either (it used to be given the end of the audio, however long
+            // the song went on after it): the export gives it the one a word of its pace has
             if (state.syncInputMode === 'tap' && getNextValidLineIndex(lIdx + 1) >= state.lyrics.length && wIdx === line.words.length - 1) {
-                if (audioPlayer.duration) word.end = audioPlayer.duration;
+                word.end = null;
             }
 
             // THESE NOW RUN FOR EVERY WORD
@@ -13538,6 +13569,33 @@
                 state.currentIndex = nextLineIdx;
                 state.currentWordIndex = 0;
             }
+        }
+
+        // A line moves as a whole: its time and the times of its words
+        function shiftLine(item, delta) {
+            if (!delta) return;
+            if (isNum(item.time)) item.time = Math.max(0, item.time + delta);
+            (item.words || []).forEach(w => {
+                if (isNum(w.start)) w.start = Math.max(0, w.start + delta);
+                if (isNum(w.end)) w.end = Math.max(0, w.end + delta);
+            });
+        }
+
+        // The start of a line was typed in by hand (`total` seconds). The line moves, so its words keep their place in it and the time of the
+        // line and the time of its first word stay the same thing. What the fields show is the start rounded to hundredths: when that is what
+        // came back, nothing was changed and nothing moves (so the exact time is kept).
+        function moveLineStart(item, total) {
+            const old = lineStartTime(item);
+            if (old === null) { item.time = total; return; }
+            if (Math.abs(total - Math.round(old * 100) / 100) < 0.004) return;
+            shiftLine(item, total - old);
+            if (!isNum(item.time)) item.time = total;
+        }
+
+        // minutes, seconds and hundredths of a time, rounded once: 12.997 is 00:13.00 and not 00:12.100
+        function clockParts(t) {
+            const cs = Math.round(Math.max(0, t) * 100);
+            return { m: Math.floor(cs / 6000), s: Math.floor((cs % 6000) / 100), cs: cs % 100 };
         }
 
         // --- Bulk Offset Logic ---
@@ -13778,6 +13836,23 @@
             return w ? Math.min(w.start, isNum(l.time) ? l.time : w.start) : l.time;
         }
 
+        // How long a word was most likely sung when nothing says so - the last word of a line in Tap mode, the last line of a song, a file
+        // that has no ends. About one and a half times the usual spacing between the starts of the words of its line (the last word of a
+        // line is held a little), but between 0.4 and 2.5 s; a second when there is only one word to go by. The export, the preview and
+        // the taps all ask this one question, so they agree.
+        function timedStarts(line, upTo) {
+            const out = [];
+            (line.words || []).forEach((w, i) => { if ((upTo === undefined || i <= upTo) && typeof w.start === 'number' && isFinite(w.start)) out.push(w.start); });
+            return out;
+        }
+        function guessWordLength(starts) {
+            const gaps = [];
+            for (let i = 1; i < starts.length; i++) { const d = starts[i] - starts[i - 1]; if (d > 0.02) gaps.push(d); }
+            if (!gaps.length) return 1;
+            gaps.sort((a, b) => a - b);
+            return Math.min(2.5, Math.max(0.4, gaps[Math.floor(gaps.length / 2)] * 1.5));     // the median: one long pause does not count
+        }
+
         // Where a word that has no end of its own stops: at the next line of the layer, but never later than a few seconds
         function fallbackEnd(l, start) {
             const layer = layerOf(l);
@@ -13803,7 +13878,8 @@
             const u = words.map(w => ({ text: w.text, start: isNum(w.start) ? w.start : null, end: isNum(w.end) ? w.end : null, join: !!w.join }));
             const firstTimed = u.find(x => x.start !== null).start;
             const lastTimed = [...u].reverse().find(x => x.start !== null);
-            const tail = isNum(lastTimed.end) && lastTimed.end > lastTimed.start ? lastTimed.end : fallbackEnd(l, lastTimed.start);
+            const tail = isNum(lastTimed.end) && lastTimed.end > lastTimed.start ? lastTimed.end
+                : Math.min(fallbackEnd(l, lastTimed.start), lastTimed.start + guessWordLength(u.filter(x => x.start !== null).map(x => x.start)));
             for (let i = 0; i < u.length;) {
                 if (u[i].start !== null) { i++; continue; }
                 let j = i;
@@ -13934,6 +14010,7 @@
 
         // --- Keyboard Control ---
         let preShiftSyncMode = 'auto'; // Stores mode before Shift was held
+        let shiftHeld = false;         // Shift is down and has put the sync mode on Hold
 
         document.addEventListener('keydown', (e) => {
             if (rebindingAction) return;
@@ -13943,7 +14020,8 @@
 
             if (vxKeyIntercept(e)) return;               // undo / redo, and keys that belong to the browser
 
-            if (e.code === 'ShiftLeft' && !e.repeat) {
+            if (e.code === 'ShiftLeft' && !e.repeat && !shiftHeld) {
+                shiftHeld = true;
                 preShiftSyncMode = state.syncInputMode;
                 setSyncInputMode('hold');
                 updateSyncUI();
@@ -14084,18 +14162,19 @@
         });
 
         document.addEventListener('keyup', (e) => {
+            // Release Shift -> Revert to previous mode (also when the focus has moved into a text box in the meantime)
+            if (e.code === 'ShiftLeft' && shiftHeld) {
+                shiftHeld = false;
+                setSyncInputMode(preShiftSyncMode);
+                updateSyncUI();
+            }
+
             if (isTypingTarget(e.target)) return;
 
             // Release the sync key
             if (vxCode(e) === keyMap.sync) {
                 e.preventDefault();
                 handleSyncUp(e);
-            }
-
-            // Release Shift -> Revert to previous mode
-            if (e.code === 'ShiftLeft') {
-                setSyncInputMode(preShiftSyncMode);
-                updateSyncUI();
             }
         });
 
@@ -14260,9 +14339,10 @@
             }
 
             if (startTime !== null) {
-                document.getElementById('edit-line-min').value = Math.floor(startTime / 60).toString().padStart(2, '0');
-                document.getElementById('edit-line-sec').value = Math.floor(startTime % 60).toString().padStart(2, '0');
-                document.getElementById('edit-line-ms').value = Math.round((startTime % 1) * 100).toString().padStart(2, '0');
+                const c = clockParts(startTime);
+                document.getElementById('edit-line-min').value = c.m.toString().padStart(2, '0');
+                document.getElementById('edit-line-sec').value = c.s.toString().padStart(2, '0');
+                document.getElementById('edit-line-ms').value = c.cs.toString().padStart(2, '0');
             } else {
                 document.getElementById('edit-line-min').value = "";
                 document.getElementById('edit-line-sec').value = "";
@@ -14313,9 +14393,12 @@
                 }
             }
 
-            lineObj.time = newTime;
-            if (lineObj.words.length > 0 && newTime !== null) {
-                lineObj.words[0].start = newTime;
+            // A new start moves the line as a whole (only its first word used to move, and landed after the others). Blank fields take the
+            // time away. An unsynced line in Word mode gets its first word timed with it; a line in Line mode has no word times to give.
+            if (newTime === null) lineObj.time = null;
+            else moveLineStart(lineObj, newTime);
+            if (newTime !== null && state.mode === 'word' && lineObj.words.length > 0 && !isNum(lineObj.words[0].start)) {
+                lineObj.words[0].start = lineObj.time;
             }
 
             const partField = document.getElementById('edit-line-part');
@@ -15092,6 +15175,47 @@
         toastAction('Cleared ' + plural(n.lines, 'line time') + (n.words ? ' and ' + plural(n.words, 'word time') : ''), 'Undo', () => Undo.undo());
     };
 
+    // ---- word ends that run through a pause ---------------------------------------------------------------------
+    // Tap mode used to end the last word of a line where the next line began, however long the pause, and the last word of the song at the end
+    // of the audio. A song timed before has those ends in it. They are recognised by their signature - exactly the start of the next line of
+    // the layer (or exactly the length of the audio) and much longer than a word of that line - and given back to the estimate. Only when asked
+    // for: a held note that really leads into the next line looks the same.
+    function longEnds() {
+        const found = [];
+        state.lyrics.forEach((l) => {
+            const ws = l.words || [];
+            let k = ws.length - 1;
+            while (k >= 0 && !isNum(ws[k].start)) k--;
+            if (k < 0 || !isNum(ws[k].end)) return;
+            const w = ws[k];
+            const layer = layerOf(l);
+            let next = Infinity;
+            state.lyrics.forEach((o) => {
+                if (o === l || layerOf(o) !== layer) return;
+                const t = lineStartTime(o);
+                if (t !== null && t > w.start + 0.05 && t < next) next = t;
+            });
+            const signature = next === Infinity
+                ? isNum(audioPlayer.duration) && Math.abs(w.end - audioPlayer.duration) < 0.01
+                : Math.abs(w.end - next) < 0.0005;
+            if (signature && w.end - w.start > guessWordLength(timedStarts(l)) * 1.5 + 0.3) found.push(w);
+        });
+        return found;
+    }
+
+    window.tidyWordEnds = function () {
+        if (state.isPreviewMode || holdActive) return;
+        toggleTools(false);
+        const list = longEnds();
+        if (!list.length) { notify('No word runs through a pause.'); return; }
+        Undo.run('Tidy word ends', () => {
+            list.forEach((w) => { w.end = null; });
+            generateLRC();
+        });
+        toastAction('Shortened ' + plural(list.length, 'word end') + ' that ran through a pause', 'Undo', () => Undo.undo());
+    };
+    window.VoxTiming = { longEnds };
+
     // ---- the cursor stays on a word that exists ------------------------------------------------------------------
     // Editing a line down to fewer words used to leave the sync cursor on a word that was no longer there, and the next
     // redraw threw (this was in the editor before). Before the cursor is read for a redraw it is put back on a real word.
@@ -15613,7 +15737,7 @@
             let dur = pv.glow;
             if (state.glowMode === 'auto') {
                 const next = words[w + 1];
-                const end = isNum(word.end) && word.end > word.start ? word.end : (next && isNum(next.start) && next.start > word.start ? next.start : word.start + 0.5);
+                const end = isNum(word.end) && word.end > word.start ? word.end : (next && isNum(next.start) && next.start > word.start ? next.start : word.start + guessWordLength(timedStarts(line, w)));
                 dur = Math.max(0.1, end - word.start);
             }
             const p = t <= word.start ? 0 : t >= word.start + dur ? 1 : (t - word.start) / dur;
@@ -16324,5 +16448,5 @@
         window.vxScroll = window.vxScroll || function (body, top) { body.scrollTo({ top: top, behavior: 'smooth' }); };
         window.testMetaInput = window.testMetaInput || function () { };
     </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4c677f4ae93632b',t:'MTc5MjMxNTI0MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

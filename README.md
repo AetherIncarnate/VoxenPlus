@@ -12,7 +12,7 @@ VoxenPlus runs directly in your browser on **PC, iPad and mobile** with no insta
 
 ## 🌐 Try VoxenPlus Online
 
-**[VoxenPlus Online](https://voxenplus.vercel.app)**
+**[VoxenPlus Online](https://voxenplus1.vercel.app)**
 
 No download or installation is required.
 

@@ -6,7 +6,7 @@ It is designed for people who want more control than a basic LRC editor provides
 
 VoxenPlus runs directly in your browser on **PC, iPad and mobile** with no installation required.
 
-**Load your song. Add your lyrics. Sync them. Export your LRC.**
+**Load your song. Add your lyrics. Sync them. Export your LRC (or JSON).**
 
 > 🍴 **VoxenPlus is a fork of [Voxen](https://github.com/Raqhael-ux/Voxen-LRC-Editor) by [Raqhael-ux](https://github.com/Raqhael-ux)**, based on Voxen v9.2b. The original editor, its sync workflow and the `.vxn` project format come from Voxen. Please take a look at the original project too.
 
@@ -53,8 +53,9 @@ VoxenPlus is a fork of the original [Voxen](https://github.com/Raqhael-ux/Voxen-
 | Clear all timestamps                                       |        ✅        |        ❌        |
 | Saved sessions (autosave, continue where you left off)     |        ✅        |        ❌        |
 | Customize: accent colour, text size, spacing, touch options |       ✅        |        ❌        |
-| Drop a song, `.lrc` or `.vxn` file onto the page           |        ✅        |        ❌        |
+| Drop a song, `.lrc`, `.json` or `.vxn` file onto the page  |        ✅        |        ❌        |
 | Pro ⇄ Advanced LRC converter                               |        ✅        |        ❌        |
+| JSON lyric format: export, open and convert                |        ✅        |        ❌        |
 | `.vxn` project files                                       |        ✅        |        ✅        |
 | Interface style                                            | Modern + Legacy | Classic only    |
 | Browser-based                                              |        ✅        |        ✅        |
@@ -192,11 +193,59 @@ Mistakes are cheap. Taps, edits, deletions, imports, sorting, offsets, layer mov
 * **Clear times** (top bar, also **Output → Timestamps → Clear all**) removes every line and word timestamp on every layer. Your lyrics, singers and syllable splits stay as they are, and you can undo it.
 * **Sort** puts the lines in order of their timestamps.
 
-### 🔁 Format converter (Pro ⇄ Advanced)
+### 🔁 Format converter (Pro ⇄ Advanced ⇄ JSON)
 
-Got an LRC file in one format and need another? Open **Convert** (top bar, **Output** tab, welcome screen or the export dialog), paste or open the file, pick **Pro** or **Advanced**, then copy or save the result. VoxenPlus recognises the format of what you paste. Your session is not touched unless you press **Open in editor**.
+Got a lyrics file in one format and need another? Open **Convert** (top bar, **Output** tab, welcome screen or the export dialog), paste or open the file, pick **Pro**, **Advanced** or **JSON**, then copy or save the result. VoxenPlus recognises the format of what you paste (a JSON file goes to Advanced unless you pick another one). Your session is not touched unless you press **Open in editor**.
+
+Any format can be turned into any other. Pro keeps one timestamp per word, so a pause between two words is closed when a file goes to Pro (the summary says how many); JSON and Advanced keep it.
 
 To export your current session in another format, change **Output → Format**.
+
+### 🧾 JSON format
+
+JSON is a third way to write your lyrics, next to Pro and Advanced. Choose **JSON** under **Output → Format** (or in the **Export** dialog) and VoxenPlus shows and saves a **`.json`** file instead of an `.lrc` file. Pro is still the format a new session starts with; **Customize → New projects start as** can change that.
+
+The file is one JSON object, four spaces of indent, times in whole milliseconds:
+
+```json
+{
+    "version": 2,
+    "song": {},
+    "metadata": {},
+    "source": {},
+    "ignoreRetiming": false,
+    "agents": { "v1": { "type": "person" } },
+    "parts": [],
+    "lines": [
+        {
+            "startMs": 25630,
+            "endMs": 27572,
+            "text": "Am I dreaming?",
+            "background": false,
+            "agent": "v1",
+            "words": [
+                { "text": "Am ", "startMs": 25636, "endMs": 26003, "isLineTimed": false },
+                { "text": "I ", "startMs": 26003, "endMs": 26323, "isLineTimed": false },
+                { "text": "drea", "startMs": 26323, "endMs": 27022, "isLineTimed": false },
+                { "text": "ming?", "startMs": 27022, "endMs": 27572, "isLineTimed": false }
+            ],
+            "backgroundWords": []
+        }
+    ]
+}
+```
+
+(The file VoxenPlus writes spreads every word over several lines; it is shortened here.)
+
+* **Words.** A word keeps the space after it, except the last word of a line. A syllable has no space after it, so *drea* and *ming* are two timed entries that read as *dreaming*. `text` of a line is the whole line.
+* **Lines.** `startMs` is the first word, rounded down to 10 ms; `endMs` is where the last word ends. Lines come in the order they start. A line that is not synced yet is left out, as in Pro and Advanced.
+* **Singers.** `agent` is the singer: `v1`, `v2`, and the third singer under the **Third singer label** (`v1000`, written as a `group`, or `v3`). `agents` lists the singers that sing (a song with a second singer has `v2` there too).
+* **Background vocals.** A line with `"background": true`, written right after the line it backs, with that line's singer and start. Its words are in `backgroundWords`, in brackets, like `(Metro!)`.
+* **Whole lines.** A line that was only timed as a whole is written as one word with `"isLineTimed": true`.
+
+VoxenPlus **reads** these files too. Open one with **Output → Files → Open**, **Import** or **Load text**, drop it on the page, or convert it. It opens as JSON, with its layers, singers and syllables. A file that was never timed (every time is 0) opens as plain lines to sync. A file that is cut off, or has no `lines`, is refused with a message and nothing is replaced.
+
+What a file says about the song (`song`, `metadata`, `source`, `ignoreRetiming` and the details of each agent) is kept with the session, in `.vxn` projects and saved sessions, and written back when you save. `parts` is always written empty.
 
 ### 🖥️ Two interface styles
 
@@ -229,14 +278,14 @@ Open **Sync settings (⚙) → Customize** (or **Media → Customize**). Everyth
 | Vibrate on tap | Off, or On (where the phone allows it) |
 | Keep the screen on | While the song plays (where the browser allows it) |
 | Ask before deleting a line | On, or Off (the deleted line comes back with **Undo**) |
-| New projects start as | Pro, or Advanced |
+| New projects start as | Pro, Advanced or JSON |
 | Save sessions automatically · keep the audio in sessions · warn before closing | each On or Off |
 
 Lyric size, spacing, font and background belong to the Modern interface; the accent colour works in both. **Export** saves your choices and your key bindings as one file, **Import** brings them back (on another device, say), **Reset** puts everything back. The volume and the reaction offset are remembered too.
 
 ### 📥 Drop files
 
-Drop a song, an `.lrc` file, a `.vxn` project or a settings file anywhere on the page. A `.txt` file with plain lyrics goes to the **Session** tab and does not replace the project you have open.
+Drop a song, an `.lrc` or `.json` lyrics file, a `.vxn` project or a settings file anywhere on the page. A `.txt` file with plain lyrics goes to the **Session** tab and does not replace the project you have open.
 
 ---
 
@@ -322,18 +371,19 @@ These formats allow VoxenPlus to create detailed synchronized lyrics for compati
 
 ## 📤 LRC Import & Export
 
-VoxenPlus can import existing LRC files (**Open LRC** on the welcome screen, or **Output → Files → Open / Load text**) and export finished synchronized lyrics.
+VoxenPlus can import existing LRC and JSON lyrics files (**Open LRC** on the welcome screen, or **Output → Files → Open / Load text**) and export finished synchronized lyrics.
 
 Supported output formats include:
 
 * **Advanced LRC**
 * **Pro LRC**
+* **JSON** (`.json`, times in milliseconds, see above)
 * Background vocal timing
 * Singer 1, 2 and 3
 * Word-level timing
 * Syllable-level timing
 
-From the **Export** dialog you can preview the LRC, copy it to your clipboard, save it as a `.lrc` file, or save a `.vxn` project.
+From the **Export** dialog you can preview the file, copy it to your clipboard, save it as a `.lrc` file (a `.json` file for the JSON format), or save a `.vxn` project.
 
 
 ---
@@ -383,7 +433,7 @@ VoxenPlus includes tools for:
 * Shifting timestamps, or typing a new start time for one line (the whole line moves, words and all)
 * Clearing all timestamps, or tidying word ends that run through a pause
 * Undoing and redoing changes
-* Converting between Pro and Advanced
+* Converting between Pro, Advanced and JSON
 * Saving and reopening sessions, customizing the look
 * Adjusting reaction offset
 * Previewing synchronized lyrics
@@ -443,7 +493,7 @@ VoxenPlus is designed for music players that support advanced LRC features.
 | [Gramophone](https://github.com/FoedusProgramme/Gramophone) |      ✅      |         ✅         |        ✅        |    ✅    |
 | Oto Music                                                   |      ✅      |         ❌         |        ✅        | Limited |
 
-Compatibility depends on the LRC features supported by each music player. Players also differ in how they show a third singer, so the **Third singer label** (`v1000` or `v3`) can be switched in the **Output** tab.
+Compatibility depends on the LRC features supported by each music player. The table is about the two LRC formats; the JSON format follows the layout of the example file it was built from, and whether a player or tool reads it depends on that player or tool. Players also differ in how they show a third singer, so the **Third singer label** (`v1000` or `v3`) can be switched in the **Output** tab.
 
 ---
 
@@ -458,7 +508,7 @@ Compatibility depends on the LRC features supported by each music player. Player
 7. Sync your lyrics while the song plays.
 8. Fine-tune timestamps and syllables. Undo anything you do not like.
 9. Preview the result.
-10. Export your synchronized lyrics as LRC (Pro or Advanced).
+10. Export your synchronized lyrics as LRC (Pro or Advanced) or as JSON.
 11. Come back whenever you like: your work was saved by itself. Press **Continue** on the welcome screen.
 
 ---
@@ -478,10 +528,10 @@ It combines:
 * Duet support
 * Custom keyboard shortcuts
 * Undo and redo
-* Pro ⇄ Advanced LRC converter
+* Pro ⇄ Advanced ⇄ JSON converter
 * Saved sessions, and a look you can customize
 * Multiple sync modes
-* LRC import and export
+* LRC and JSON import and export
 * `.vxn` project files
 * Browser-based editing
 * PC, iPad and mobile support
@@ -504,11 +554,15 @@ Yes. VoxenPlus is available as a browser-based application without requiring an 
 
 ### Does VoxenPlus support LRC files?
 
-Yes. VoxenPlus supports LRC importing and exporting, including detailed word-level and syllable-level timing.
+Yes. VoxenPlus supports LRC importing and exporting, including detailed word-level and syllable-level timing. It also reads and writes JSON lyrics files.
 
-### Can I convert between Pro and Advanced?
+### Can I convert between Pro, Advanced and JSON?
 
-Yes. Use **Convert** in the top bar to convert a file between Pro LRC and Advanced LRC, or change **Output → Format** to export your current session in the other format.
+Yes. Use **Convert** in the top bar to convert a file between Pro LRC, Advanced LRC and JSON, in any direction, or change **Output → Format** to export your current session in another format.
+
+### Does VoxenPlus support JSON lyrics?
+
+Yes. Choose **JSON** under **Output → Format** to export your lyrics as a `.json` file with the words, their times in milliseconds, the singers and the background vocals (see **JSON format** above). VoxenPlus opens, converts and drops such files too.
 
 ### Can VoxenPlus create karaoke lyrics?
 
@@ -582,4 +636,4 @@ Syllable splitting uses TeX hyphenation patterns, the CMU Pronouncing Dictionary
 
 ## 📌 Keywords
 
-VoxenPlus, Voxen fork, fork of Voxen, synced lyrics editor, synchronized lyrics editor, LRC editor, LRC file editor, karaoke lyrics editor, karaoke LRC editor, word synced lyrics, word-by-word lyrics, syllable synced lyrics, syllable timing, lyric synchronization, lyric timestamp editor, background vocals LRC, duet lyrics, multi-singer lyrics, three singers lyrics, Pro to Advanced LRC converter, lyrics format converter, advanced LRC, Pro LRC, browser LRC editor, online lyrics editor, free lyrics editor, Voxen alternative.
+VoxenPlus, Voxen fork, fork of Voxen, synced lyrics editor, synchronized lyrics editor, LRC editor, LRC file editor, karaoke lyrics editor, karaoke LRC editor, word synced lyrics, word-by-word lyrics, syllable synced lyrics, syllable timing, lyric synchronization, lyric timestamp editor, background vocals LRC, duet lyrics, multi-singer lyrics, three singers lyrics, Pro to Advanced LRC converter, lyrics format converter, JSON lyrics, lyrics JSON format, LRC to JSON converter, advanced LRC, Pro LRC, browser LRC editor, online lyrics editor, free lyrics editor, Voxen alternative.

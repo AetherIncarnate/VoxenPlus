@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-    VoxenPlus - a synced lyrics editor for LRC files (Pro and Advanced), line, word and syllable timing,
+    VoxenPlus - a synced lyrics editor for LRC files (Pro and Advanced) and JSON lyrics files, line, word and syllable timing,
     background vocals and up to three singers, in one HTML file.
 
     VoxenPlus is a fork of Voxen by Raqhael-ux (this fork is based on Voxen v9.2b).
@@ -15,7 +15,7 @@
     <meta name="theme-color" content="#0e1012">
     <title>VoxenPlus</title>
     <meta name="application-name" content="VoxenPlus">
-    <meta name="description" content="VoxenPlus is a synced lyrics (LRC) editor with line, word and syllable timing, background vocals and up to three singers. A fork of Voxen by Raqhael-ux.">
+    <meta name="description" content="VoxenPlus is a synced lyrics (LRC and JSON) editor with line, word and syllable timing, background vocals and up to three singers. A fork of Voxen by Raqhael-ux.">
     <style id="css-modern">
     /* =====================================================================
        VoxenPlus styles - purple theme
@@ -4521,6 +4521,13 @@
             display: none;
         }
     }
+
+    /* The JSON format ---------------------------------------------------------------------------------------------- */
+    .cv-chip[data-kind="json"] {
+        border-color: var(--accent-line);
+        background: var(--accent-soft);
+        color: var(--accent-text);
+    }
     </style>
     <style id="css-legacy" media="not all">
     /* =====================================================================
@@ -8374,6 +8381,13 @@
     #bg-remove-btn {
         display: none !important;
     }
+
+    /* The JSON format ---------------------------------------------------------------------------------------------- */
+    .cv-chip[data-kind="json"] {
+        border-color: var(--accent-line);
+        background: var(--accent-soft);
+        color: var(--accent-text);
+    }
     </style>
     <style id="css-v11">
     /* =====================================================================================================================
@@ -8960,7 +8974,7 @@
                         </button>
                     </div>
                     <button id="btn-convert" class="tb-btn tb-new" type="button" onclick="openConvertModal()"
-                        title="Convert between Pro and Advanced" aria-label="Convert" data-v6>
+                        title="Convert between Pro, Advanced and JSON" aria-label="Convert" data-v6>
                         <svg class="ic" aria-hidden="true"><use href="#i-convert" /></svg>
                         <span class="btn-text">Convert</span>
                     </button>
@@ -9155,7 +9169,12 @@
                                 <input type="radio" id="fmt-pro-sidebar" name="lrc-fmt" value="pro" checked
                                     onchange="setLRCFormat('pro')">
                                 <label for="fmt-pro-sidebar">Pro</label>
+                                <input type="radio" id="fmt-json-sidebar" name="lrc-fmt" value="json"
+                                    onchange="setLRCFormat('json')" data-v12>
+                                <label for="fmt-json-sidebar" data-v12>JSON</label>
                             </div>
+                            <p class="hint" id="fmt-json-hint" hidden data-v12>Saves a .json file: every line with its words, their times in milliseconds,
+                                its singer and its background vocals.</p>
                         </div>
 
                         <div class="field" data-v6>
@@ -9171,8 +9190,8 @@
 
                         <div class="field" data-v6>
                             <span class="field-label">Convert</span>
-                            <button class="btn btn-secondary" type="button" onclick="openConvertModal()">Pro &#8644; Advanced&hellip;</button>
-                            <p class="hint">Turn a Pro file into an Advanced one, or the other way round, without touching this session.</p>
+                            <button class="btn btn-secondary" type="button" onclick="openConvertModal()">Pro &#8644; Advanced &#8644; JSON&hellip;</button>
+                            <p class="hint">Turn a Pro, Advanced or JSON file into one of the others, without touching this session.</p>
                         </div>
 
                         <hr class="divider">
@@ -9189,12 +9208,12 @@
 
                         <div class="field">
                             <span class="field-label">Files</span>
-                            <input type="file" id="lrc-file-input" accept=".lrc,.txt" hidden onchange="handleLRCFile(this)">
+                            <input type="file" id="lrc-file-input" accept=".lrc,.txt,.json,application/json" hidden onchange="handleLRCFile(this)">
                             <div class="row-3">
                                 <button class="btn btn-secondary" type="button"
                                     onclick="document.getElementById('lrc-file-input').click()">Open</button>
                                 <button class="btn btn-secondary" type="button" onclick="loadLRCFromSidebar()">Load text</button>
-                                <button class="btn" type="button" onclick="downloadLRC()">Save .lrc</button>
+                                <button class="btn" type="button" id="save-lrc-btn" onclick="downloadLRC()">Save .lrc</button>
                             </div>
                         </div>
                     </div>
@@ -9831,10 +9850,12 @@
                     <label for="fmt-pro-export">Pro</label>
                     <input type="radio" id="fmt-adv-export" name="lrc-fmt-export" value="advanced" onchange="exportSetFormat('advanced')">
                     <label for="fmt-adv-export">Advanced</label>
+                    <input type="radio" id="fmt-json-export" name="lrc-fmt-export" value="json" onchange="exportSetFormat('json')" data-v12>
+                    <label for="fmt-json-export" data-v12>JSON</label>
                 </div>
             </div>
             <div class="field">
-                <label class="field-label" for="export-modal-preview">LRC preview</label>
+                <label class="field-label" for="export-modal-preview" id="export-preview-label">LRC preview</label>
                 <textarea id="export-modal-preview" class="export-preview" readonly></textarea>
                 <p class="hint" id="export-summary"></p>
             </div>
@@ -9843,7 +9864,7 @@
             </button>
             <div class="export-grid">
                 <button class="btn" type="button" onclick="downloadLRC()">
-                    <svg class="ic" aria-hidden="true"><use href="#i-download" /></svg> .lrc
+                    <svg class="ic" aria-hidden="true"><use href="#i-download" /></svg> <span id="export-ext-label">.lrc</span>
                 </button>
                 <button class="btn btn-secondary" type="button" onclick="saveProject()">
                     <svg class="ic" aria-hidden="true"><use href="#i-save" /></svg> .vxn project
@@ -10022,8 +10043,8 @@
 
     <div class="modal-overlay" id="convert-modal" data-v6>
         <div class="base-modal convert-modal" role="dialog" aria-label="Convert lyrics format">
-            <h2 class="modal-title">Convert Pro &#8644; Advanced</h2>
-            <p class="hint">Paste or open an LRC file in one format and get it in the other. Your session is not touched
+            <h2 class="modal-title">Convert lyrics</h2>
+            <p class="hint">Paste or open a lyrics file in the Pro, Advanced or JSON format and get it in another one. Your session is not touched
                 unless you press Open in editor.</p>
 
             <div class="field">
@@ -10033,7 +10054,7 @@
                 </div>
                 <textarea id="convert-input" class="mono cv-text" spellcheck="false" autocomplete="off" autocapitalize="off"
                     placeholder="[00:12.500]v1:&lt;00:12.500&gt;Hello &lt;00:13.100&gt;world&lt;00:13.800&gt;"></textarea>
-                <input type="file" id="convert-file" accept=".lrc,.txt,text/plain" hidden>
+                <input type="file" id="convert-file" accept=".lrc,.txt,.json,text/plain,application/json" hidden>
                 <div class="row-3 cv-tools">
                     <button class="btn btn-secondary" type="button" onclick="document.getElementById('convert-file').click()">Open file</button>
                     <button class="btn btn-secondary" type="button" onclick="convertUseSession()">Use session</button>
@@ -10048,6 +10069,8 @@
                     <label for="cv-to-pro">Pro</label>
                     <input type="radio" id="cv-to-advanced" name="cv-to" value="advanced" onchange="convertSetTarget('advanced')" checked>
                     <label for="cv-to-advanced">Advanced</label>
+                    <input type="radio" id="cv-to-json" name="cv-to" value="json" onchange="convertSetTarget('json')" data-v12>
+                    <label for="cv-to-json" data-v12>JSON</label>
                 </div>
             </div>
 
@@ -10067,7 +10090,7 @@
     </div>
 
     <div class="drop-hint" id="drop-hint" data-v11 aria-hidden="true">
-        <div>Drop a song, an .lrc file or a .vxn project<small>Lyrics from a .txt file go to the Session tab</small></div>
+        <div>Drop a song, an .lrc or .json file or a .vxn project<small>Lyrics from a .txt file go to the Session tab</small></div>
     </div>
 
     <div class="layer-menu" id="layer-menu" role="menu" aria-label="Add a layer" hidden></div>
@@ -10100,7 +10123,8 @@
             currentSpeed: 1.0,
             syncInputMode: 'hybrid',
             glowMode: 'auto',
-            lrcFormat: 'pro',
+            lrcFormat: 'pro',         // 'pro' | 'advanced' | 'json'
+            jsonMeta: null,           // what a JSON lyrics file says about the song (song, metadata, source ...): kept for the next save
             singerFilter: 'all',      // lead layer only: 'all' | 'v1' | 'v2' | 'v3'
             thirdSingerLabel: 'v1000',
             activeLayer: 'lead',      // the layer that receives sync taps
@@ -10747,7 +10771,7 @@
             document.getElementById('welcome-song-btn').classList.toggle('primary', !hasAudio);
             document.getElementById('welcome-paste-btn').classList.toggle('primary', hasAudio);
             document.getElementById('welcome-hint').textContent = hasAudio
-                ? 'Paste your lyrics to start syncing, or open an existing LRC file.'
+                ? 'Paste your lyrics to start syncing, or open an existing LRC or JSON file.'
                 : 'Load an audio file to enable LRC features.';
         }
 
@@ -12586,6 +12610,7 @@ let sylQueue = [];                  // new lines waiting to be split
             const bg = toLines(document.getElementById('raw-bg-lyrics').value).map(t => newLineItem('bg', 'v1', t));
             state.syllables = wasSyllables;
             state.lyrics = lead.concat(v2, v3, bg);
+            state.jsonMeta = null;
             state.v2Track = v2.length > 0;
             state.v3Track = v3.length > 0;
 
@@ -12648,8 +12673,8 @@ let sylQueue = [];                  // new lines waiting to be split
 
         // A file that calls its third singer v3 (or v1000) is written back under that name
         function keepThirdSingerLabel(text) {
-            showThirdSingerLabel(/\{agent:v1000\}|(^|\n)\s*\[[^\]]*\]\s*v1000:/.test(text) ? 'v1000'
-                : (/\{agent:v3\}|(^|\n)\s*\[[^\]]*\]\s*v3:/.test(text) ? 'v3' : null));
+            showThirdSingerLabel(/\{agent:v1000\}|(^|\n)\s*\[[^\]]*\]\s*v1000:|"v1000"\s*:|:\s*"v1000"/.test(text) ? 'v1000'
+                : (/\{agent:v3\}|(^|\n)\s*\[[^\]]*\]\s*v3:|"v3"\s*:|:\s*"v3"/.test(text) ? 'v3' : null));
         }
 
         function togglePreviewMode() {
@@ -13383,9 +13408,9 @@ let sylQueue = [];                  // new lines waiting to be split
         // The project as plain data: what a .vxn file holds and what a saved session keeps. Old files have fewer of these fields and still load.
         function projectData() {
             const raw = (id) => { const e = document.getElementById(id); return e ? e.value : ''; };
-            return {
+            const out = {
                 version: "v4",
-                vp: 11,
+                vp: 12,
                 timestamp: Date.now(),
                 mode: state.mode,
                 v2Track: state.v2Track,
@@ -13404,6 +13429,8 @@ let sylQueue = [];                  // new lines waiting to be split
                 currentIndex: state.currentIndex,
                 cursors: LAYERS.map(layer => [cursorIndex(layer), layerCursors[layer].word, layerCursors[layer].end ? 1 : 0])
             };
+            if (state.jsonMeta) out.jsonMeta = state.jsonMeta;         // what a JSON lyrics file says about the song
+            return out;
         }
 
         function saveProject() {
@@ -13437,7 +13464,8 @@ let sylQueue = [];                  // new lines waiting to be split
                 appContainer.dataset.singer = data.singerFilter;
                 updateSingerFilterOptions();
             }
-            if (data.lrcFormat === 'pro' || data.lrcFormat === 'advanced') setLRCFormat(data.lrcFormat);
+            state.jsonMeta = window.VoxJSON ? VoxJSON.cleanMeta(data.jsonMeta) : null;
+            if (data.lrcFormat === 'pro' || data.lrcFormat === 'advanced' || data.lrcFormat === 'json') setLRCFormat(data.lrcFormat);
             if (['auto', 'hold', 'tap'].includes(data.syncInputMode)) setSyncInputMode(data.syncInputMode);
             if (Array.isArray(data.cursors)) {        // where the next tap of each layer goes
                 LAYERS.forEach((layer, k) => {
@@ -13555,7 +13583,7 @@ let sylQueue = [];                  // new lines waiting to be split
                 // --- FILE INPUT HANDLER ---
                 const fileInput = document.createElement('input');
                 fileInput.type = 'file';
-                fileInput.accept = '.lrc,.txt';
+                fileInput.accept = '.lrc,.txt,.json,application/json';
                 fileInput.style.display = 'none';
                 fileInput.onchange = (e) => {
                     const file = e.target.files[0];
@@ -13576,7 +13604,7 @@ let sylQueue = [];                  // new lines waiting to be split
                 const btnOpen = document.createElement('button');
                 btnOpen.className = 'btn btn-outline';
                 btnOpen.append(iconEl('folder'), document.createTextNode(" Open file"));
-                btnOpen.title = "Load from .lrc file";
+                btnOpen.title = "Load from an .lrc or .json file";
                 btnOpen.onclick = () => fileInput.click();
 
                 // Button 2: Import Text (Parse whatever is in the box)
@@ -13609,6 +13637,8 @@ let sylQueue = [];                  // new lines waiting to be split
 
         // Reading half of the import: text -> lines. It does not touch the editor (the converter uses it as well).
         function parseLRCText(lrcText) {
+            // a JSON lyrics file ({ ..., "lines": [...] }) is read by the JSON reader
+            if (window.VoxJSON && VoxJSON.detect(lrcText)) return VoxJSON.parse(lrcText);
             const lines = lrcText.split(/\r?\n/);
             const newLyrics = [];
 
@@ -13784,11 +13814,12 @@ let sylQueue = [];                  // new lines waiting to be split
                 togglePreviewMode();
             }
             if (!lrcText.trim()) return;
+            if (window.VoxJSON && VoxJSON.broken(lrcText)) { notify("That JSON file is cut off, or it has no list of lines, so there are no lyrics to read.", 'error'); return; }
 
             const parsed = parseLRCText(lrcText);
             const newLyrics = parsed.lyrics, detectedFormat = parsed.format, hasWordData = parsed.hasWordData;
 
-            if (newLyrics.length === 0) { notify("No valid LRC timestamps found.", 'error'); return; }
+            if (newLyrics.length === 0) { notify(detectedFormat === 'json' ? "No lyric lines found in this JSON file." : "No valid LRC timestamps found.", 'error'); return; }
 
             state.lyrics = newLyrics.map(normalizeLine);
             state.v2Track = state.lyrics.some(l => !l.isBg && l.singer === 'v2');
@@ -13798,10 +13829,11 @@ let sylQueue = [];                  // new lines waiting to be split
             resetLayers(state.v2Track || state.v3Track || state.lyrics.some(l => l.isBg));
 
             // Apply Detected Settings
+            state.jsonMeta = parsed.meta || null;                  // what a JSON file says about the song (a file of another format has none)
             if (detectedFormat === 'pro') {
                 setLRCFormat('pro');
             } else {
-                setLRCFormat('advanced');
+                setLRCFormat(detectedFormat === 'json' ? 'json' : 'advanced');
                 state.mode = hasWordData ? 'word' : 'line';
                 document.getElementById(hasWordData ? 'mode-word' : 'mode-line').checked = true;
             }
@@ -13819,7 +13851,8 @@ let sylQueue = [];                  // new lines waiting to be split
             const v3Raw = document.getElementById('raw-v3-lyrics');
             if (v3Raw) v3Raw.value = state.v3Track ? textsOf(l => !l.isBg && l.singer === 'v3') : '';
             document.getElementById('raw-bg-lyrics').value = textsOf(l => l.isBg);
-            exportOutput.value = lrcText;
+            if (detectedFormat === 'json') generateLRC();                         // a JSON file shows as it is written back
+            else exportOutput.value = lrcText;
 
             const bgCount = state.lyrics.filter(l => l.isBg).length;
             const v2Count = state.v2Track ? state.lyrics.filter(l => !l.isBg && l.singer === 'v2').length : 0;
@@ -14762,9 +14795,10 @@ let sylQueue = [];                  // new lines waiting to be split
             return out;
         }
 
-        function generateLRC() { exportOutput.value = buildLRCText(); }
+        function generateLRC() { exportOutput.value = buildLRCText(); if (window.VoxJSON) VoxJSON.refresh(); }
 
         function buildLRCText() {
+            if (state.lrcFormat === 'json' && window.VoxJSON) return VoxJSON.build();      // the JSON format
             let out = "";
 
             const items = exportOrder();
@@ -14813,10 +14847,11 @@ let sylQueue = [];                  // new lines waiting to be split
 
         function downloadLRC() {
             generateLRC();
-            const blob = new Blob([exportOutput.value], { type: 'text/plain' });
+            const asJson = state.lrcFormat === 'json' && window.VoxJSON;
+            const blob = new Blob([exportOutput.value], { type: asJson ? VoxJSON.mime : 'text/plain' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `${currentFileName}.lrc`;
+            a.download = `${currentFileName}${asJson ? VoxJSON.ext : '.lrc'}`;
             document.body.appendChild(a); a.click(); document.body.removeChild(a);
         }
 
@@ -15039,6 +15074,8 @@ let sylQueue = [];                  // new lines waiting to be split
             // Sync UI (Sidebar)
             document.getElementById('fmt-adv-sidebar').checked = (fmt === 'advanced');
             document.getElementById('fmt-pro-sidebar').checked = (fmt === 'pro');
+            const jsonRadio = document.getElementById('fmt-json-sidebar');
+            if (jsonRadio) jsonRadio.checked = (fmt === 'json');
 
             // Update internal logic variables/UI states
             const tapBtn = document.getElementById('opt-tap');
@@ -15431,6 +15468,7 @@ let sylQueue = [];                  // new lines waiting to be split
 
         function initializeEmptyEditor() {
             state.lyrics = [newLineItem('lead', 'v1', "Edit this lyrics")];
+            state.jsonMeta = null;
             state.mode = document.querySelector('input[name="mode"]:checked').value;
             resetLayers(false);
             renderEditor();
@@ -15463,9 +15501,11 @@ let sylQueue = [];                  // new lines waiting to be split
             if (v2) parts.push(`${v2} singer 2 line${v2 === 1 ? '' : 's'}`);
             if (v3) parts.push(`${v3} singer 3 line${v3 === 1 ? '' : 's'}`);
             parts.push(`${bg} background line${bg === 1 ? '' : 's'}`);
-            document.getElementById('export-summary').textContent =
-                parts.join(', ') + '. Background lines follow the line they back; only synced lines are exported.' +
-                (syl ? ` ${syl} syllable${syl === 1 ? '' : 's'} are written as separate timed units.` : '');
+            const asJson = state.lrcFormat === 'json';
+            document.getElementById('export-summary').textContent = parts.join(', ') +
+                (asJson ? '. Background lines come right after the line they back; only synced lines are exported.'
+                    : '. Background lines follow the line they back; only synced lines are exported.') +
+                (syl ? ` ${syl} syllable${syl === 1 ? '' : 's'} are written as separate timed ${asJson ? 'words' : 'units'}.` : '');
             document.getElementById('export-modal').classList.add('active');
         }
 
@@ -15576,6 +15616,7 @@ let sylQueue = [];                  // new lines waiting to be split
             toggleTools(false);
             askConfirm("Reset the project?", "This clears all lyrics, on every layer. Your audio stays loaded.", "Reset", () => {
                 state.lyrics = [];
+                state.jsonMeta = null;
                 state.v2Track = false;
                 state.v3Track = false;
                 resetLayers(false);
@@ -15735,10 +15776,10 @@ let sylQueue = [];                  // new lines waiting to be split
             const lyrics = JSON.stringify(state.lyrics);
             return {
                 label: label || '', lyrics, mode: state.mode, v2: !!state.v2Track, v3: !!state.v3Track, bg: !!state.bgTrack, syl: !!state.syllables,
-                layer: state.activeLayer, cursors, size: lyrics.length
+                meta: state.jsonMeta ? JSON.stringify(state.jsonMeta) : '', layer: state.activeLayer, cursors, size: lyrics.length
             };
         }
-        const sameDoc = (a, b) => a.lyrics === b.lyrics && a.mode === b.mode && a.v2 === b.v2 && a.v3 === b.v3 && a.bg === b.bg && a.syl === b.syl;
+        const sameDoc = (a, b) => a.lyrics === b.lyrics && a.mode === b.mode && a.v2 === b.v2 && a.v3 === b.v3 && a.bg === b.bg && a.syl === b.syl && a.meta === b.meta;
 
         function push(s, soon) {
             const top = undoStack[undoStack.length - 1];
@@ -15803,6 +15844,7 @@ let sylQueue = [];                  // new lines waiting to be split
                 state.v3Track = s.v3;
                 state.bgTrack = !!s.bg;
                 state.syllables = s.syl;
+                state.jsonMeta = s.meta ? JSON.parse(s.meta) : null;               // the song details that went with those lines
                 state.activeLayer = enabledLayers().includes(s.layer) ? s.layer : 'lead';
                 if (state.v2Track && state.singerFilter === 'v2') state.singerFilter = 'all';
                 if (state.v3Track && state.singerFilter === 'v3') state.singerFilter = 'all';
@@ -16043,7 +16085,7 @@ let sylQueue = [];                  // new lines waiting to be split
     // a conversion gives exactly what opening the file and exporting it in the other format would give - without
     // touching the session.
     function withDoc(over, fn) {
-        const keep = { lyrics: state.lyrics, lrcFormat: state.lrcFormat, thirdSingerLabel: state.thirdSingerLabel, v2Track: state.v2Track, v3Track: state.v3Track };
+        const keep = { lyrics: state.lyrics, lrcFormat: state.lrcFormat, thirdSingerLabel: state.thirdSingerLabel, v2Track: state.v2Track, v3Track: state.v3Track, jsonMeta: state.jsonMeta };
         try {
             Object.assign(state, over);
             return fn();
@@ -16052,7 +16094,7 @@ let sylQueue = [];                  // new lines waiting to be split
         }
     }
 
-    const FORMAT_NAME = { pro: 'Pro', advanced: 'Advanced' };
+    const FORMAT_NAME = { pro: 'Pro', advanced: 'Advanced', json: 'JSON' };
 
     function analyseLRC(text) {
         const parsed = parseLRCText(text);
@@ -16071,23 +16113,28 @@ let sylQueue = [];                  // new lines waiting to be split
         });
         const timed = lyrics.filter((l) => isNum(l.time)).length;
         let kind = 'none';
-        if (timed) kind = parsed.format === 'pro' ? 'pro' : (parsed.hasWordData ? 'advanced' : 'lines');
-        return { lyrics, kind, timed, untimed: lyrics.length - timed };
+        if (timed) kind = parsed.format === 'json' ? 'json' : (parsed.format === 'pro' ? 'pro' : (parsed.hasWordData ? 'advanced' : 'lines'));
+        return { lyrics, kind, timed, untimed: lyrics.length - timed, meta: parsed.meta || null };
     }
 
     // text -> { text, kind, target, stats } | { error }
     function convertLRC(text, target) {
         if (!String(text || '').trim()) return { error: '' };
         const a = analyseLRC(text);
-        if (!a.lyrics.length) return { error: 'No valid LRC timestamps found.' };
+        if (VoxJSON.broken(text)) return { error: 'This JSON is cut off, or it has no list of lines, so there are no lyrics to read.' };
+        if (!a.lyrics.length) return { error: a.kind === 'json' || VoxJSON.detect(text) ? 'No lyric lines found in this JSON file.' : 'No valid LRC timestamps found.' };
         if (!a.timed) return { error: 'None of the lines has a timestamp, so there is nothing to convert.' };
         // keep the name the file uses for a third singer (v3 or v1000)
-        const label = /\{agent:v1000\}|(^|\n)\s*\[[^\]]*\]\s*v1000:/.test(text) ? 'v1000'
-            : (/\{agent:v3\}|(^|\n)\s*\[[^\]]*\]\s*v3:/.test(text) ? 'v3' : state.thirdSingerLabel);
-        const stats = { lead: 0, v2: 0, v3: 0, bg: 0, units: 0, joins: 0, whole: 0, gaps: 0, untimed: a.untimed };
+        const label = /\{agent:v1000\}|(^|\n)\s*\[[^\]]*\]\s*v1000:|"v1000"\s*:|:\s*"v1000"/.test(text) ? 'v1000'
+            : (/\{agent:v3\}|(^|\n)\s*\[[^\]]*\]\s*v3:|"v3"\s*:|:\s*"v3"/.test(text) ? 'v3' : state.thirdSingerLabel);
+        // the song details a JSON file carries: another format has no place for them
+        const stats = {
+            lead: 0, v2: 0, v3: 0, bg: 0, units: 0, joins: 0, whole: 0, gaps: 0, untimed: a.untimed,
+            details: !!(a.kind === 'json' && a.meta && (a.meta.song || a.meta.metadata || a.meta.source))
+        };
         let out = '';
         withDoc({
-            lyrics: a.lyrics, lrcFormat: target, thirdSingerLabel: label,
+            lyrics: a.lyrics, lrcFormat: target, thirdSingerLabel: label, jsonMeta: a.kind === 'json' ? a.meta : null,
             v2Track: a.lyrics.some((l) => !l.isBg && l.singer === 'v2'),
             v3Track: a.lyrics.some((l) => !l.isBg && l.singer === 'v3')
         }, () => {
@@ -16118,7 +16165,8 @@ let sylQueue = [];                  // new lines waiting to be split
         let msg = from + ' \u2192 ' + FORMAT_NAME[r.target] + '. ' + parts.join(', ') + (s.units ? ', ' + plural(s.units, 'timed word') +
             (s.joins ? ' (' + plural(s.joins, 'syllable') + ' joined)' : '') : '') + '.';
         if (r.kind === r.target) msg += ' It was already in this format, so this is a tidied copy.';
-        if (s.whole) msg += ' ' + plural(s.whole, 'line has', 'lines have') + ' no word times, so ' + (s.whole === 1 ? 'it is' : 'each is') + ' written as one block.';
+        if (s.whole) msg += ' ' + plural(s.whole, 'line has', 'lines have') + ' no word times, so ' + (s.whole === 1 ? 'it is' : 'each is') + (r.target === 'json' ? ' written as one line-timed word.' : ' written as one block.');
+        if (r.kind === 'json' && r.target !== 'json' && s.details) msg += ' ' + FORMAT_NAME[r.target] + ' has no place for the song details of the file, so they are left out.';
         if (r.target === 'pro' && s.gaps) msg += ' Pro keeps one stamp per word, so ' + plural(s.gaps, 'pause') + ' between words ' + (s.gaps === 1 ? 'is' : 'are') + ' closed.';
         if (s.untimed) msg += ' ' + plural(s.untimed, 'line has', 'lines have') + ' no timestamp and ' + (s.untimed === 1 ? 'was' : 'were') + ' left out.';
         return msg;
@@ -16131,7 +16179,7 @@ let sylQueue = [];                  // new lines waiting to be split
         return {
             modal: $('convert-modal'), input: $('convert-input'), output: $('convert-output'), chip: $('convert-detected'),
             summary: $('convert-summary'), open: $('convert-open-btn'), copy: $('convert-copy-btn'), save: $('convert-save-btn'),
-            toPro: $('cv-to-pro'), toAdv: $('cv-to-advanced')
+            toPro: $('cv-to-pro'), toAdv: $('cv-to-advanced'), toJson: $('cv-to-json')
         };
     }
 
@@ -16145,13 +16193,15 @@ let sylQueue = [];                  // new lines waiting to be split
         const ok = r.error === undefined;
         // the other format is the default target, until you pick one yourself
         if (ok && !cv.picked) {
-            const want = r.kind === 'pro' ? 'advanced' : 'pro';
+            const want = r.kind === 'pro' || r.kind === 'json' ? 'advanced' : 'pro';
             if (want !== cv.target) { cv.target = want; return cvRun(); }
         }
         e.toPro.checked = cv.target === 'pro';
         e.toAdv.checked = cv.target === 'advanced';
+        if (e.toJson) e.toJson.checked = cv.target === 'json';
+        e.save.textContent = cv.target === 'json' ? 'Save ' + VoxJSON.ext : 'Save .lrc';
         e.output.value = ok ? r.text : '';
-        e.summary.textContent = text.trim() ? describeConversion(r) : 'Paste or open an LRC file in the Pro or the Advanced format.';
+        e.summary.textContent = text.trim() ? describeConversion(r) : 'Paste or open a lyrics file in the Pro, Advanced or JSON format.';
         e.summary.classList.toggle('is-error', !ok && !!text.trim());
         e.chip.textContent = !text.trim() ? 'Nothing yet' : ok ? (r.kind === 'lines' ? 'Line times only' : FORMAT_NAME[r.kind] + ' format') : 'Not recognised';
         e.chip.dataset.kind = ok ? r.kind : 'none';
@@ -16176,7 +16226,7 @@ let sylQueue = [];                  // new lines waiting to be split
         const a = document.activeElement;
         if (a && m.contains(a)) a.blur();             // a hidden text box must not keep the keys (Ctrl+Z right after Open in editor)
     };
-    window.convertSetTarget = function (t) { cv.target = t === 'pro' ? 'pro' : 'advanced'; cv.picked = true; cvRun(); };
+    window.convertSetTarget = function (t) { cv.target = t === 'pro' || t === 'json' ? t : 'advanced'; cv.picked = true; cvRun(); };
     window.convertClear = function () {
         const e = cvEls();
         e.input.value = '';
@@ -16199,7 +16249,7 @@ let sylQueue = [];                  // new lines waiting to be split
         const reader = new FileReader();
         reader.onload = () => {
             cvEls().input.value = String(reader.result || '');
-            cv.name = file.name.replace(/(\.(lrc|txt))+$/i, '');
+            cv.name = file.name.replace(/(\.(lrc|txt|json))+$/i, '');
             cv.picked = false;
             cvRun();
         };
@@ -16213,10 +16263,11 @@ let sylQueue = [];                  // new lines waiting to be split
     window.convertSave = function () {
         const e = cvEls();
         if (!e.output.value) return;
-        const blob = new Blob([e.output.value], { type: 'text/plain' });
+        const asJson = cv.target === 'json';
+        const blob = new Blob([e.output.value], { type: asJson ? VoxJSON.mime : 'text/plain' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = (cv.name || currentFileName || 'lyrics') + '-' + cv.target + '.lrc';
+        a.download = (cv.name || currentFileName || 'lyrics') + (asJson ? VoxJSON.ext : '-' + cv.target + '.lrc');
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -16795,9 +16846,10 @@ let sylQueue = [];                  // new lines waiting to be split
     const origExport = window.openExportModal;
     window.openExportModal = function () {
         const r = origExport.apply(this, arguments);
-        const pro = $('fmt-pro-export'), adv = $('fmt-adv-export');
+        const pro = $('fmt-pro-export'), adv = $('fmt-adv-export'), jsn = $('fmt-json-export');
         if (pro) pro.checked = state.lrcFormat === 'pro';
         if (adv) adv.checked = state.lrcFormat === 'advanced';
+        if (jsn) jsn.checked = state.lrcFormat === 'json';
         return r;
     };
     // the settings dialog shows which interface and which preview animation are on
@@ -16813,6 +16865,318 @@ let sylQueue = [];                  // new lines waiting to be split
     initConvert();
     Undo.refresh();
     syncToggles();
+
+    // =================================================================================================================
+    // 6c. The JSON format
+    // =================================================================================================================
+    // A third way to write the lyrics, next to Pro and Advanced: one JSON file, 4 spaces of indent.
+    //
+    //   {
+    //       "version": 2, "song": {}, "metadata": {}, "source": {}, "ignoreRetiming": false,
+    //       "agents": { "v1": { "type": "person" }, "v2": { "type": "person" } },
+    //       "parts": [],
+    //       "lines": [
+    //           { "startMs": 22920, "endMs": 25100, "text": "I don't feel", "background": false, "agent": "v1",
+    //             "words": [ { "text": "I ", "startMs": 22925, "endMs": 23292, "isLineTimed": false }, ... ],
+    //             "backgroundWords": [] },
+    //           { "startMs": 41610, "endMs": 43565, "text": "(Metro!)", "background": true, "agent": "v1",
+    //             "words": [], "backgroundWords": [ { "text": "(Metro!)", "startMs": 42755, "endMs": 43565, "isLineTimed": false } ] } ] }
+    //
+    // * Times are whole milliseconds. A word keeps the space that follows it (the last word of a line has none, and a syllable that is
+    //   followed by the rest of its word has none either: figh|ting), so the texts of the words add up to the text of the line.
+    // * The start of a line is the start of its first word, rounded down to 10 ms. Lines are in time order.
+    // * A background line comes right after the line it backs, with that line's singer and that line's start; its words are
+    //   backgroundWords, written in brackets, and `words` stays empty.
+    // * A line that was only timed as a whole has one word, the whole line, with isLineTimed: true.
+    // * A line that is not synced yet is left out, as in Pro and Advanced.
+    // * song, metadata, source and ignoreRetiming of a file that is opened are kept and written back; parts are not used by the editor.
+    //
+    // Reading gives the same kind of lines the Pro / Advanced reader gives (so the editor, the converter and the exporters take them as
+    // they are); writing is built on exportOrder() / exportUnits(), the two functions the Pro and Advanced files are built on.
+    const VoxJSONFormat = (function () {
+        const VERSION = 2;
+        const ms = (s) => Math.round(s * 1000);
+        const floor10 = (n) => Math.floor(n / 10) * 10;
+        const isObj = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
+        const clone = (v) => JSON.parse(JSON.stringify(v));
+        const num = (v) => {
+            if (typeof v === 'number') return isFinite(v) ? v : null;
+            if (typeof v === 'string' && v.trim() !== '' && isFinite(Number(v))) return Number(v);       // "1200" counts as 1200
+            return null;
+        };
+        const agentType = (label) => (label === 'v1000' ? 'group' : 'person');          // v1000 is the group, as Apple names it
+
+        // ---- what a file says about the song, besides its lines --------------------------------------------------------
+        function cleanMeta(d) {
+            if (!isObj(d)) return null;
+            const m = {};
+            ['song', 'metadata', 'source'].forEach((k) => { if (isObj(d[k]) && Object.keys(d[k]).length) m[k] = clone(d[k]); });
+            if (d.ignoreRetiming === true) m.ignoreRetiming = true;
+            if (isObj(d.agents)) {
+                const a = {};
+                Object.keys(d.agents).forEach((k) => { if (isObj(d.agents[k])) a[k] = clone(d.agents[k]); });
+                if (Object.keys(a).length) m.agents = a;
+            }
+            return Object.keys(m).length ? m : null;
+        }
+
+        // =============================================================================================================
+        // writing
+        // =============================================================================================================
+        // the words of one line, as they are written: each keeps the space that follows it
+        function piecesOf(units) {
+            if (units.length === 1 && units[0].whole) {
+                const u = units[0];
+                return [{ text: u.text, startMs: ms(u.start), endMs: ms(u.end), isLineTimed: true }];
+            }
+            return units.map((u, i) => {
+                const next = units[i + 1];
+                const space = next && !next.join && !u.text.endsWith('-');             // the same rule unitsToText() has
+                return { text: u.text + (space ? ' ' : ''), startMs: ms(u.start), endMs: ms(u.end), isLineTimed: false };
+            });
+        }
+
+        // Is the whole text one pair of brackets, "(hey)" but not "(hey) (you)"?
+        function enclosed(text) {
+            const t = String(text).trim();
+            if (t.length < 2 || t[0] !== '(' || t[t.length - 1] !== ')') return false;
+            let depth = 0;
+            for (let i = 0; i < t.length; i++) {
+                if (t[i] === '(') depth++;
+                else if (t[i] === ')' && --depth === 0 && i < t.length - 1) return false;          // closed before the end
+            }
+            return depth === 0;
+        }
+
+        // no stray bracket anywhere: every ( is closed and no ) comes first
+        function balanced(text) {
+            let depth = 0;
+            for (let i = 0; i < text.length; i++) {
+                if (text[i] === '(') depth++;
+                else if (text[i] === ')' && --depth < 0) return false;
+            }
+            return depth === 0;
+        }
+
+        // Background vocals are written in brackets, once: a text that has them already keeps them. "((x))" gets a pair more, because
+        // reading takes one pair off, and that must leave the "((x))" the editor had.
+        function bracket(list) {
+            if (!list.length) return list;
+            const t = list.map((p) => p.text).join('').trim();
+            if (enclosed(t) && !enclosed(t.slice(1, -1))) return list;
+            list[0].text = '(' + list[0].text;
+            list[list.length - 1].text += ')';
+            return list;
+        }
+
+        function startOf(l, units) {
+            const first = units[0].start;
+            return isNum(l.time) ? Math.min(l.time, first) : first;
+        }
+
+        function build() {
+            const meta = state.jsonMeta || {};
+            const lines = [];
+            const used = { v1: true };
+            let hostStart = null;                                  // the start of the line that the background lines after it back
+            exportOrder().forEach((item) => {
+                const l = item.l;
+                const units = exportUnits(l);
+                const id = item.agent || (['v1', 'v2', 'v3'].includes(l.backs) ? l.backs : 'v1');         // a background line with no line to sit in: the singer it backs
+                used[id] = true;
+                let startMs = floor10(ms(startOf(l, units)));
+                if (item.bg) {
+                    if (item.agent && hostStart !== null) startMs = Math.min(startMs, hostStart);
+                } else {
+                    hostStart = startMs;
+                }
+                const list = piecesOf(units);
+                if (item.bg) bracket(list);
+                lines.push({
+                    startMs,
+                    endMs: ms(units[units.length - 1].end),
+                    text: list.map((p) => p.text).join(''),
+                    background: !!item.bg,
+                    agent: agentLabel(id),
+                    words: item.bg ? [] : list,
+                    backgroundWords: item.bg ? list : []
+                });
+            });
+            if (!lines.length) return '';                          // nothing is synced yet: no file, as in Pro and Advanced
+
+            const agents = {};
+            ['v1', 'v2', 'v3'].forEach((id) => {
+                if (!used[id]) return;
+                const label = agentLabel(id);
+                agents[label] = meta.agents && isObj(meta.agents[label]) ? clone(meta.agents[label]) : { type: agentType(label) };
+            });
+            const doc = {
+                version: VERSION,
+                song: meta.song ? clone(meta.song) : {},
+                metadata: meta.metadata ? clone(meta.metadata) : {},
+                source: meta.source ? clone(meta.source) : {},
+                ignoreRetiming: meta.ignoreRetiming === true,
+                agents,
+                parts: [],
+                lines
+            };
+            return JSON.stringify(doc, null, 4) + '\n';
+        }
+
+        // =============================================================================================================
+        // reading
+        // =============================================================================================================
+        let cache = { text: null, doc: null };
+
+        // the document of a text that is a JSON lyrics file ({ ..., "lines": [...] }), else null
+        function docOf(raw) {
+            let t = String(raw == null ? '' : raw);
+            if (t.charCodeAt(0) === 0xFEFF) t = t.slice(1);
+            t = t.trim();
+            if (t.charCodeAt(0) !== 123) return null;                // "{"
+            if (cache.text === t) return cache.doc;
+            let d = null;
+            try { d = JSON.parse(t); } catch (e) { d = null; }
+            if (!isObj(d) || !Array.isArray(d.lines)) d = null;
+            cache = { text: t, doc: d };
+            return d;
+        }
+
+        const detect = (text) => docOf(text) !== null;
+
+        function singerOf(agent) {
+            if (!agent) return 'v1';
+            const a = String(agent).toLowerCase();
+            return a === 'v1' ? 'v1' : (a === 'v2' ? 'v2' : 'v3');          // v3, v1000 and anything else: the group
+        }
+
+        function piecesIn(arr) {
+            const out = [];
+            if (!Array.isArray(arr)) return out;
+            arr.forEach((p) => {
+                if (isObj(p) && typeof p.text === 'string') out.push({ raw: p.text, start: num(p.startMs), end: num(p.endMs), lineTimed: p.isLineTimed === true });
+            });
+            // a file that was never timed has 0 in every field (or none): that is no time at all
+            if (out.length && out.every((p) => !p.start && !p.end)) out.forEach((p) => { p.start = null; p.end = null; });
+            return out;
+        }
+
+        // The brackets round the whole of the background vocals of a file are not part of the words. "(hey) (oh)" is two bracketed words, not
+        // one bracketed text: it stays. A text with a stray bracket ("ah)" is written as "(ah))") gets its pair taken off too, so that
+        // writing it again gives the same file.
+        function unbracket(list) {
+            if (!list.length) return list;
+            const t = list.map((p) => p.raw).join('').trim();
+            if (t.length < 2 || t[0] !== '(' || t[t.length - 1] !== ')') return list;
+            if (!enclosed(t) && balanced(t)) return list;
+            const first = list.find((p) => p.raw.trim());
+            const last = [...list].reverse().find((p) => p.raw.trim());
+            first.raw = first.raw.replace('(', '');
+            last.raw = last.raw.replace(/\)(\s*)$/, '$1');
+            return list;
+        }
+
+        function unbracketText(text) {
+            const t = String(text).trim();
+            if (t.length < 2 || t[0] !== '(' || t[t.length - 1] !== ')') return text;
+            return !enclosed(t) && balanced(t) ? text : t.slice(1, -1);
+        }
+
+        // pieces -> words, the way the Pro reader makes them: a piece that does not start after a space joins the one before it
+        function wordsOf(list, timed) {
+            const words = [];
+            let spaced = true;                                       // did the piece before end with a space?
+            list.forEach((p) => {
+                const t = p.raw.trim();
+                if (!t) { if (/\s/.test(p.raw)) spaced = true; return; }
+                const w = { text: t, start: timed && p.start !== null ? p.start / 1000 : null, end: timed && p.end !== null ? p.end / 1000 : null };
+                const startsWord = spaced || /^\s/.test(p.raw) || (words.length && words[words.length - 1].text.endsWith('-'));
+                if (words.length && !startsWord) w.join = true;
+                spaced = /\s$/.test(p.raw);
+                words.push(w);
+            });
+            return words;
+        }
+
+        // does the text look like a JSON lyrics file that cannot be read (cut off, or no "lines")?
+        function broken(raw) {
+            let t = String(raw == null ? '' : raw);
+            if (t.charCodeAt(0) === 0xFEFF) t = t.slice(1);
+            t = t.trim();
+            return t.charCodeAt(0) === 123 && /"(lines|startMs|backgroundWords)"\s*:/.test(t) && docOf(t) === null;
+        }
+
+        function parse(text) {
+            const d = docOf(text);
+            const lyrics = [];
+            let hasWordData = false;
+            if (!d) return { lyrics, format: 'json', hasWordData, meta: null };
+            let lastMain = null;                                     // a background line with no singer backs the line above it
+
+            // one lead line / one background line out of the pieces of a file line (lineMs: where the file says the line starts)
+            const make = (list, lineMs, bg, singer, plainText) => {
+                const whole = !list.length || list.every((p) => p.lineTimed);          // only the line as a whole was timed
+                const words = wordsOf(list, !whole);
+                const text = words.length ? unitsToText(words) : String(plainText || '').trim();
+                const timed = list.find((p) => p.start !== null);
+                const anchor = timed ? timed.start : null;                              // where the first word starts, in ms
+                let at = lineMs;
+                // a background line starts where its words do; the start of a lead line is rounded down to 10 ms, so a word that
+                // starts that little after it gives the exact time
+                if (anchor !== null && (bg || at === null || at > anchor || anchor - at <= 10.1)) at = anchor;
+                if (!whole && words.some((w) => w.start !== null)) hasWordData = true;
+                return { text, time: at === null ? null : at / 1000, words: whole || !words.length ? parseWords(text) : words, isBg: bg, singer: bg ? 'v1' : singer };
+            };
+
+            d.lines.forEach((raw) => {
+                if (!isObj(raw)) return;
+                const agent = typeof raw.agent === 'string' && raw.agent ? raw.agent : null;
+                const isBgLine = raw.background === true;
+                const text = typeof raw.text === 'string' ? raw.text : '';
+                const mainList = isBgLine ? [] : piecesIn(raw.words);
+                let bgList = piecesIn(raw.backgroundWords);
+                if (isBgLine && !bgList.length) bgList = piecesIn(raw.words);
+                const singer = singerOf(agent);
+                let lineMs = num(raw.startMs);
+                const lineEnd = num(raw.endMs);
+                if (lineMs !== null && lineMs <= 0 && !lineEnd) lineMs = null;         // 0 and no end: the line is not timed
+
+                if (!isBgLine && (mainList.length || text.trim())) {
+                    lyrics.push(make(mainList, lineMs, false, singer, text));
+                    lastMain = singer;
+                }
+                if (bgList.length || (isBgLine && text.trim())) {
+                    const plain = unbracketText(text);
+                    const entry = make(unbracket(bgList), lineMs, true, singer, plain);
+                    const host = isBgLine ? (agent ? singer : lastMain) : singer;
+                    if (host) entry.backs = host;
+                    lyrics.push(entry);
+                }
+            });
+            return { lyrics, format: 'json', hasWordData, meta: cleanMeta(d) };
+        }
+
+        // =============================================================================================================
+        // the page: the labels follow the format
+        // =============================================================================================================
+        const ext = '.json';
+        function refresh() {
+            const on = state.lrcFormat === 'json';
+            const set = (id, v) => { const e = $(id); if (e && e.textContent !== v) e.textContent = v; };
+            const radio = $('fmt-json-sidebar');
+            if (radio) radio.checked = on;
+            const hint = $('fmt-json-hint');
+            if (hint) hint.hidden = !on;
+            set('save-lrc-btn', on ? 'Save ' + ext : 'Save .lrc');
+            set('export-ext-label', on ? ext : '.lrc');
+            set('export-preview-label', on ? 'JSON preview' : 'LRC preview');
+            const out = $('export-output');
+            if (out) out.placeholder = on ? '{ "version": 2, ... } Output will appear here...' : '[00:00.00] Output will appear here...';
+        }
+
+        return { detect, broken, parse, build, refresh, cleanMeta, ext, mime: 'application/json', version: VERSION };
+    })();
+    window.VoxJSON = VoxJSONFormat;
 
     // =================================================================================================================
     // 8. The shell stays put
@@ -16977,8 +17341,8 @@ let sylQueue = [];                  // new lines waiting to be split
 
         { key: 'keepAwake', group: 'Playing and syncing', label: 'Keep the screen on', sub: 'While the song plays', type: 'toggle', def: true },
         { key: 'confirmDelete', group: 'Playing and syncing', label: 'Ask before deleting a line', sub: 'Undo brings a deleted line back either way', type: 'toggle', def: true },
-        { key: 'startFormat', group: 'Playing and syncing', label: 'New projects start as', sub: 'Pro (word times in one line) or Advanced', type: 'choice', def: 'pro',
-          options: [['pro', 'Pro'], ['advanced', 'Advanced']] },
+        { key: 'startFormat', group: 'Playing and syncing', label: 'New projects start as', sub: 'Pro (word times in one line), Advanced or JSON', type: 'choice', def: 'pro',
+          options: [['pro', 'Pro'], ['advanced', 'Advanced'], ['json', 'JSON']] },
         { key: 'offset', def: null, ui: false },
         { key: 'volume', def: null, ui: false },
 
@@ -17331,9 +17695,9 @@ let sylQueue = [];                  // new lines waiting to be split
         off.addEventListener('change', () => { const n = parseFloat(off.value); if (isFinite(n)) api.set('offset', n, true); });
     }
 
-    // new projects start as Pro or Advanced
-    if (P.startFormat === 'advanced' && typeof setLRCFormat === 'function') {
-        try { setLRCFormat('advanced'); } catch (e) { /* stays Pro */ }
+    // new projects start as Pro, Advanced or JSON
+    if ((P.startFormat === 'advanced' || P.startFormat === 'json') && typeof setLRCFormat === 'function') {
+        try { setLRCFormat(P.startFormat); } catch (e) { /* stays Pro */ }
     }
 
     // the colour of the browser bar depends on the interface and on the background: keep it right after a switch
@@ -17978,18 +18342,27 @@ let sylQueue = [];                  // new lines waiting to be split
                     done.lyrics = true;
                     readProjectFile(file);
                 } else if (e === 'json') {
-                    const data = JSON.parse(await readText(file));
+                    const text = await readText(file);
+                    if (window.VoxJSON && VoxJSON.broken(text)) {              // a lyrics file that is cut off: said in the words of the importer
+                        if (!done.lyrics) { done.lyrics = true; parseAndLoadLRC(text); }
+                        continue;
+                    }
+                    const data = JSON.parse(text);
                     if (data && data.kind === 'settings' && window.VoxPrefs) {
                         window.VoxPrefs.importData(data);
                         notify('Settings imported');
+                    } else if (window.VoxJSON && VoxJSON.detect(text)) {
+                        if (done.lyrics) continue;                // JSON lyrics: the importer reads them like an .lrc file
+                        done.lyrics = true;
+                        parseAndLoadLRC(text);
                     } else {
-                        notify('That file is not a VoxenPlus settings file', 'error');
+                        notify('That file is not a VoxenPlus settings file or a JSON lyrics file', 'error');
                     }
                 } else if (e === 'lrc' || e === 'txt') {
                     if (done.lyrics) continue;
                     done.lyrics = true;
                     const text = await readText(file);
-                    if (/\[\d{1,3}:\d{2}(?:[.:]\d{1,3})?\]/.test(text)) {
+                    if (/\[\d{1,3}:\d{2}(?:[.:]\d{1,3})?\]/.test(text) || (window.VoxJSON && (VoxJSON.detect(text) || VoxJSON.broken(text)))) {
                         parseAndLoadLRC(text);
                     } else {
                         // plain lyrics: they go to the Session tab; the project that is open is not replaced
@@ -18037,5 +18410,5 @@ let sylQueue = [];                  // new lines waiting to be split
         window.VoxUndo = window.VoxUndo || { mark: function () { }, run: function (l, fn, c, a) { return fn.apply(c, a || []); }, refresh: function () { } };
         window.vxScroll = window.vxScroll || function (body, top) { body.scrollTo({ top: top, behavior: 'smooth' }); };
     </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a607b136d95a9bf2',t:'MTc5NTY4MzUxNQ=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a607b136d95a9bf2',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a610e1b038265e9d',t:'MTc5NTc3OTg3Mw=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a610e1b038265e9d',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
